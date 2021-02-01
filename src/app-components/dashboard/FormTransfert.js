@@ -296,7 +296,7 @@ const MyForm = (props) => {
           <Row>
             <Col xl="12" style={{ margin: "12px 0" }}>
               <Button color="primary" type="submit" disabled={isSubmitting}>
-                Submit
+                {isSubmitting ? "En cours ..." : "Enregistrer"}
               </Button>
             </Col>
           </Row>

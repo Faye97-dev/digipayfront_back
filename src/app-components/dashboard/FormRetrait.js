@@ -162,7 +162,7 @@ function ListRetraits(props) {
                                 );
                               }}
                             >
-                              Retirer
+                              {props.loading ? "En cours ..." : "Retirer"}
                             </Button>
                           </div>
                         </div>
