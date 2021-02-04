@@ -31,7 +31,7 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import Switch from "rc-switch";
 import { updateStatusAgence } from "../../actions/agence";
 import { showAlert } from "../../utils/alerts";
-
+import { ClipLoader } from "react-spinners";
 function Toggle(props) {
   //const [checked, setChecked] = useState(true);
 
@@ -432,7 +432,9 @@ const HeaderDots = (props) => {
   let OnlineToggle = <></>;
   if (props.role === "RESPONSABLE_AGENCE") {
     OnlineToggle = props.auth.agenceStatus_isLoading ? (
-      "Loading ...."
+      <span className="px-3">
+        <ClipLoader color={"var(--primary)"} loading={true} />
+      </span>
     ) : (
       <Toggle
         checked={props.auth.user && props.auth.user.agence.online}

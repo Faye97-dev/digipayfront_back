@@ -370,13 +370,13 @@ const HeaderMenu = (props) => {
   return (
     <>
       <div className="app-header-menu">
-        {/*<MySelect
+        <MySelect
           label="Carte"
           name="carte"
           value={props.role}
           onChange={props.changeRole}
-        />*/}
-        <span>{props.user && props.user.agence.nom}</span>
+        />
+        {/*<span className="pl-3">{props.user && props.user.agence.nom}</span>*/}
       </div>
     </>
   );

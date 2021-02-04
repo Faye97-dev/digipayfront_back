@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card } from "reactstrap";
+import { Card, Button } from "reactstrap";
 
 import avatar1 from "../../assets/images/avatars/av1.png";
 import avatar2 from "../../assets/images/avatars/av2.png";
@@ -10,7 +10,8 @@ import avatar4 from "../../assets/images/avatars/av4.png";
 import { connect } from "react-redux";
 import { getEmployes } from "../../actions/employe";
 import { showAlert } from "../../utils/alerts";
-
+import { SkeletonUser } from "../../utils/SkeletonLoader";
+import { NavLink } from "react-router-dom";
 function EmployeGrid(props) {
   const avatars = [avatar1, avatar2, avatar3, avatar4];
   useEffect(() => {
@@ -19,14 +20,51 @@ function EmployeGrid(props) {
   return (
     <>
       <Card className="card-box mt-5 p-3 text-center">
-        <div className="my-3">
-          {/*<h6 className="font-weight-bold font-size-lg mb-1 text-black">
-            Employes de l'agence
-            </h6>*/}
+        <div className="my-0">
+          <NavLink href="/#" to="/Employe" color="primary">
+            <h6 className="font-weight-bold font-size-lg text-left mb-1 text-dark px-3">
+              Employés
+            </h6>
+          </NavLink>
+
+          <div>
+            {/*<Button
+              href="/#"
+              tag={NavLink}
+              to="/Employe"
+              color="primary"
+              className="btn-sm"
+            >
+              <FontAwesomeIcon
+                icon={["far", "user"]}
+                className="font-size-xxl text-primary"
+              />
+              Voir plus
+            </Button>*/}
+          </div>
           <p className="text-black-50 mb-0"></p>
         </div>
         <div className="d-flex flex-row flex-wrap justify-content-center">
-          {props.employes.loading === false &&
+          {props.employes.loading ? (
+            <>
+              <div className="position-relative px-5 py-3">
+                <div className="divider-v divider-v-lg" />
+                <SkeletonUser />
+              </div>
+              <div className="position-relative px-5 py-3">
+                <div className="divider-v divider-v-lg" />
+                <SkeletonUser />
+              </div>
+              <div className="position-relative px-5 py-3">
+                <div className="divider-v divider-v-lg" />
+                <SkeletonUser />
+              </div>
+              <div className="position-relative px-5 py-3">
+                <div className="divider-v divider-v-lg" />
+                <SkeletonUser />
+              </div>
+            </>
+          ) : (
             props.employes.payload.map((item) => {
               return (
                 <div
@@ -51,17 +89,14 @@ function EmployeGrid(props) {
                     {item.first_name + " " + item.last_name}
                   </div>
                   <div className="font-weight-bold font-size-sm text-black-50">
-                    <FontAwesomeIcon
-                      icon={["fas", "star"]}
-                      className="text-warning mr-1"
-                    />
-                    <span>4.8</span>
-                    <span className="px-1">|</span>
+                    {/*<span>4.8</span>
+                    <span className="px-1">|</span>*/}
                     {item.tel}
                   </div>
                 </div>
               );
-            })}
+            })
+          )}
         </div>
       </Card>
     </>

@@ -5,7 +5,7 @@ import { Row, Col, Card, TabContent, TabPane, Nav, NavItem } from "reactstrap";
 import { NavLink as NavLinkStrap } from "reactstrap";
 import FormTransfert from "./FormTransfert";
 import FormRetrait from "./FormRetrait";
-
+import FormClientSend from "./FormClientSend";
 export default function Tabs() {
   const [activeTab, setActiveTab] = useState("1");
 
@@ -28,7 +28,7 @@ export default function Tabs() {
                     }}
                   >
                     <span className="px-3 py-2 font-weight-bold">
-                      Transferts
+                      Transfert
                     </span>
                   </NavLinkStrap>
                 </NavItem>
@@ -39,7 +39,17 @@ export default function Tabs() {
                       toggle("2");
                     }}
                   >
-                    <span className="px-3 py-2 font-weight-bold">Retraits</span>
+                    <span className="px-3 py-2 font-weight-bold">Retrait</span>
+                  </NavLinkStrap>
+                </NavItem>
+                <NavItem>
+                  <NavLinkStrap
+                    className={clsx({ active: activeTab === "3" })}
+                    onClick={() => {
+                      toggle("3");
+                    }}
+                  >
+                    <span className="px-3 py-2 font-weight-bold">Recharge</span>
                   </NavLinkStrap>
                 </NavItem>
               </Nav>
@@ -53,6 +63,11 @@ export default function Tabs() {
               <TabPane tabId="2">
                 <div className=" mt-4 mb-5">
                   <FormRetrait></FormRetrait>
+                </div>
+              </TabPane>
+              <TabPane tabId="3">
+                <div className=" mt-4 mb-5">
+                  <FormClientSend />
                 </div>
               </TabPane>
             </TabContent>

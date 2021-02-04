@@ -1,28 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Row,
-  Col,
-  Container,
-  FormGroup,
-  Input,
-  UncontrolledTooltip,
-  Button,
-} from "reactstrap";
-
+import { Row, Col, Container } from "reactstrap";
 import illustration1 from "../../assets/images/illustrations/pack1/authentication.svg";
 //import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../../actions/auth";
 import { Redirect } from "react-router-dom";
 import FormLogin from "./FormLogin";
-function Login(props) {
+import { RiseLoader } from "react-spinners";
+const SuspenseLoading = () => {
   return (
     <>
-      {props.auth.isAuthenticated ? (
-        <Redirect to="/Dashboard" />
-      ) : (
+      <div className="d-flex align-items-center flex-column vh-100 justify-content-center text-center py-3">
+        <div className="d-flex align-items-center flex-column px-4 pb-2">
+          <RiseLoader color={"#3c44b1"} loading={true} />
+        </div>
+        <div className="text-muted font-size-xl text-center pt-4">
+          Lancement de digiPay , veuillez patientez svp ...
+          <span className="font-size-lg d-block text-dark"></span>
+        </div>
+      </div>
+    </>
+  );
+};
+function Login(props) {
+  const [formSubmiting, setFormSubmiting] = useState(false);
+  const handleFormLoading = () => setFormSubmiting(true);
+  return (
+    <>
+      {props.auth.isLoading && !formSubmiting ? (
+        <SuspenseLoading />
+      ) : !props.auth.isAuthenticated ? (
         <>
           <div className="app-wrapper bg-white min-vh-100">
             <div className="app-main min-vh-100">
@@ -47,18 +55,9 @@ function Login(props) {
                                 </span>
 
                                 <div>
-                                  <FormLogin />
-
-                                  {/*<Button
-                                    size="lg"
-                                    className="btn-block text-uppercase font-weight-bold font-size-sm"
-                                    color="primary"
-                                    onClick={() => props.login()}
-                                  >
-                                    {props.auth.isLoading
-                                      ? "Loading .... "
-                                      : "Sign in"}
-                                    </Button>*/}
+                                  <FormLogin
+                                    handleFormLoading={handleFormLoading}
+                                  />
                                 </div>
                                 <div className="text-center pt-4 text-black-50">
                                   Don't have an account?{" "}
@@ -91,6 +90,8 @@ function Login(props) {
             </div>
           </div>
         </>
+      ) : (
+        <Redirect to="/Dashboard" />
       )}
     </>
   );

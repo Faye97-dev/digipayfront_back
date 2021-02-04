@@ -9,8 +9,8 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import { getNotWhitrated } from "../../actions/async";
 import { addRetrait } from "../../actions/transaction";
 import { connect } from "react-redux";
-
 import { showAlert } from "../../utils/alerts";
+import { ClipLoader } from "react-spinners";
 function FormRetrait(props) {
   return (
     <>
@@ -151,19 +151,26 @@ function ListRetraits(props) {
                           </div>
 
                           <div>
-                            <Button
-                              color="warning btn btn-sm"
-                              disabled={props.loading}
-                              onClick={() => {
-                                props.addRetrait(
-                                  { id: item.id },
-                                  props.removeRetrait,
-                                  showAlert
-                                );
-                              }}
-                            >
-                              {props.loading ? "En cours ..." : "Retirer"}
-                            </Button>
+                            {props.loading ? (
+                              <ClipLoader
+                                color={"var(--warning)"}
+                                loading={true}
+                              />
+                            ) : (
+                              <Button
+                                color="warning btn btn-sm"
+                                disabled={props.loading}
+                                onClick={() => {
+                                  props.addRetrait(
+                                    { id: item.id },
+                                    props.removeRetrait,
+                                    showAlert
+                                  );
+                                }}
+                              >
+                                Retirer
+                              </Button>
+                            )}
                           </div>
                         </div>
                         <div className="divider my-2"></div>

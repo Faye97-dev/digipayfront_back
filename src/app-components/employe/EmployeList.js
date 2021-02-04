@@ -40,6 +40,7 @@ import {
 import FormFilter from "../transaction/FormFilter";
 import empty from "../../assets/images/empty.png";
 import { showAlert } from "../../utils/alerts";
+import SkeletonLoader from "../../utils/SkeletonLoader";
 const filtersOptions = {
   type_agence: {
     label: "Type agence",
@@ -240,7 +241,9 @@ class EmployeList extends Component {
   render() {
     const employes = this.props.employes.loading ? (
       <tr>
-        <td colSpan="4">loading .....</td>
+        <td colSpan="4">
+          <SkeletonLoader />
+        </td>
       </tr>
     ) : (
       <>
@@ -258,7 +261,7 @@ class EmployeList extends Component {
         ) : (
           this.state.current.map((item) => {
             return (
-              <tr key={item.username}>
+              <tr key={item.id}>
                 <td className="text-center text-black-30">
                   <span className="font-weight-bold">
                     {getHighlightedText(item.first_name, this.state.search)}{" "}
@@ -316,12 +319,10 @@ class EmployeList extends Component {
       <>
         <Card className="card-box shadow-none">
           <div className="px-4 pt-4 text-primary">
-            <h5 className="font-weight-normal text-dark">
-              Employes de l'agence
-            </h5>
+            <h5 className="font-weight-bold text-dark">Employés</h5>
           </div>
           <div className="d-flex justify-content-between px-4 py-3">
-            {/*<div
+            <div
               className={clsx(
                 "search-wrapper search-wrapper--alternate search-wrapper--grow",
                 { "is-active": this.state.searchOpen }
@@ -338,18 +339,22 @@ class EmployeList extends Component {
                 onKeyDown={this.handleSearchSubmit}
                 value={this.state.search}
                 onChange={this.handleSearchChange}
+                disabled={this.props.employes.loading}
               />
-              </div>
+            </div>
             <div className="d-flex align-items-center">
-              <Button
-                color="danger"
-                outline
-                className="d-flex align-items-center justify-content-center d-40 mr-2 p-0 rounded-pill"
-                onClick={this.reset}
-              >
-                <RotateCw className="w-50" />
-              </Button>
-              <UncontrolledDropdown>
+              {!this.props.employes.loading && (
+                <Button
+                  color="danger"
+                  outline
+                  className="d-flex align-items-center justify-content-center d-40 mr-2 p-0 rounded-pill"
+                  onClick={this.reset}
+                >
+                  <RotateCw className="w-50" />
+                </Button>
+              )}
+
+              {/*<UncontrolledDropdown>
                 {this.state.filterValues === {} ||
                 allNull(this.state.filterValues) ? (
                   <DropdownToggle
@@ -378,8 +383,8 @@ class EmployeList extends Component {
                 </div>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              </div>
-              */}
+                */}
+            </div>
           </div>
           <div className="divider" />
           <div className="px-4 pt-3 pb-1">
@@ -391,20 +396,41 @@ class EmployeList extends Component {
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
+                        onClick={() =>
+                          !this.props.employes.loading &&
+                          this.handleOrdering({
+                            attribute: ["first_name"],
+                            increment: this.state.orderingValues.increment,
+                          })
+                        }
                       >
-                        Nom complet
+                        Nom complet {this.currentOrdering("first_name")}
                       </th>
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
+                        onClick={() =>
+                          !this.props.employes.loading &&
+                          this.handleOrdering({
+                            attribute: ["adresse"],
+                            increment: this.state.orderingValues.increment,
+                          })
+                        }
                       >
-                        Adresse
+                        Adresse {this.currentOrdering("adresse")}
                       </th>
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
+                        onClick={() =>
+                          !this.props.employes.loading &&
+                          this.handleOrdering({
+                            attribute: ["tel"],
+                            increment: this.state.orderingValues.increment,
+                          })
+                        }
                       >
-                        Contact
+                        Contact {this.currentOrdering("tel")}
                       </th>
 
                       <th

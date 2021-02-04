@@ -59,8 +59,8 @@ export default function TransactionsCompensation() {
     <>
       <Card className="card-box shadow-none">
         <div className="px-4 pt-4 text-primary">
-          <h5 className="font-weight-normal text-dark">
-            Historique de compensations
+          <h5 className="font-weight-bold text-dark">
+            Historiques de compensations
           </h5>
         </div>
         <div className="d-flex justify-content-between px-4 py-3">

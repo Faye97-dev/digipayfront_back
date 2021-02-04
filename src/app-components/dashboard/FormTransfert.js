@@ -9,6 +9,7 @@ import { getAgences } from "../../actions/agence";
 import { getClients } from "../../actions/client";
 import { addTransfert } from "../../actions/transaction";
 import { showAlert } from "../../utils/alerts";
+import { SyncLoader } from "react-spinners";
 const objectAttributeExist = (item, value) => {
   if (!item) {
     return false;
@@ -295,9 +296,13 @@ const MyForm = (props) => {
           </Row>
           <Row>
             <Col xl="12" style={{ margin: "12px 0" }}>
-              <Button color="primary" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "En cours ..." : "Enregistrer"}
-              </Button>
+              {isSubmitting ? (
+                <SyncLoader color={"var(--primary)"} loading={true} />
+              ) : (
+                <Button color="primary" type="submit" disabled={isSubmitting}>
+                  Enregistrer
+                </Button>
+              )}
             </Col>
           </Row>
         </>

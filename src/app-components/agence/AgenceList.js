@@ -24,6 +24,7 @@ import { connect } from "react-redux";
 import { getAgences } from "../../actions/agence";
 import { mapColorAgence } from "../../utils/choices";
 import { showAlert } from "../../utils/alerts";
+import SkeletonLoader from "../../utils/SkeletonLoader";
 import {
   filterDataProcess,
   filterToBool,
@@ -253,7 +254,9 @@ class AgenceList extends Component {
   render() {
     const agences = this.props.agences.loading ? (
       <tr>
-        <td colSpan="7">loading .....</td>
+        <td colSpan="7">
+          <SkeletonLoader />
+        </td>
       </tr>
     ) : (
       <>
@@ -269,85 +272,90 @@ class AgenceList extends Component {
             </td>
           </tr>
         ) : (
-          this.state.current.map((item) => {
-            return (
-              <tr key={item.id}>
-                <td>
-                  {getHighlightedText(item.code_agence, this.state.search)}
-                </td>
-                <td>{getHighlightedText(item.nom, this.state.search)}</td>
-                <td className="text-center">
-                  <div>
-                    <a
-                      href="#/"
-                      onClick={(e) => e.preventDefault()}
-                      className="font-weight-bold text-black"
-                      title="..."
+          this.state.current
+            .filter((item) => item.id !== this.props.user.agence.id)
+            .map((item) => {
+              return (
+                <tr key={item.id}>
+                  <td>
+                    {getHighlightedText(item.code_agence, this.state.search)}
+                  </td>
+                  <td>{getHighlightedText(item.nom, this.state.search)}</td>
+                  <td className="text-center">
+                    <div>
+                      <a
+                        href="#/"
+                        onClick={(e) => e.preventDefault()}
+                        className="font-weight-bold text-black"
+                        title="..."
+                      >
+                        {getHighlightedText(
+                          item.commune.commune,
+                          this.state.search
+                        )}
+                      </a>
+                      <span className="text-black-50 d-block">
+                        {getHighlightedText(item.adresse, this.state.search)}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="text-center">
+                    <div>
+                      <a
+                        href="#/"
+                        onClick={(e) => e.preventDefault()}
+                        className="font-weight-bold text-black"
+                        title="..."
+                      >
+                        {getHighlightedText(item.tel, this.state.search)}
+                      </a>
+                      <span className="text-black-50 d-block">
+                        {getHighlightedText(item.email, this.state.search)}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="text-center">
+                    <Badge
+                      className={
+                        "px-4 py-1 h-auto text-" +
+                        mapColorAgence[item.type_agence] +
+                        " border-1 border-" +
+                        mapColorAgence[item.type_agence]
+                      }
+                      color={"neutral-" + mapColorAgence[item.type_agence]}
                     >
-                      {getHighlightedText(
-                        item.commune.commune,
-                        this.state.search
-                      )}
-                    </a>
-                    <span className="text-black-50 d-block">
-                      {getHighlightedText(item.adresse, this.state.search)}
-                    </span>
-                  </div>
-                </td>
-                <td className="text-center">
-                  <div>
-                    <a
-                      href="#/"
-                      onClick={(e) => e.preventDefault()}
-                      className="font-weight-bold text-black"
-                      title="..."
+                      {item.type_agence}
+                    </Badge>
+                  </td>
+
+                  <td className="text-center">
+                    <Badge
+                      className={
+                        item.online
+                          ? "px-4 py-1 h-auto text-success border-1 border-sucess neutral-success"
+                          : "px-4 py-1 h-auto text-danger border-1 border-danger neutral-danger"
+                      }
+                      color={item.online ? "neutral-success" : "neutral-danger"}
                     >
-                      {getHighlightedText(item.tel, this.state.search)}
-                    </a>
-                    <span className="text-black-50 d-block">
-                      {getHighlightedText(item.email, this.state.search)}
-                    </span>
-                  </div>
-                </td>
-                <td className="text-center">
-                  <Badge
-                    className={
-                      "px-4 py-1 h-auto text-" +
-                      mapColorAgence[item.type_agence] +
-                      " border-1 border-" +
-                      mapColorAgence[item.type_agence]
-                    }
-                    color={"neutral-" + mapColorAgence[item.type_agence]}
-                  >
-                    {item.type_agence}
-                  </Badge>
-                </td>
+                      {item.online ? "En ligne" : "Hors ligne"}
+                    </Badge>
+                  </td>
 
-                <td className="text-center">
-                  <Badge
-                    className={
-                      item.online
-                        ? "px-4 py-1 h-auto text-success border-1 border-sucess neutral-success"
-                        : "px-4 py-1 h-auto text-danger border-1 border-danger neutral-danger"
-                    }
-                    color={item.online ? "neutral-success" : "neutral-danger"}
-                  >
-                    {item.online ? "En ligne" : "Hors ligne"}
-                  </Badge>
-                </td>
-
-                <td className="text-center">
-                  <Button className="btn btn-primary">...</Button>
-                </td>
-              </tr>
-            );
-          })
+                  <td className="text-center">
+                    <Button className="btn btn-primary">...</Button>
+                  </td>
+                </tr>
+              );
+            })
         )}
       </>
     );
     return (
       <>
         <Card className="card-box shadow-none">
+          <div className="px-4 pt-4 text-primary">
+            <h5 className="font-weight-bold text-dark">Listes des Agences</h5>
+          </div>
           <div className="d-flex justify-content-between px-4 py-3">
             <div
               className={clsx(
@@ -366,18 +374,22 @@ class AgenceList extends Component {
                 onKeyDown={this.handleSearchSubmit}
                 value={this.state.search}
                 onChange={this.handleSearchChange}
+                disabled={this.props.agences.loading}
               />
             </div>
             <div className="d-flex align-items-center">
-              <Button
-                color="danger"
-                outline
-                className="d-flex align-items-center justify-content-center d-40 mr-2 p-0 rounded-pill"
-                onClick={this.reset}
-              >
-                <RotateCw className="w-50" />
-              </Button>
-              <UncontrolledDropdown>
+              {!this.props.agences.loading && (
+                <Button
+                  color="danger"
+                  outline
+                  className="d-flex align-items-center justify-content-center d-40 mr-2 p-0 rounded-pill"
+                  onClick={this.reset}
+                >
+                  <RotateCw className="w-50" />
+                </Button>
+              )}
+
+              <UncontrolledDropdown disabled={this.props.agences.loading}>
                 {this.state.filterValues === {} ||
                 allNull(this.state.filterValues) ? (
                   <DropdownToggle
@@ -442,6 +454,7 @@ class AgenceList extends Component {
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                         onClick={() =>
+                          !this.props.agences.loading &&
                           this.handleOrdering({
                             attribute: ["code_agence"],
                             increment: this.state.orderingValues.increment,
@@ -454,6 +467,7 @@ class AgenceList extends Component {
                         className=" text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                         onClick={() =>
+                          !this.props.agences.loading &&
                           this.handleOrdering({
                             attribute: ["nom"],
                             increment: this.state.orderingValues.increment,
@@ -466,6 +480,7 @@ class AgenceList extends Component {
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                         onClick={() =>
+                          !this.props.agences.loading &&
                           this.handleOrdering({
                             attribute: ["commune", "commune"],
                             increment: this.state.orderingValues.increment,
@@ -478,6 +493,7 @@ class AgenceList extends Component {
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                         onClick={() =>
+                          !this.props.agences.loading &&
                           this.handleOrdering({
                             attribute: ["tel"],
                             increment: this.state.orderingValues.increment,
@@ -490,6 +506,7 @@ class AgenceList extends Component {
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                         onClick={() =>
+                          !this.props.agences.loading &&
                           this.handleOrdering({
                             attribute: ["type_agence"],
                             increment: this.state.orderingValues.increment,
@@ -537,6 +554,7 @@ class AgenceList extends Component {
 
 const mapStateToProps = (state) => ({
   agences: state.agence.agences,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, {

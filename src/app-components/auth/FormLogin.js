@@ -7,6 +7,7 @@ import { Button, Row, Col, Label } from "reactstrap";
 import { connect } from "react-redux";
 import { login } from "../../actions/auth";
 import { showAlert } from "../../utils/alerts";
+import { SyncLoader } from "react-spinners";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     username: Yup.string().required("Nom d'utilisateur est obligatoire !"),
@@ -22,14 +23,13 @@ const formikEnhancer = withFormik({
     password: "",
   }),
   handleSubmit: (values, { props, setSubmitting, resetForm }) => {
-    //console.log(props);
+    props.handleFormLoading();
     const payload = {
       ...values,
     };
     //setTimeout(() => {
     props.login(payload, resetForm, setSubmitting, showAlert);
     //console.log(payload);
-    //setSubmitting(false);
     //}, 7000);
   },
   displayName: "MyForm",
@@ -75,22 +75,28 @@ const MyForm = (props) => {
           )}
         </Col>
       </Row>
-      <Row>
-        {/*<Col xl="12" style={{ margin: "12px 0" }}>
-          <Button color="primary" type="submit" disabled={isSubmitting}>
-            Envoyer
+      {!props.loading ? (
+        <Button
+          size="lg"
+          type="submit"
+          disabled={isSubmitting}
+          className="btn-block text-uppercase font-weight-bold font-size-sm"
+          color="primary"
+        >
+          Login
+        </Button>
+      ) : (
+        <div className="d-flex align-items-center justify-content-center">
+          <Button
+            size="lg"
+            disabled
+            className="btn-block text-uppercase font-weight-bold font-size-sm"
+            color="primary"
+          >
+            <SyncLoader color={"var(--white)"} loading={true} />
           </Button>
-          </Col>*/}
-      </Row>
-      <Button
-        size="lg"
-        type="submit"
-        disabled={isSubmitting}
-        className="btn-block text-uppercase font-weight-bold font-size-sm"
-        color="primary"
-      >
-        {props.loading ? "Loading .... " : "Login"}
-      </Button>
+        </div>
+      )}
     </Form>
   );
 };
@@ -102,5 +108,7 @@ const MyEnhancedForm = connect(mapStateToProps, { login })(
   formikEnhancer(MyForm)
 );
 
-const FormLogin = () => <MyEnhancedForm />;
+const FormLogin = (props) => (
+  <MyEnhancedForm handleFormLoading={props.handleFormLoading} />
+);
 export default FormLogin;

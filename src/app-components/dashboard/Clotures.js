@@ -59,7 +59,7 @@ export default function Clotures() {
     <>
       <Card className="card-box shadow-none">
         <div className="px-4 pt-4 text-primary">
-          <h5 className="font-weight-normal text-dark">
+          <h5 className="font-weight-bold text-dark">
             Clotures recentes des agences
           </h5>
         </div>

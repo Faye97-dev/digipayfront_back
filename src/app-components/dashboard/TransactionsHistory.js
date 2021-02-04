@@ -40,31 +40,27 @@ import {
 import FormFilter from "../transaction/FormFilter";
 import empty from "../../assets/images/empty.png";
 import { showAlert } from "../../utils/alerts";
-
+import SkeletonLoader from "../../utils/SkeletonLoader";
+import ModalTransDetails from "../transaction/ModalTransDetails";
 const filtersOptions = {
-  type_agence: {
-    label: "Type agence",
-    name: "type_agence",
-    content: [
-      { value: "AGENCE_INTERN", label: "AGENCE_INTERN" },
-      { value: "PARTNER_SILVER", label: "PARTNER_SILVER" },
-      { value: "PARTNER_GOLD", label: "PARTNER_GOLD" },
-    ],
-  },
-  online: {
+  status: {
     label: "Status",
-    name: "online",
+    name: "status",
     content: [
-      { value: false, label: "Hors Ligne" },
-      { value: true, label: "En ligne" },
+      { value: "NOT_WITHDRAWED", label: "NOT_WITHDRAWED" },
+      { value: "TO_VALIDATE", label: "TO_VALIDATE" },
+      { value: "WITHDRAWED", label: "WITHDRAWED" },
+      { value: "CANCELED", label: "CANCELED" },
     ],
   },
-  commune_code: {
-    label: "Commune",
-    name: "commune_code",
+  type_transaction: {
+    label: "Type de Transaction",
+    name: "type_transaction",
     content: [
-      { value: 1, label: "TVZ" },
-      { value: 2, label: "KSAR" },
+      { value: "01", label: "TRANSFERT" },
+      { value: "02", label: "RETRAIT" },
+      { value: "03", label: "COMP_VERSEMENT" },
+      { value: "04", label: "COMP_RETRAIT" },
     ],
   },
 };
@@ -254,7 +250,9 @@ class TransactionsHistory extends Component {
   render() {
     const transactions = this.props.transactions.loading ? (
       <tr>
-        <td colSpan="9">loading .....</td>
+        <td colSpan="9">
+          <SkeletonLoader />
+        </td>
       </tr>
     ) : (
       <>
@@ -294,10 +292,7 @@ class TransactionsHistory extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {getHighlightedText(
-                        item.transaction.agence_origine.nom,
-                        this.state.search
-                      )}
+                      {item.transaction.agence_origine.nom}
                     </a>
                     <span className="text-black-50 d-block">
                       {item.transaction.agence_origine.type_agence}
@@ -312,10 +307,7 @@ class TransactionsHistory extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {getHighlightedText(
-                        item.transaction.agence_destination.nom,
-                        this.state.search
-                      )}
+                      {item.transaction.agence_destination.nom}
                     </a>
                     <span className="text-black-50 d-block">
                       {item.transaction.agence_destination.type_agence}
@@ -330,16 +322,10 @@ class TransactionsHistory extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {getHighlightedText(
-                        item.transaction.destinataire.nom,
-                        this.state.search
-                      )}
+                      {item.transaction.destinataire.nom}
                     </a>
                     <span className="text-black-50 d-block">
-                      {getHighlightedText(
-                        item.transaction.destinataire.tel,
-                        this.state.search
-                      )}
+                      {item.transaction.destinataire.tel}
                     </span>
                   </div>
                 </td>
@@ -380,7 +366,7 @@ class TransactionsHistory extends Component {
                   </Badge>
                 </td>
                 <td className="text-center">
-                  <Button
+                  {/*<Button
                     color="primary"
                     className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
                   >
@@ -388,7 +374,8 @@ class TransactionsHistory extends Component {
                       icon={["fas", "eye"]}
                       className="font-size-sm"
                     />
-                  </Button>
+                  </Button>*/}
+                  <ModalTransDetails item={item} />
                 </td>
               </tr>
             );
@@ -401,12 +388,12 @@ class TransactionsHistory extends Component {
       <>
         <Card className="card-box shadow-none">
           <div className="px-4 pt-4 text-primary">
-            <h5 className="font-weight-normal text-dark">
-              Historique de transactions
+            <h5 className="font-weight-bold text-dark">
+              Historiques transactions
             </h5>
           </div>
           <div className="d-flex justify-content-between px-4 py-3">
-            {/*<div
+            <div
               className={clsx(
                 "search-wrapper search-wrapper--alternate search-wrapper--grow",
                 { "is-active": this.state.searchOpen }
@@ -419,22 +406,26 @@ class TransactionsHistory extends Component {
                 type="search"
                 onFocus={this.openSearch}
                 onBlur={this.closeSearch}
-                placeholder="Search transactions..."
+                placeholder="Rechercher par ..."
                 onKeyDown={this.handleSearchSubmit}
                 value={this.state.search}
                 onChange={this.handleSearchChange}
+                disabled={this.props.transactions.loading}
               />
-              </div>
+            </div>
             <div className="d-flex align-items-center">
-              <Button
-                color="danger"
-                outline
-                className="d-flex align-items-center justify-content-center d-40 mr-2 p-0 rounded-pill"
-                onClick={this.reset}
-              >
-                <RotateCw className="w-50" />
-              </Button>
-              <UncontrolledDropdown>
+              {!this.props.transactions.loading && (
+                <Button
+                  color="danger"
+                  outline
+                  className="d-flex align-items-center justify-content-center d-40 mr-2 p-0 rounded-pill"
+                  onClick={this.reset}
+                >
+                  <RotateCw className="w-50" />
+                </Button>
+              )}
+
+              <UncontrolledDropdown disabled={this.props.transactions.loading}>
                 {this.state.filterValues === {} ||
                 allNull(this.state.filterValues) ? (
                   <DropdownToggle
@@ -460,11 +451,10 @@ class TransactionsHistory extends Component {
                       filterValues={this.state.filterValues}
                       filtersOptions={filtersOptions}
                     />
-                </div>
+                  </div>
                 </DropdownMenu>
               </UncontrolledDropdown>
-              </div>
-              */}
+            </div>
           </div>
           <div className="divider" />
           <div className="px-4 pt-3 pb-1">
@@ -474,13 +464,20 @@ class TransactionsHistory extends Component {
                   <thead>
                     <tr>
                       <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
+                        className="text-center font-size-lg font-weight-normal text-dark"
                         scope="col"
+                        onClick={() =>
+                          !this.props.transactions.loading &&
+                          this.handleOrdering({
+                            attribute: ["code_transaction"],
+                            increment: this.state.orderingValues.increment,
+                          })
+                        }
                       >
-                        Numero
+                        Numero {this.currentOrdering("code_transaction")}
                       </th>
                       <th
-                        className=" text-center font-size-lg font-weight-normal   text-dark"
+                        className=" text-center font-size-lg font-weight-normal text-dark"
                         scope="col"
                       >
                         Date
@@ -512,14 +509,28 @@ class TransactionsHistory extends Component {
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
+                        onClick={() =>
+                          !this.props.transactions.loading &&
+                          this.handleOrdering({
+                            attribute: ["type_transaction"],
+                            increment: this.state.orderingValues.increment,
+                          })
+                        }
                       >
-                        Type
+                        Type {this.currentOrdering("type_transaction")}
                       </th>
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
+                        onClick={() =>
+                          !this.props.transactions.loading &&
+                          this.handleOrdering({
+                            attribute: ["transaction", "status"],
+                            increment: this.state.orderingValues.increment,
+                          })
+                        }
                       >
-                        Status
+                        Status {this.currentOrdering("status")}
                       </th>
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
@@ -529,72 +540,7 @@ class TransactionsHistory extends Component {
                       </th>
                     </tr>
                   </thead>
-                  {/*<thead>
-                    <tr>
-                      <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                        onClick={() =>
-                          this.handleOrdering({
-                            attribute: ["code_agence"],
-                            increment: this.state.orderingValues.increment,
-                          })
-                        }
-                      >
-                        Code agence {this.currentOrdering("code_agence")}
-                      </th>
-                      <th
-                        className=" text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                        onClick={() =>
-                          this.handleOrdering({
-                            attribute: ["nom"],
-                            increment: this.state.orderingValues.increment,
-                          })
-                        }
-                      >
-                        Nom {this.currentOrdering("nom")}
-                      </th>
-                      <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                        onClick={() =>
-                          this.handleOrdering({
-                            attribute: ["commune", "commune"],
-                            increment: this.state.orderingValues.increment,
-                          })
-                        }
-                      >
-                        Adresse {this.currentOrdering("commune")}
-                      </th>
-                      <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                        onClick={() =>
-                          this.handleOrdering({
-                            attribute: ["tel"],
-                            increment: this.state.orderingValues.increment,
-                          })
-                        }
-                      >
-                        Contact {this.currentOrdering("tel")}
-                      </th>
-                      <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                        onClick={() =>
-                          this.handleOrdering({
-                            attribute: ["type_agence"],
-                            increment: this.state.orderingValues.increment,
-                          })
-                        }
-                      >
-                        Type {this.currentOrdering("type_agence")}
-                      </th>
-                     
-                    </tr>
-                  </thead>
-                      */}
+
                   <tbody>{transactions}</tbody>
                 </Table>
               </div>

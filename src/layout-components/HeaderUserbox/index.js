@@ -55,8 +55,7 @@ const HeaderUserbox = (props) => {
             <ListGroupItem className="rounded-top">
               <Nav pills className="nav-neutral-primary flex-column">
                 <NavItem>
-                  {/*<NavLinkStrap href="/#" tag={NavLink} to="/PageProfile">*/}
-                  <NavLinkStrap href="/#" onClick={(e) => e.preventDefault()}>
+                  <NavLinkStrap href="/#" tag={NavLink} to="/Profil">
                     <FontAwesomeIcon
                       icon={["far", "user"]}
                       className="font-size-xxl text-primary"

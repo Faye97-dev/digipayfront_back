@@ -16,15 +16,16 @@ const formikEnhancer = withFormik({
       .required("Numero de telephone est obligatoire !"),
   }),*/
   mapPropsToValues: (props) => ({
-    type_agence: props.filterValues && (props.filterValues.type_agence || ""),
-    online: props.filterValues && (props.filterValues.online || ""),
-    commune_code: props.filterValues && (props.filterValues.commune_code || ""),
+    type_transaction:
+      props.filterValues && (props.filterValues.type_transaction || ""),
+    //online: props.filterValues && (props.filterValues.online || ""),
+    status: props.filterValues && (props.filterValues.status || ""),
   }),
 
   /*handleSubmit: (values, { setSubmitting }) => {
     const data = {
-      type_agence: values.type_agence.value,
-      online: values.online.value,
+      type_transaction: values.type_transaction.value,
+      //online: values.online.value,
     };
     
     setSubmitting(false);
@@ -48,9 +49,9 @@ const MyForm = (props) => {
   const customSubmit = (e) => {
     e.preventDefault();
     const data = {
-      type_agence: values.type_agence.value,
-      online: values.online.value,
-      "commune#commune_code": values.commune_code.value,
+      type_transaction: values.type_transaction.value,
+      //online: values.online.value,
+      "transaction#status": values.status.value,
     };
     props.handleFilter(data);
     setSubmitting(false);
@@ -61,19 +62,19 @@ const MyForm = (props) => {
         <Row>
           <Col xl="12" style={{ margin: "9px 0" }}>
             <MySelect
-              label={props.filtersOptions.type_agence.label}
-              name={props.filtersOptions.type_agence.name}
-              option={props.filtersOptions.type_agence.content}
-              value={values.type_agence}
+              label={props.filtersOptions.type_transaction.label}
+              name={props.filtersOptions.type_transaction.name}
+              option={props.filtersOptions.type_transaction.content}
+              value={values.type_transaction}
               onChange={setFieldValue}
               onBlur={setFieldTouched}
-              error={errors.type_agence}
-              touched={touched.type_agence}
+              error={errors.type_transaction}
+              touched={touched.type_transaction}
             />
           </Col>
         </Row>
 
-        <Row>
+        {/*<Row>
           <Col xl="12" style={{ margin: "9px 0" }}>
             <MySelect
               label={props.filtersOptions.online.label}
@@ -86,19 +87,19 @@ const MyForm = (props) => {
               touched={touched.online}
             />
           </Col>
-        </Row>
+       </Row>*/}
 
         <Row>
           <Col xl="12" style={{ margin: "9px 0" }}>
             <MySelect
-              label={props.filtersOptions.commune_code.label}
-              name={props.filtersOptions.commune_code.name}
-              option={props.filtersOptions.commune_code.content}
-              value={values.commune_code}
+              label={props.filtersOptions.status.label}
+              name={props.filtersOptions.status.name}
+              option={props.filtersOptions.status.content}
+              value={values.status}
               onChange={setFieldValue}
               onBlur={setFieldTouched}
-              error={errors.commune_code}
-              touched={touched.commune_code}
+              error={errors.status}
+              touched={touched.status}
             />
           </Col>
         </Row>

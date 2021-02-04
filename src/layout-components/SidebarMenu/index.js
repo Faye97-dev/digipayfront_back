@@ -34,6 +34,10 @@ import {
   User,
   CreditCard,
   Repeat,
+  BarChart,
+  DollarSign,
+  Phone,
+  MessageCircle,
 } from "react-feather";
 
 import { Row, Col, Button, Modal } from "reactstrap";
@@ -1392,7 +1396,7 @@ const SidebarMenu = (props) => {
       label: "Employes",
       link: "/Employe",
       icon: <User />,
-      roles: ["SYSADMIN", "RESPONSABLE_AGENCE"],
+      roles: ["SYSADMIN"],
     },
     {
       id: 5,
@@ -1410,6 +1414,60 @@ const SidebarMenu = (props) => {
     },
     {
       id: 6,
+      label: "Statistiques",
+      link: "/Statistique",
+      icon: <BarChart />,
+      roles: [
+        "SYSADMIN",
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+        "CLIENT",
+        "VENDOR",
+      ],
+    },
+    {
+      id: 7,
+      label: "Compensations",
+      link: "/Compensation",
+      icon: <DollarSign />,
+      roles: [
+        "SYSADMIN",
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+      ],
+    },
+    {
+      id: 8,
+      label: "Notifications",
+      link: "/Notification",
+      icon: <MessageCircle />,
+      roles: [
+        "SYSADMIN",
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+        "CLIENT",
+        "VENDOR",
+      ],
+    },
+    {
+      id: 9,
+      label: "Contacts",
+      link: "/Contact",
+      icon: <Phone />,
+      roles: [
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+        "CLIENT",
+        "VENDOR",
+      ],
+    },
+
+    /*{
+      id: 10,
       label: "Messagerie",
       link: "/Chat",
       icon: <Send />,
@@ -1421,7 +1479,7 @@ const SidebarMenu = (props) => {
         "CLIENT",
         "VENDOR",
       ],
-    },
+    },*/
   ];
 
   const Menu = (

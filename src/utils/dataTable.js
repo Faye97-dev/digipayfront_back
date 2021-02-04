@@ -169,7 +169,7 @@ export const getHighlightedText = (text, search) => {
     return "";
   }
   if (search === "" || typeof text !== "string") {
-    return text;
+    return text; // handle int and float
   }
   const cleanSearch = search.replace(/[^a-zA-Z0-9-: ]/g, "");
   const parts = text.split(new RegExp(`(${cleanSearch})`, "gi"));

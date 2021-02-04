@@ -6,7 +6,7 @@ import { NavLink as NavLinkStrap } from "reactstrap";
 
 import FormVendor from "./FormVendor";
 import FormVendorPayback from "./FormVendorPayback";
-
+import FormClientPay from "./FormClientPay";
 export default function TabsClient() {
   const [activeTab, setActiveTab] = useState("2");
 
@@ -28,7 +28,9 @@ export default function TabsClient() {
                       toggle("2");
                     }}
                   >
-                    <span className="px-3 py-2 font-weight-bold">Paiement</span>
+                    <span className="px-3 py-2 font-weight-bold">
+                      Encaisser
+                    </span>
                   </NavLinkStrap>
                 </NavItem>
                 <NavItem>
@@ -38,7 +40,17 @@ export default function TabsClient() {
                       toggle("3");
                     }}
                   >
-                    <span className="px-3 py-2 font-weight-bold">Retrait</span>
+                    <span className="px-3 py-2 font-weight-bold">Retirer</span>
+                  </NavLinkStrap>
+                </NavItem>
+                <NavItem>
+                  <NavLinkStrap
+                    className={clsx({ active: activeTab === "1" })}
+                    onClick={() => {
+                      toggle("1");
+                    }}
+                  >
+                    <span className="px-3 py-2 font-weight-bold">Payer</span>
                   </NavLinkStrap>
                 </NavItem>
                 <NavItem>
@@ -49,7 +61,7 @@ export default function TabsClient() {
                     }}
                   >
                     <span className="px-3 py-2 font-weight-bold">
-                      Remboursement
+                      Rembourser
                     </span>
                   </NavLinkStrap>
                 </NavItem>
@@ -69,6 +81,11 @@ export default function TabsClient() {
               <TabPane tabId="4">
                 <div className=" my-5">
                   <FormVendorPayback submit="Demander" />
+                </div>
+              </TabPane>
+              <TabPane tabId="1">
+                <div className=" my-5">
+                  <FormClientPay submit="Demander" />
                 </div>
               </TabPane>
             </TabContent>

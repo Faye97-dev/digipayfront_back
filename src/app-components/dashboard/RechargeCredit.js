@@ -19,41 +19,13 @@ export default class RechargeCredit extends Component {
   render() {
     return (
       <>
-        {/*<Card className="card-box p-5 mb-5">
-          <Row className="no-gutters align-items-center">
-            <Col xl="5">
-              <a
-                href="#/"
-                onClick={(e) => e.preventDefault()}
-                className="d-flex h-280px rounded card-box-hover-rise"
-              >
-                <img
-                  src={stock1}
-                  alt="Bamburgh React Admin Dashboard with Reactstrap PRO"
-                  className="img-fit-container rounded"
-                />
-              </a>
-            </Col>
-            <Col xl="7">
-              <CardBody className="px-0 px-xl-5 pt-4 pb-xl-1">
-                <a href="#/" onClick={(e) => e.preventDefault()}>
-                  <h2 className="font-weight-bold mb-1">
-                    Recharge de Carte credit
-                  </h2>
-                </a>
-                <FormClientCredit></FormClientCredit>
-              </CardBody>
-            </Col>
-          </Row>
-    </Card>*/}
-
-        <LivePreviewExample></LivePreviewExample>
+        <CollapseRechargeCredit />
       </>
     );
   }
 }
 
-function LivePreviewExample() {
+function CollapseRechargeCredit() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);

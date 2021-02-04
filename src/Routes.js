@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from "react";
 import { connect } from "react-redux";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { ClimbingBoxLoader } from "react-spinners";
+import { RiseLoader } from "react-spinners";
 import PrivateRoute from "./utils/PrivateRoute";
 // Layout Blueprints
 
@@ -85,6 +85,17 @@ const Employe = lazy(() => import("./app-components/employe/Employe"));
 const Mesenger = lazy(() => import("./app-components/mesenger/Mesenger"));
 const Recharge = lazy(() => import("./app-components/recharge/FormBanquaire"));
 const Login = lazy(() => import("./app-components/auth/Login"));
+const Compensation = lazy(() =>
+  import("./app-components/compensation/Compensation")
+);
+const Statistique = lazy(() =>
+  import("./app-components/statistiques/Statistique")
+);
+const Profil = lazy(() => import("./app-components/profil/ProfilResponsable"));
+const Notification = lazy(() =>
+  import("./app-components/notification/Notification")
+);
+const Contact = lazy(() => import("./app-components/contact/Contact"));
 /**/
 
 const PageLoginBasic = lazy(() => import("./example-pages/PageLoginBasic"));
@@ -162,6 +173,51 @@ const Routes = (props) => {
       link: "/RechargeBanquaire",
       roles: ["CLIENT"],
     },
+    {
+      component: Compensation,
+      link: "/Compensation",
+      roles: [
+        "SYSADMIN",
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+      ],
+    },
+    {
+      component: Statistique,
+      link: "/Statistique",
+      roles: [
+        "SYSADMIN",
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+        "CLIENT",
+        "VENDOR",
+      ],
+    },
+    {
+      component: Notification,
+      link: "/Notification",
+      roles: [
+        "SYSADMIN",
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+        "CLIENT",
+        "VENDOR",
+      ],
+    },
+    {
+      component: Contact,
+      link: "/Contact",
+      roles: [
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+        "CLIENT",
+        "VENDOR",
+      ],
+    },
   ];
 
   const RoutesCollapsed = [
@@ -183,15 +239,12 @@ const Routes = (props) => {
     return (
       <>
         <div className="d-flex align-items-center flex-column vh-100 justify-content-center text-center py-3">
-          <div className="d-flex align-items-center flex-column px-4">
-            <ClimbingBoxLoader color={"#3c44b1"} loading={true} />
+          <div className="d-flex align-items-center flex-column px-4 pb-2">
+            <RiseLoader color={"#3c44b1"} loading={true} />
           </div>
-          <div className="text-muted font-size-xl text-center pt-3">
-            Please wait while we load the live preview examples
-            <span className="font-size-lg d-block text-dark">
-              This live preview instance can be slower than a real production
-              build!
-            </span>
+          <div className="text-muted font-size-xl text-center pt-4">
+            Lancement de digiPay , veuillez patientez svp ...
+            <span className="font-size-lg d-block text-dark"></span>
           </div>
         </div>
       </>
@@ -226,6 +279,10 @@ const Routes = (props) => {
                 "/Agence",
                 "/Employe",
                 "/RechargeBanquaire",
+                "/Compensation",
+                "/Statistique",
+                "/Notification",
+                "/Contact",
                 "/DashboardMonitoring",
               ]}
             >
@@ -258,7 +315,7 @@ const Routes = (props) => {
                 </Switch>
               </LeftSidebar>
             </Route>
-            <Route path={["/Chat", "/PageProfile"]}>
+            <Route path={["/Chat", "/Profil"]}>
               <CollapsedSidebar>
                 <Switch location={location} key={location.pathname}>
                   <motion.div
@@ -279,8 +336,8 @@ const Routes = (props) => {
                       />
                     );
                   })*/}
-                    <PrivateRoute path="/Chat" component={Mesenger} />
-                    <PrivateRoute path="/PageProfile" component={PageProfile} />
+                    {/*<PrivateRoute path="/Chat" component={Mesenger} />*/}
+                    <PrivateRoute path="/Profil" component={Profil} />
                   </motion.div>
                 </Switch>
               </CollapsedSidebar>
