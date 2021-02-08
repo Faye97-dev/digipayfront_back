@@ -7,10 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   UncontrolledPopover,
   Badge,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
+  CardBody,
+  Card,
   Button,
   Progress,
 } from "reactstrap";
@@ -32,6 +30,7 @@ import Switch from "rc-switch";
 import { updateStatusAgence } from "../../actions/agence";
 import { showAlert } from "../../utils/alerts";
 import { ClipLoader } from "react-spinners";
+import { NavLink } from "react-router-dom";
 function Toggle(props) {
   //const [checked, setChecked] = useState(true);
 
@@ -275,6 +274,36 @@ const HeaderDots = (props) => {
     </>
   );
 
+  const fetchData = [
+    {
+      id: 1,
+      from: "42158976",
+      date: "13-11-2020 16:59",
+      style: "warning",
+      type: "RETRAIT",
+      msg:
+        "Vous avez envoye 500.0 pour le client dont le numero est : 42158976",
+    },
+    {
+      id: 2,
+      from: "2015786",
+      date: "12-11-2020 12:59",
+      style: "primary",
+      type: "TRANSFERT",
+      msg:
+        "Vous avez retire 6200.0 pour le client dont le numero est : 2015786",
+    },
+    {
+      id: 3,
+      from: "20171400",
+      date: "28-10-2020 10:21",
+      style: "warning",
+      type: "RETRAIT",
+      msg:
+        "Vous avez envoye 250.0 pour le client dont le numero est : 20171400",
+    },
+  ];
+
   const notif = (
     <>
       <span className="d-inline-block pr-2">
@@ -303,7 +332,7 @@ const HeaderDots = (props) => {
                 Notifications
               </h4>
               <p className=" mb-0">
-                You have <b className="text-success">472</b> new messages
+                You have <b className="text-success">4</b> new messages
               </p>
             </div>
           </div>
@@ -314,111 +343,67 @@ const HeaderDots = (props) => {
                   wheelPropagation: false,
                 }}
               >
-                <div className="timeline-list timeline-list-offset timeline-list-offset-dot">
-                  <div className="timeline-item">
-                    <div className="timeline-item-offset">9:25</div>
-                    <div className="timeline-item--content">
-                      <div className="timeline-item--icon" />
-                      <h4 className="timeline-item--label mb-2 font-weight-bold">
-                        1991
-                      </h4>
-                      <p>
-                        The World Wide Web goes live with its first web page.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="timeline-item">
-                    <div className="timeline-item-offset">9:25</div>
-                    <div className="timeline-item--content">
-                      <div className="timeline-item--icon" />
-                      <h4 className="timeline-item--label mb-2 font-weight-bold">
-                        Java exam day
-                      </h4>
-                      <p>
-                        Bill Clinton's presidential scandal makes it online.
-                      </p>
-                      <div className="avatar-wrapper-overlap mt-2 mb-1">
-                        <div className="avatar-icon-wrapper avatar-icon-sm">
-                          <div className="avatar-icon">
-                            <img alt="..." src={avatar1} />
+                {fetchData.map((item) => {
+                  return (
+                    <Card className="card-box mb-3 mx-3" key={item.id}>
+                      <div className={`card-indicator bg-${item.style}`} />
+                      <CardBody className="px-4 py-2">
+                        <div className="d-none d-sm-block">
+                          <div className="pb-2 d-flex justify-content-between">
+                            <a
+                              href="#/"
+                              className="font-size-xl text-black"
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              {item.from}
+                            </a>
+                            <div className="ml-auto font-size-sm text-primary px-2">
+                              <FontAwesomeIcon
+                                icon={["far", "clock"]}
+                                className="mr-1"
+                              />
+                              {item.date}
+                            </div>
                           </div>
                         </div>
-                        <div className="avatar-icon-wrapper avatar-icon-sm">
-                          <div className="avatar-icon">
-                            <img alt="..." src={avatar2} />
+                        <div className="d-sm-none d-block ">
+                          <a
+                            href="#/"
+                            className="font-size-xl text-black pb-2"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            {item.from}
+                          </a>
+                          <div className="font-size-sm text-primary pb-2">
+                            <FontAwesomeIcon
+                              icon={["far", "clock"]}
+                              className="mr-1"
+                            />
+                            {item.date}
                           </div>
                         </div>
-                        <div className="avatar-icon-wrapper avatar-icon-sm">
-                          <div className="avatar-icon">
-                            <img alt="..." src={avatar6} />
-                          </div>
+
+                        <div className="d-flex align-items-center justify-content-start text-justify">
+                          <Badge color={item.style} className="px-3 mx-2">
+                            {item.type}
+                          </Badge>
+                          {/*item.msg*/}
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="timeline-item">
-                    <div className="timeline-item-offset">9:25</div>
-                    <div className="timeline-item--content">
-                      <div className="timeline-item--icon" />
-                      <h4 className="timeline-item--label mb-2 font-weight-bold">
-                        Business investor meeting
-                      </h4>
-                      <p>
-                        Mosaic, the first graphical browser, is introduced to
-                        the average consumer.
-                      </p>
-                      <div className="mt-3">
-                        <a href="#/" onClick={(e) => e.preventDefault()}>
-                          <img
-                            alt="..."
-                            className="img-fluid rounded mr-3 shadow-sm"
-                            src={people1}
-                            width="70"
-                          />
-                        </a>
-                        <a href="#/" onClick={(e) => e.preventDefault()}>
-                          <img
-                            alt="..."
-                            className="img-fluid rounded shadow-sm"
-                            src={people3}
-                            width="70"
-                          />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="timeline-item">
-                    <div className="timeline-item-offset">9:25</div>
-                    <div className="timeline-item--content">
-                      <div className="timeline-item--icon" />
-                      <h4 className="timeline-item--label mb-2 font-weight-bold">
-                        Learning round table gathering
-                      </h4>
-                      <p>First ever iPod launches.</p>
-                      <div className="mt-2">
-                        <Button size="sm" color="primary">
-                          Submit Report
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="timeline-item">
-                    <div className="timeline-item-offset">9:25</div>
-                    <div className="timeline-item--content">
-                      <div className="timeline-item--icon" />
-                      <h4 className="timeline-item--label mb-2 font-weight-bold">
-                        2003
-                      </h4>
-                      <p>MySpace becomes the most popular social network.</p>
-                    </div>
-                  </div>
-                </div>
+                      </CardBody>
+                    </Card>
+                  );
+                })}
               </PerfectScrollbar>
             </div>
           </div>
           <div className="text-center py-3">
-            <Button color="primary" className="px-4">
-              <span className="btn-wrapper--label">Learn more</span>
+            <Button
+              color="primary"
+              className="px-4"
+              tag={NavLink}
+              to="/Notification"
+            >
+              <span className="btn-wrapper--label">Voir plus</span>
               <span className="btn-wrapper--icon">
                 <FontAwesomeIcon icon={["fas", "arrow-right"]} />
               </span>

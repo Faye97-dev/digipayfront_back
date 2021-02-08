@@ -10,13 +10,13 @@ import {
   DropdownMenu,
 } from "reactstrap";
 
-import avatar2 from "../../assets/images/avatars/avatar2.jpg";
+import av1 from "../../assets/images/avatars/av1.png";
 import { NavLink } from "react-router-dom";
-
-const SidebarUserbox = () => {
-  const demo = (
+import { connect } from "react-redux";
+const SidebarUserbox = (props) => {
+  const profil = (
     <div className="app-sidebar--userbox">
-      <UncontrolledDropdown className="card-tr-actions">
+      {/*<UncontrolledDropdown className="card-tr-actions">
         <DropdownToggle
           color="link"
           className="p-0 border-0 d-30 text-white-50"
@@ -33,7 +33,7 @@ const SidebarUserbox = () => {
           <div className="align-box-row align-items-center p-3">
             <div className="avatar-icon-wrapper avatar-icon-md">
               <div className="avatar-icon rounded-circle">
-                <img alt="..." src={avatar2} />
+                <img alt="..." src={av1} />
               </div>
             </div>
             <div className="pl-2">
@@ -86,19 +86,22 @@ const SidebarUserbox = () => {
             </UncontrolledTooltip>
           </div>
         </DropdownMenu>
-      </UncontrolledDropdown>
+  </UncontrolledDropdown>*/}
       <div className="avatar-icon-wrapper avatar-icon-md">
-        <Badge color="danger" className="badge-circle">
-          Offline
+        <Badge color="success" className="badge-circle">
+          Online
         </Badge>
         <div className="avatar-icon rounded-circle">
-          <img alt="..." src={avatar2} />
+          <img alt="..." src={av1} />
         </div>
       </div>
       <div className="my-3 userbox-details">
-        Emma Taylor
-        <small className="d-block text-white-50">
-          (emma.taylor@uifort.com)
+        {props.user && props.user.first_name + " " + props.user.last_name}
+        <span className="d-block text-white py-1">
+          <Badge color="primary">{props.user && props.user.role}</Badge>
+        </span>
+        <small className="d-block text-white-20">
+          {props.user && props.user.tel}
         </small>
       </div>
       <Button size="sm" tag={NavLink} to="/PageProfile" color="userbox">
@@ -106,7 +109,11 @@ const SidebarUserbox = () => {
       </Button>
     </div>
   );
-  return <></>;
+  return <>{profil}</>;
 };
 
-export default SidebarUserbox;
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {})(SidebarUserbox);

@@ -1,8 +1,12 @@
 import React, { Component } from "react";
-
+import ContactList from "./ContactList";
 export class Contact extends Component {
   render() {
-    return <div>Contact</div>;
+    return (
+      <div>
+        <ContactList />
+      </div>
+    );
   }
 }
 

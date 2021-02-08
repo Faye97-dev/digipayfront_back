@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Row,
   Col,
@@ -9,10 +9,10 @@ import {
   ListGroup,
   ListGroupItem,
   Button,
-  Progress
-} from 'reactstrap';
+  Progress,
+} from "reactstrap";
 
-import avatar6 from '../../../assets/images/avatars/avatar6.jpg';
+import avatar6 from "../../../assets/images/avatars/avatar6.jpg";
 
 export default function LivePreviewExample() {
   return (
@@ -21,9 +21,10 @@ export default function LivePreviewExample() {
         <div className="card-tr-actions">
           <Button
             color="link"
-            className="btn-link-second p-0 font-size-xl text-second">
+            className="btn-link-second p-0 font-size-xl text-second"
+          >
             <FontAwesomeIcon
-              icon={['fas', 'ellipsis-h']}
+              icon={["fas", "ellipsis-h"]}
               className="font-size-lg"
             />
           </Button>
@@ -45,7 +46,8 @@ export default function LivePreviewExample() {
             <a
               href="#/"
               onClick={(e) => e.preventDefault()}
-              className="avatar-icon-wrapper mr-0 mr-md-3">
+              className="avatar-icon-wrapper mr-0 mr-md-3"
+            >
               <div className="d-block p-0 avatar-icon-wrapper m-0 d-100">
                 <Badge color="success" className="badge-circle p-top-a">
                   Online
@@ -61,12 +63,13 @@ export default function LivePreviewExample() {
                   <a
                     href="#/"
                     onClick={(e) => e.preventDefault()}
-                    className="font-size-lg mx-0 my-3 my-xl-0 font-weight-bold p-0">
+                    className="font-size-lg mx-0 my-3 my-xl-0 font-weight-bold p-0"
+                  >
                     Trystan Russo
                   </a>
                   <div className="d-block d-md-flex align-items-center mt-1 mb-3">
                     <FontAwesomeIcon
-                      icon={['far', 'envelope']}
+                      icon={["far", "envelope"]}
                       className="mr-2"
                     />
                     <span className="text-black-50 pr-4">
@@ -74,12 +77,12 @@ export default function LivePreviewExample() {
                     </span>
 
                     <FontAwesomeIcon
-                      icon={['far', 'address-card']}
+                      icon={["far", "address-card"]}
                       className="mr-2"
                     />
                     <span className="text-black-50 pr-4">Project Manager</span>
 
-                    <FontAwesomeIcon icon={['far', 'map']} className="mr-2" />
+                    <FontAwesomeIcon icon={["far", "map"]} className="mr-2" />
                     <span className="text-black-50">San Francisco, USA</span>
                   </div>
                 </div>
@@ -88,13 +91,15 @@ export default function LivePreviewExample() {
                   <Button
                     color="primary"
                     size="sm"
-                    className="shadow-none mr-2 text-uppercase font-size-xs font-weight-bold">
+                    className="shadow-none mr-2 text-uppercase font-size-xs font-weight-bold"
+                  >
                     Chat
                   </Button>
                   <Button
                     size="sm"
                     color="neutral-primary"
-                    className="text-uppercase font-size-xs font-weight-bold">
+                    className="text-uppercase font-size-xs font-weight-bold"
+                  >
                     Profile
                   </Button>
                 </div>
@@ -124,11 +129,13 @@ export default function LivePreviewExample() {
             <a
               href="#/"
               onClick={(e) => e.preventDefault()}
-              className="mr-0 mr-md-3">
+              className="mr-0 mr-md-3"
+            >
               <div className="avatar-icon-wrapper m-0 d-100">
                 <Badge
                   color="danger"
-                  className="badge-position badge-position--bottom-right badge-circle">
+                  className="badge-position badge-position--bottom-right badge-circle"
+                >
                   Offline
                 </Badge>
                 <div className="rounded overflow-hidden bg-neutral-danger font-size-lg text-center font-weight-bold text-danger d-flex justify-content-center flex-column">
@@ -142,23 +149,24 @@ export default function LivePreviewExample() {
                   <a
                     href="#/"
                     onClick={(e) => e.preventDefault()}
-                    className="font-size-lg mx-0 my-3 my-xl-0 font-weight-bold p-0">
+                    className="font-size-lg mx-0 my-3 my-xl-0 font-weight-bold p-0"
+                  >
                     Zara Wagstaff
                   </a>
                   <div className="d-block d-md-flex align-items-center mt-1 mb-3">
                     <FontAwesomeIcon
-                      icon={['far', 'envelope']}
+                      icon={["far", "envelope"]}
                       className="mr-2"
                     />
                     <span className="text-black-50 pr-4">zara@wags.com</span>
 
                     <FontAwesomeIcon
-                      icon={['far', 'address-card']}
+                      icon={["far", "address-card"]}
                       className="mr-2"
                     />
                     <span className="text-black-50 pr-4">UX Consultant</span>
 
-                    <FontAwesomeIcon icon={['far', 'map']} className="mr-2" />
+                    <FontAwesomeIcon icon={["far", "map"]} className="mr-2" />
                     <span className="text-black-50">London, UK</span>
                   </div>
                 </div>
@@ -167,13 +175,15 @@ export default function LivePreviewExample() {
                   <Button
                     color="primary"
                     size="sm"
-                    className="shadow-none mr-2 text-uppercase font-size-xs font-weight-bold">
+                    className="shadow-none mr-2 text-uppercase font-size-xs font-weight-bold"
+                  >
                     Chat
                   </Button>
                   <Button
                     size="sm"
                     color="neutral-primary"
-                    className="text-uppercase font-size-xs font-weight-bold">
+                    className="text-uppercase font-size-xs font-weight-bold"
+                  >
                     Profile
                   </Button>
                 </div>

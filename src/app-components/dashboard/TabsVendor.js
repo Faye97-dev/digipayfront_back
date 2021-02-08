@@ -7,8 +7,8 @@ import { NavLink as NavLinkStrap } from "reactstrap";
 import FormVendor from "./FormVendor";
 import FormVendorPayback from "./FormVendorPayback";
 import FormClientPay from "./FormClientPay";
-export default function TabsClient() {
-  const [activeTab, setActiveTab] = useState("2");
+export default function TabsVendor() {
+  const [activeTab, setActiveTab] = useState("3");
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -16,23 +16,12 @@ export default function TabsClient() {
 
   return (
     <>
-      <Row className="py-5">
+      <CodeGenerator />
+      <Row className="pb-5">
         <Col lg="12">
           <Card className="shadow-xxl px-3">
             <div className="nav-tabs-primary tabs-animated tabs-animated-line">
               <Nav tabs justified className="justify-content-center">
-                <NavItem>
-                  <NavLinkStrap
-                    className={clsx({ active: activeTab === "2" })}
-                    onClick={() => {
-                      toggle("2");
-                    }}
-                  >
-                    <span className="px-3 py-2 font-weight-bold">
-                      Encaisser
-                    </span>
-                  </NavLinkStrap>
-                </NavItem>
                 <NavItem>
                   <NavLinkStrap
                     className={clsx({ active: activeTab === "3" })}
@@ -68,14 +57,14 @@ export default function TabsClient() {
               </Nav>
             </div>
             <TabContent activeTab={activeTab}>
-              <TabPane tabId="2">
-                <div className=" my-5">
-                  <FormVendor submit="Payer" />
-                </div>
-              </TabPane>
               <TabPane tabId="3">
                 <div className=" my-5">
                   <FormVendor submit="Demander" />
+                </div>
+              </TabPane>
+              <TabPane tabId="1">
+                <div className=" my-5">
+                  <FormClientPay submit="Payer" />
                 </div>
               </TabPane>
               <TabPane tabId="4">
@@ -83,9 +72,46 @@ export default function TabsClient() {
                   <FormVendorPayback submit="Demander" />
                 </div>
               </TabPane>
+            </TabContent>
+          </Card>
+        </Col>
+      </Row>
+    </>
+  );
+}
+
+function CodeGenerator() {
+  const [activeTab, setActiveTab] = useState("1");
+
+  const toggle = (tab) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  };
+
+  return (
+    <>
+      <Row className="py-5">
+        <Col lg="12">
+          <Card className="shadow-xxl px-3">
+            <div className="nav-tabs-primary tabs-animated tabs-animated-line">
+              <Nav tabs justified className="justify-content-center mx-5 px-5">
+                <NavItem>
+                  <NavLinkStrap
+                    className={clsx({ active: activeTab === "1" })}
+                    onClick={() => {
+                      toggle("1");
+                    }}
+                  >
+                    <span className="px-3 py-2 font-weight-bold">
+                      Générer un code de paiement
+                    </span>
+                  </NavLinkStrap>
+                </NavItem>
+              </Nav>
+            </div>
+            <TabContent activeTab={activeTab}>
               <TabPane tabId="1">
                 <div className=" my-5">
-                  <FormClientPay submit="Demander" />
+                  <FormVendor submit="Générer" />
                 </div>
               </TabPane>
             </TabContent>

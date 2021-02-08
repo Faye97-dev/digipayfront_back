@@ -1378,19 +1378,7 @@ const SidebarMenu = (props) => {
         },
       ],
     },
-    {
-      id: 3,
-      label: "Agences",
-      link: "/Agence",
-      icon: <MapPin />,
-      roles: [
-        "SYSADMIN",
-        "EMPLOYE_AGENCE",
-        "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
-        "CLIENT",
-      ],
-    },
+
     {
       id: 4,
       label: "Employes",
@@ -1458,6 +1446,20 @@ const SidebarMenu = (props) => {
       link: "/Contact",
       icon: <Phone />,
       roles: [
+        "EMPLOYE_AGENCE",
+        "RESPONSABLE_AGENCE",
+        "AGENT_COMPENSATION",
+        "CLIENT",
+        "VENDOR",
+      ],
+    },
+    {
+      id: 3,
+      label: "Agences",
+      link: "/Agence",
+      icon: <MapPin />,
+      roles: [
+        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
