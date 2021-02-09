@@ -303,7 +303,92 @@ const HeaderDots = (props) => {
         "Vous avez envoye 250.0 pour le client dont le numero est : 20171400",
     },
   ];
+  const popover = (
+    <>
+      <div className="bg-composed-wrapper bg-primary mx-3 mt-3 border-0 text-center rounded-sm">
+        <div className="bg-composed-img-3 bg-composed-wrapper--image" />
+        <div className="bg-composed-wrapper--content text-white px-2 py-4">
+          <h4 className="font-size-xl font-weight-bold mb-2">Notifications</h4>
+          <p className=" mb-0">
+            You have <b className="text-success">4</b> new messages
+          </p>
+        </div>
+      </div>
+      <div className="tabs-animated tabs-animated-shadow tabs-bordered">
+        <div className="scroll-area scroll-area-sm shadow-overflow">
+          <PerfectScrollbar
+            options={{
+              wheelPropagation: false,
+            }}
+          >
+            {fetchData.map((item) => {
+              return (
+                <Card className="card-box mb-3 mx-3" key={item.id}>
+                  <div className={`card-indicator bg-${item.style}`} />
+                  <CardBody className="px-4 py-2">
+                    <div className="d-none d-sm-block">
+                      <div className="pb-2 d-flex justify-content-between">
+                        <a
+                          href="#/"
+                          className="font-size-xl text-black"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          {item.from}
+                        </a>
+                        <div className="ml-auto font-size-sm text-primary px-2">
+                          <FontAwesomeIcon
+                            icon={["far", "clock"]}
+                            className="mr-1"
+                          />
+                          {item.date}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-sm-none d-block ">
+                      <a
+                        href="#/"
+                        className="font-size-xl text-black pb-2"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        {item.from}
+                      </a>
+                      <div className="font-size-sm text-primary pb-2">
+                        <FontAwesomeIcon
+                          icon={["far", "clock"]}
+                          className="mr-1"
+                        />
+                        {item.date}
+                      </div>
+                    </div>
 
+                    <div className="d-flex align-items-center justify-content-start text-justify">
+                      <Badge color={item.style} className="px-3 mx-2">
+                        {item.type}
+                      </Badge>
+                      {/*item.msg*/}
+                    </div>
+                  </CardBody>
+                </Card>
+              );
+            })}
+          </PerfectScrollbar>
+        </div>
+      </div>
+      <div className="text-center py-3">
+        <Button
+          color="primary"
+          className="px-4"
+          tag={NavLink}
+          to="/Notification"
+        >
+          <span className="btn-wrapper--label">Voir plus</span>
+          <span className="btn-wrapper--icon">
+            <FontAwesomeIcon icon={["fas", "arrow-right"]} />
+          </span>
+        </Button>
+      </div>
+    </>
+  );
   const notif = (
     <>
       <span className="d-inline-block pr-2">
@@ -322,93 +407,18 @@ const HeaderDots = (props) => {
         <UncontrolledPopover
           target="alertsPopover"
           trigger="legacy"
-          className="popover-custom-wrapper popover-custom-md"
+          className="d-sm-none d-block popover-custom-wrapper popover-custom-sm"
           placement="auto"
         >
-          <div className="bg-composed-wrapper bg-primary mx-3 mt-3 border-0 text-center rounded-sm">
-            <div className="bg-composed-img-3 bg-composed-wrapper--image" />
-            <div className="bg-composed-wrapper--content text-white px-2 py-4">
-              <h4 className="font-size-xl font-weight-bold mb-2">
-                Notifications
-              </h4>
-              <p className=" mb-0">
-                You have <b className="text-success">4</b> new messages
-              </p>
-            </div>
-          </div>
-          <div className="tabs-animated tabs-animated-shadow tabs-bordered">
-            <div className="scroll-area scroll-area-sm shadow-overflow">
-              <PerfectScrollbar
-                options={{
-                  wheelPropagation: false,
-                }}
-              >
-                {fetchData.map((item) => {
-                  return (
-                    <Card className="card-box mb-3 mx-3" key={item.id}>
-                      <div className={`card-indicator bg-${item.style}`} />
-                      <CardBody className="px-4 py-2">
-                        <div className="d-none d-sm-block">
-                          <div className="pb-2 d-flex justify-content-between">
-                            <a
-                              href="#/"
-                              className="font-size-xl text-black"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              {item.from}
-                            </a>
-                            <div className="ml-auto font-size-sm text-primary px-2">
-                              <FontAwesomeIcon
-                                icon={["far", "clock"]}
-                                className="mr-1"
-                              />
-                              {item.date}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="d-sm-none d-block ">
-                          <a
-                            href="#/"
-                            className="font-size-xl text-black pb-2"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            {item.from}
-                          </a>
-                          <div className="font-size-sm text-primary pb-2">
-                            <FontAwesomeIcon
-                              icon={["far", "clock"]}
-                              className="mr-1"
-                            />
-                            {item.date}
-                          </div>
-                        </div>
-
-                        <div className="d-flex align-items-center justify-content-start text-justify">
-                          <Badge color={item.style} className="px-3 mx-2">
-                            {item.type}
-                          </Badge>
-                          {/*item.msg*/}
-                        </div>
-                      </CardBody>
-                    </Card>
-                  );
-                })}
-              </PerfectScrollbar>
-            </div>
-          </div>
-          <div className="text-center py-3">
-            <Button
-              color="primary"
-              className="px-4"
-              tag={NavLink}
-              to="/Notification"
-            >
-              <span className="btn-wrapper--label">Voir plus</span>
-              <span className="btn-wrapper--icon">
-                <FontAwesomeIcon icon={["fas", "arrow-right"]} />
-              </span>
-            </Button>
-          </div>
+          {popover}
+        </UncontrolledPopover>
+        <UncontrolledPopover
+          target="alertsPopover"
+          trigger="legacy"
+          className="d-none d-sm-block popover-custom-wrapper popover-custom-md"
+          placement="auto"
+        >
+          {popover}
         </UncontrolledPopover>
       </span>
     </>

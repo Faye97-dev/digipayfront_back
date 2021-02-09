@@ -64,7 +64,7 @@ const formikEnhancer = withFormik({
     frais_origine: 0,
     frais_destination: 0,
     remarque: "",
-    note: "",
+    //note: "",
   }),
   handleSubmit: (values, { props, resetForm, setSubmitting }) => {
     //{ setSubmitting, resetForm, addTransfert }
@@ -283,7 +283,7 @@ const MyForm = (props) => {
                 </div>
               )}
             </Col>
-            <Col xl="12" style={{ margin: "12px 0" }}>
+            {/*<Col xl="12" style={{ margin: "12px 0" }}>
               <Label for="note">Note</Label>
               <Field name="note" type="text" placeholder="notes ...." />
 
@@ -292,7 +292,7 @@ const MyForm = (props) => {
                   {errors.note}
                 </div>
               )}
-            </Col>
+              </Col>*/}
           </Row>
           <Row>
             <Col xl="12" style={{ margin: "12px 0" }}>

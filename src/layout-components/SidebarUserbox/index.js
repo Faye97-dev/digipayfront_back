@@ -95,18 +95,18 @@ const SidebarUserbox = (props) => {
           <img alt="..." src={av1} />
         </div>
       </div>
-      <div className="my-3 userbox-details">
+      <div className="mt-3 mb-0 userbox-details">
         {props.user && props.user.first_name + " " + props.user.last_name}
         <span className="d-block text-white py-1">
-          <Badge color="primary">{props.user && props.user.role}</Badge>
+          <Badge color="primary">{props.role && props.role.label}</Badge>
         </span>
         <small className="d-block text-white-20">
           {props.user && props.user.tel}
         </small>
       </div>
-      <Button size="sm" tag={NavLink} to="/PageProfile" color="userbox">
+      {/* <Button size="sm" tag={NavLink} to="/Profil" color="userbox">
         Mon profil
-      </Button>
+      </Button> */}
     </div>
   );
   return <>{profil}</>;
@@ -114,6 +114,7 @@ const SidebarUserbox = (props) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  role: state.auth.role,
 });
 
 export default connect(mapStateToProps, {})(SidebarUserbox);

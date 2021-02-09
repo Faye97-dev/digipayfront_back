@@ -45,7 +45,7 @@ function CollapseRechargeCredit() {
                   >
                     <div>
                       <h3 className="font-weight-bold mb-1 text-primary">
-                        Recharge Carte credit
+                        Recharge crédit téléphone
                       </h3>
                     </div>
                     <FontAwesomeIcon
@@ -57,9 +57,9 @@ function CollapseRechargeCredit() {
               </div>
             </CardHeader>
             <Collapse isOpen={isOpen}>
-              <div className="p-5">
+              <div className="px-lg-5 py-5 px-1">
                 <Row className="no-gutters align-items-center">
-                  <Col xl="5">
+                  {/*<Col xl="5">
                     <a
                       href="#/"
                       onClick={(e) => e.preventDefault()}
@@ -71,9 +71,9 @@ function CollapseRechargeCredit() {
                         className="img-fit-container rounded"
                       />
                     </a>
-                  </Col>
-                  <Col xl="7">
-                    <CardBody className="px-0 px-xl-5 pt-4 pb-xl-1">
+                  </Col>*/}
+                  <Col xl="12">
+                    <CardBody className="px-5 pt-1 pb-1 ">
                       <FormClientCredit></FormClientCredit>
                     </CardBody>
                   </Col>

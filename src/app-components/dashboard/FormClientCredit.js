@@ -2,12 +2,12 @@ import "./formik-demo.css";
 import React from "react";
 import { withFormik, Field, Form } from "formik";
 import * as Yup from "yup";
-import { Button, Row, Col, Label } from "reactstrap";
+import { Button, Row, Col, Label, Badge } from "reactstrap";
 import Select from "react-select";
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
-    operateur: Yup.object().required("L'operateur est obligatoire !"),
+    //operateur: Yup.object().required("L'operateur est obligatoire !"),
     carte: Yup.object().required("La carte est obligatoire !"),
     tel: Yup.number()
       .min(0, "Numero de telephone invalid  !")
@@ -15,7 +15,7 @@ const formikEnhancer = withFormik({
       .required("Numero de telephone est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({
-    operateur: "",
+    //operateur: "",
     carte: "",
     tel: 45121830,
   }),
@@ -23,7 +23,7 @@ const formikEnhancer = withFormik({
     const payload = {
       ...values,
       carte: { ...values.carte },
-      operateur: { ...values.operateur },
+      //operateur: { ...values.operateur },
     };
     setTimeout(() => {
       alert(JSON.stringify(payload, null, 2));
@@ -44,23 +44,36 @@ const MyForm = (props) => {
     setFieldTouched,
     isSubmitting,
   } = props;
+  const [operateur, tagColor] = values.tel.toString().trim().startsWith("4")
+    ? ["Mauritel", "warning"]
+    : values.tel.toString().trim().startsWith("3")
+    ? ["Mattel", "info"]
+    : values.tel.toString().trim().startsWith("2")
+    ? ["Chinguitel", "primary"]
+    : ["", ""];
   return (
     <>
       <Form onSubmit={handleSubmit}>
         <Row>
-          <Col xl="6" lg="12" style={{ margin: "9px 0" }}>
-            <MySelect
-              label="Operateur"
-              name="operateur"
-              option={optionsOperateur}
-              value={values.operateur}
-              onChange={setFieldValue}
-              onBlur={setFieldTouched}
-              error={errors.operateur}
-              touched={touched.operateur}
-            />
+          <Col xl="12" style={{ margin: "9px 0" }}>
+            <Label for="tel">
+              Téléphone
+              <Badge className="mx-2 px-2" color={tagColor}>
+                {operateur}
+              </Badge>
+            </Label>
+            <Field name="tel" type="number" />
+
+            {errors.tel && touched.tel && (
+              <div style={{ color: "red", marginTop: ".5rem" }}>
+                {errors.tel}
+              </div>
+            )}
           </Col>
-          <Col xl="6" lg="12" style={{ margin: "9px 0" }}>
+        </Row>
+
+        <Row>
+          <Col xl="12" style={{ margin: "9px 0" }}>
             <MySelect
               label="Carte"
               name="carte"
@@ -72,18 +85,18 @@ const MyForm = (props) => {
               touched={touched.carte}
             />
           </Col>
-        </Row>
-        <Row>
-          <Col xl="12" style={{ margin: "9px 0" }}>
-            <Label for="tel">Telephone</Label>
-            <Field name="tel" type="number" />
-
-            {errors.tel && touched.tel && (
-              <div style={{ color: "red", marginTop: ".5rem" }}>
-                {errors.tel}
-              </div>
-            )}
-          </Col>
+          {/* <Col xl="12" style={{ margin: "9px 0" }}>
+            <MySelect
+              label="Operateur"
+              name="operateur"
+              option={optionsOperateur}
+              value={values.operateur}
+              onChange={setFieldValue}
+              onBlur={setFieldTouched}
+              error={errors.operateur}
+              touched={touched.operateur}
+            />
+            </Col>*/}
         </Row>
         <Row>
           <Col xl="12" style={{ margin: "9px 0" }}>
@@ -102,7 +115,7 @@ const optionsCarte = [
   { value: "100", label: "100 MRU" },
   { value: "200", label: "200 MRU" },
   { value: "500", label: "500 MRU" },
-  { value: "100", label: "100 MRU" },
+  { value: "1000", label: "1000 MRU" },
 ];
 
 const optionsOperateur = [

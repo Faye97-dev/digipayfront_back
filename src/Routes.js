@@ -88,9 +88,9 @@ const Login = lazy(() => import("./app-components/auth/Login"));
 const Compensation = lazy(() =>
   import("./app-components/compensation/Compensation")
 );
-const Statistique = lazy(() =>
+/*const Statistique = lazy(() =>
   import("./app-components/statistiques/Statistique")
-);
+);*/
 const Profil = lazy(() => import("./app-components/profil/ProfilResponsable"));
 const Notification = lazy(() =>
   import("./app-components/notification/Notification")
@@ -100,7 +100,7 @@ const Contact = lazy(() => import("./app-components/contact/Contact"));
 
 const PageLoginBasic = lazy(() => import("./example-pages/PageLoginBasic"));
 
-const PageProfile = lazy(() => import("./example-pages/PageProfile"));
+//const PageProfile = lazy(() => import("./example-pages/PageProfile"));
 
 const Routes = (props) => {
   const location = useLocation();
@@ -149,6 +149,7 @@ const Routes = (props) => {
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
         "CLIENT",
+        "VENDOR",
       ],
     },
     {
@@ -183,7 +184,7 @@ const Routes = (props) => {
         "AGENT_COMPENSATION",
       ],
     },
-    {
+    /*{
       component: Statistique,
       link: "/Statistique",
       roles: [
@@ -194,7 +195,7 @@ const Routes = (props) => {
         "CLIENT",
         "VENDOR",
       ],
-    },
+    },*/
     {
       component: Notification,
       link: "/Notification",

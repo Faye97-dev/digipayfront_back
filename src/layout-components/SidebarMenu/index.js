@@ -1400,7 +1400,7 @@ const SidebarMenu = (props) => {
         "VENDOR",
       ],
     },
-    {
+    /*{
       id: 6,
       label: "Statistiques",
       link: "/Statistique",
@@ -1413,7 +1413,7 @@ const SidebarMenu = (props) => {
         "CLIENT",
         "VENDOR",
       ],
-    },
+    },*/
     {
       id: 7,
       label: "Compensations",
@@ -1441,11 +1441,12 @@ const SidebarMenu = (props) => {
       ],
     },
     {
-      id: 9,
-      label: "Contacts",
-      link: "/Contact",
-      icon: <Phone />,
+      id: 3,
+      label: "Agences",
+      link: "/Agence",
+      icon: <MapPin />,
       roles: [
+        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -1454,12 +1455,11 @@ const SidebarMenu = (props) => {
       ],
     },
     {
-      id: 3,
-      label: "Agences",
-      link: "/Agence",
-      icon: <MapPin />,
+      id: 9,
+      label: "Contacts",
+      link: "/Contact",
+      icon: <Phone />,
       roles: [
-        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",

@@ -94,7 +94,7 @@ class ContactList extends Component {
     return (
       <>
         <Row className="d-flex justify-content-center ">
-          <Col xl="4" md="6" sm="8" xs="12">
+          <Col xl="5" md="6" sm="8" xs="12">
             <Card className=" mb-3 bg-white">
               <div className="px-3 py-1">
                 <div className="rounded bg-white ">
