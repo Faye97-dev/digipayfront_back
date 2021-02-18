@@ -10,17 +10,21 @@ export const SUP_3000 = "SUP_3000";
 export const EMPLOYE_AGENCE = "EMPLOYE_AGENCE";
 export const RESPONSABLE_AGENCE = "RESPONSABLE_AGENCE";
 export const AGENT_COMPENSATION = "AGENT_COMPENSATION";
+export const CLIENT = "CLIENT";
+export const VENDOR = "VENDOR";
 
 export const NOT_WITHDRAWED = "NOT_WITHDRAWED";
 export const TO_VALIDATE = "TO_VALIDATE";
 export const WITHDRAWED = "WITHDRAWED";
 export const CANCELED = "CANCELED";
+export const COMFIRMED = "COMFIRMED";
 
 export const mapColorStatus = {
   NOT_WITHDRAWED: "warning",
   WITHDRAWED: "success",
   CANCELED: "danger",
   TO_VALIDATE: "info",
+  COMFIRMED: "success",
 };
 
 export const mapColorAgence = {
@@ -34,6 +38,10 @@ export const mapColorTypes = {
   "02": "warning",
   "03": "success",
   "04": "warning",
+  "05": "info",
+  "06": "warning",
+  "07": "success",
+  "08": "danger",
 };
 
 export const mapTypeNames = {
@@ -41,4 +49,8 @@ export const mapTypeNames = {
   "02": "RETRAIT",
   "03": "COMP_VERSEMENT",
   "04": "COMP_RETRAIT",
+  "05": "RECHARGE",
+  "06": "PAIEMENT",
+  "07": "ENVOI",
+  "08": "REMBOURSEMENT",
 };

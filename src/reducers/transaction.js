@@ -5,6 +5,7 @@ import {
   ADD_TRANSFERT,
   ADD_RETRAIT,
   ERROR_TRANS,
+  SUCCESS_TRANS,
 } from "../actions/types.js";
 
 const initialState = {
@@ -31,6 +32,7 @@ export default function (state = initialState, action) {
         return state;
       }
     case ERROR_TRANS:
+    case SUCCESS_TRANS:
       return {
         ...state,
         transactions: {

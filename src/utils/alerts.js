@@ -7,7 +7,7 @@ export const showAlert = (type, text, icon) => {
       >
         {icon}
       </span>
-      <span>
+      <span className="text-justify">
         <strong className={`d-block`}>{title + " !"}</strong>
         {text}
       </span>
@@ -16,7 +16,7 @@ export const showAlert = (type, text, icon) => {
 
   //switch (type) {
   if (type === "info") {
-    console.log(text);
+    //console.log(text);
     toast.info(msg("Info"), {
       containerId: "B",
     });

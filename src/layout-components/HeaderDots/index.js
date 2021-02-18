@@ -440,7 +440,7 @@ const HeaderDots = (props) => {
   return (
     <>
       <div className="d-flex align-items-center popover-header-wrapper">
-        {notif}
+        {/*notif*/}
         {OnlineToggle}
       </div>
     </>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import clsx from "clsx";
 
@@ -34,8 +34,18 @@ import {
 } from "react-feather";
 
 import { CardBody, UncontrolledTooltip, Progress } from "reactstrap";
+import { connect } from "react-redux";
+import { getTransactions } from "../../actions/transaction";
+import { showAlert } from "../../utils/alerts";
 
-export default function TransactionsClient() {
+import empty from "../../assets/images/empty.png";
+import SkeletonLoader from "../../utils/SkeletonLoader";
+import {
+  mapColorStatus,
+  mapTypeNames,
+  mapColorTypes,
+} from "../../utils/choices";
+function TransactionsClient(props) {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const openSearch = () => setSearchOpen(true);
@@ -49,7 +59,121 @@ export default function TransactionsClient() {
     { value: "processing", label: "Processing" },
     { value: "cancelled", label: "Cancelled" },
   ];
+  useEffect(() => props.getTransactions(showAlert), []);
 
+  const transactions = props.transactions.loading ? (
+    <tr>
+      <td colSpan="8">
+        <SkeletonLoader />
+      </td>
+    </tr>
+  ) : (
+    <>
+      {props.transactions.payload.length === 0 ? (
+        <tr>
+          <td colSpan="8">
+            <div className="d-flex align-items-center justify-content-center pt-3">
+              <img style={{ width: "17%" }} src={empty} />
+            </div>
+            <div className="d-flex align-items-center justify-content-center pt-1">
+              <span>Pas de données disponibles </span>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        props.transactions.payload.map((item) => {
+          const keys = Object.keys({ ...item.transaction });
+          return (
+            <tr key={item.id}>
+              <td className="text-center text-black-30">
+                <span className="font-weight-bold">
+                  {item.code_transaction}
+                </span>
+              </td>
+              <td className="text-center text-black-30">
+                <span className="font-weight-bold">{item.date}</span>
+              </td>
+              <td className="text-center">
+                <div>
+                  <a
+                    href="#/"
+                    onClick={(e) => e.preventDefault()}
+                    className="font-weight-bold text-black-30"
+                    title="..."
+                  >
+                    {keys.includes("agence_origine")
+                      ? item.transaction.expediteur.nom
+                      : `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
+                  </a>
+                  <span className="text-black-50 d-block">
+                    {item.transaction.expediteur.tel}
+                  </span>
+                </div>
+              </td>
+              <td className="text-center">
+                <div>
+                  <a
+                    href="#/"
+                    onClick={(e) => e.preventDefault()}
+                    className="font-weight-bold text-black-30"
+                    title="..."
+                  >
+                    {keys.includes("agence_origine")
+                      ? item.transaction.destinataire.nom
+                      : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                  </a>
+                  <span className="text-black-50 d-block">
+                    {item.transaction.destinataire.tel}
+                  </span>
+                </div>
+              </td>
+              <td className="font-size-lg font-weight-bold text-center">
+                <span>{item.transaction.montant}</span>
+                <small className="px-2">MRU</small>
+              </td>
+              <td className="text-center">
+                <Badge
+                  className={
+                    "px-4 py-1 h-auto text-" +
+                    mapColorTypes[item.type_transaction] +
+                    " border-1 border-" +
+                    mapColorTypes[item.type_transaction]
+                  }
+                  color={"neutral-" + mapColorTypes[item.type_transaction]}
+                >
+                  {mapTypeNames[item.type_transaction]}
+                </Badge>
+              </td>
+              <td className="text-center">
+                <Badge
+                  className={
+                    "px-4 py-1 h-auto text-" +
+                    mapColorStatus[item.transaction.status] +
+                    " border-1 border-" +
+                    mapColorStatus[item.transaction.status]
+                  }
+                  color={"neutral-" + mapColorStatus[item.transaction.status]}
+                >
+                  {item.transaction.status}
+                </Badge>
+              </td>
+              <td className="text-center">
+                <Button
+                  color="primary"
+                  className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
+                >
+                  <FontAwesomeIcon
+                    icon={["fas", "eye"]}
+                    className="font-size-sm"
+                  />
+                </Button>
+              </td>
+            </tr>
+          );
+        })
+      )}
+    </>
+  );
   return (
     <>
       <Card className="card-box shadow-none">
@@ -244,7 +368,12 @@ export default function TransactionsClient() {
                     >
                       Numero
                     </th>
-
+                    <th
+                      className=" text-center font-size-lg font-weight-normal   text-dark"
+                      scope="col"
+                    >
+                      Date
+                    </th>
                     <th
                       className="text-center font-size-lg font-weight-normal   text-dark"
                       scope="col"
@@ -256,12 +385,6 @@ export default function TransactionsClient() {
                       scope="col"
                     >
                       Beneficiaire
-                    </th>
-                    <th
-                      className=" text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Date
                     </th>
                     <th
                       className="text-center text-center text-center font-size-lg font-weight-normal   text-dark"
@@ -289,140 +412,7 @@ export default function TransactionsClient() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td className="text-center text-black-30">
-                      <span className="font-weight-bold"> 1604423704</span>
-                    </td>
-
-                    <td className="text-center">
-                      <div>
-                        <a
-                          href="#/"
-                          onClick={(e) => e.preventDefault()}
-                          className="font-weight-bold text-black-30"
-                          title="..."
-                        >
-                          Mohamed Mohamed
-                        </a>
-                        <span className="text-black-50 d-block">46461429</span>
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <div>
-                        <a
-                          href="#/"
-                          onClick={(e) => e.preventDefault()}
-                          className="font-weight-bold text-black-30"
-                          title="..."
-                        ></a>
-                        <span className="text-black-50 d-block">4925630</span>
-                      </div>
-                    </td>
-                    <td className="text-center text-black-30">
-                      <span className="font-weight-bold">15-01-2020 12:10</span>
-                    </td>
-
-                    <td className="font-size-lg font-weight-bold text-center">
-                      <span>2.495</span>
-                      <small className="px-2">MRU</small>
-                    </td>
-                    <td className="text-center">
-                      <Badge
-                        className="px-4 py-1 h-auto text-danger border-1 border-danger"
-                        color="neutral-danger"
-                      >
-                        PAIEMENT
-                      </Badge>
-                    </td>
-                    <td className="text-center">
-                      <Badge
-                        className="px-4 py-1 h-auto text-success border-1 border-success"
-                        color="neutral-success"
-                      >
-                        VALIDE
-                      </Badge>
-                    </td>
-                    <td className="text-center">
-                      <Button
-                        color="primary"
-                        className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
-                      >
-                        <FontAwesomeIcon
-                          icon={["fas", "eye"]}
-                          className="font-size-sm"
-                        />
-                      </Button>
-                    </td>
-                  </tr>
-                  <tr className="divider"></tr>
-                  <tr>
-                    <td className="text-center text-black-30">
-                      <span className="font-weight-bold"> 1604418639</span>
-                    </td>
-
-                    <td className="text-center">
-                      <div>
-                        <a
-                          href="#/"
-                          onClick={(e) => e.preventDefault()}
-                          className="font-weight-bold text-black-30"
-                          title="..."
-                        ></a>
-                        <span className="text-black-50 d-block"> 22513077</span>
-                      </div>
-                    </td>
-                    <td className="text-center">
-                      <div>
-                        <a
-                          href="#/"
-                          onClick={(e) => e.preventDefault()}
-                          className="font-weight-bold text-black-30"
-                          title="..."
-                        >
-                          Mohamed Mohamed
-                        </a>
-                        <span className="text-black-50 d-block">46461429</span>
-                      </div>
-                    </td>
-                    <td className="text-center text-black-30">
-                      <span className="font-weight-bold">01-07-2020 18:50</span>
-                    </td>
-
-                    <td className="font-size-lg font-weight-bold text-center">
-                      <span>10500</span>
-                      <small className="px-2">MRU</small>
-                    </td>
-                    <td className="text-center">
-                      <Badge
-                        className="px-4 py-1 h-auto text-success border-1 border-success"
-                        color="neutral-success"
-                      >
-                        RECHARGE
-                      </Badge>
-                    </td>
-                    <td className="text-center">
-                      <Badge
-                        className="px-4 py-1 h-auto text-success border-1 border-success"
-                        color="neutral-success"
-                      >
-                        VALIDE
-                      </Badge>
-                    </td>
-                    <td className="text-center">
-                      <Button
-                        color="primary"
-                        className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
-                      >
-                        <FontAwesomeIcon
-                          icon={["fas", "eye"]}
-                          className="font-size-sm"
-                        />
-                      </Button>
-                    </td>
-                  </tr>
-                  <tr className="divider"></tr>
-                </tbody>
+                <tbody>{transactions}</tbody>
               </Table>
             </div>
           </CardBody>
@@ -439,3 +429,11 @@ export default function TransactionsClient() {
     </>
   );
 }
+
+const mapStateToProps = (state) => ({
+  transactions: state.transaction.transactions,
+});
+
+export default connect(mapStateToProps, {
+  getTransactions,
+})(TransactionsClient);

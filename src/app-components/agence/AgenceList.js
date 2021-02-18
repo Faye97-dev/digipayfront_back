@@ -273,7 +273,7 @@ class AgenceList extends Component {
           </tr>
         ) : (
           this.state.current
-            .filter((item) => item.id !== this.props.user.agence.id)
+            //.filter((item) => item.id !== this.props.user.agence.id) look for solution
             .map((item) => {
               return (
                 <tr key={item.id}>

@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Input, Card, Badge, Button, CardBody } from "reactstrap";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import { Card, CardBody } from "reactstrap";
 import RcPagination from "rc-pagination";
 import localeInfo from "rc-pagination/lib/locale/fr_FR";
 import { PaginateData } from "../../utils/dataTable";
+import { getNotifications } from "../../actions/notification";
+import empty from "../../assets/images/empty.png";
+import { showAlert } from "../../utils/alerts";
+import { connect } from "react-redux";
+import { SkeletonCard } from "../../utils/SkeletonLoader";
 const fetchData = [
   {
     id: 1,
@@ -42,7 +46,7 @@ class NotificationList extends Component {
       data: [],
       init: true,
       //totalPage: 1,
-      totalRowsPerPage: 10,
+      totalRowsPerPage: 5,
       totalData: 0,
       page: 1,
       current: [],
@@ -52,8 +56,30 @@ class NotificationList extends Component {
     this.Paginate = this.Paginate.bind(this);
   }
   componentDidMount() {
-    //this.props.getTransactions(true, showAlert);
-    this.Paginate([...fetchData], this.state.totalRowsPerPage);
+    this.props.getNotifications(showAlert);
+    //this.Paginate([...fetchData], this.state.totalRowsPerPage);
+  }
+
+  UNSAFE_componentWillUpdate(nextProps) {
+    if (
+      nextProps.notifications.loading === false &&
+      //nextProps.notifications.payload !== this.state.data &&
+      this.state.init
+    ) {
+      console.log(" sync notifications props with state  ...");
+      this.Paginate(
+        [...nextProps.notifications.payload],
+        this.state.totalRowsPerPage
+      );
+    }
+
+    /*if (
+      nextState.search === "" &&
+      this.state.search !== "" &&
+      (nextState.filterValues === {} || allNull(nextState.filterValues))
+    ) {
+      this.reset();
+    }*/
   }
 
   Paginate(data, rows) {
@@ -78,72 +104,98 @@ class NotificationList extends Component {
     });
   }
   render() {
+    const notifications = this.props.notifications.loading ? (
+      <SkeletonCard />
+    ) : (
+      <>
+        {this.state.current.length === 0 ? (
+          <>
+            <div className="d-flex align-items-center justify-content-center pt-3">
+              <img style={{ width: "17%" }} src={empty} />
+            </div>
+            <div className="d-flex align-items-center justify-content-center pt-1">
+              <span>Pas de données disponibles </span>
+            </div>
+          </>
+        ) : (
+          this.state.current.map((item) => {
+            return (
+              <Card className="card-box mb-3" key={item.id}>
+                <div className={`card-indicator bg-primary`} />
+                <CardBody className="px-4 py-3">
+                  <div className="d-none d-sm-block">
+                    <div className=" pb-3 d-flex justify-content-between">
+                      <a
+                        href="#/"
+                        className="font-size-xl text-black"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        {item.status}
+                      </a>
+                      <div className="ml-auto font-size-sm text-primary px-2">
+                        <FontAwesomeIcon
+                          icon={["far", "clock"]}
+                          className="mr-1"
+                        />
+                        {item.date}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="d-none d-sm-block">
+                    <div className="d-flex align-items-center justify-content-start text-justify font-size-lg">
+                      {/*<Badge color="first" className="px-3 mx-2">
+                      On hold
+                      </Badge>*/}
+                      {item.message}
+                    </div>
+                  </div>
+                  {/* mobile format */}
+                  <div className="d-sm-none d-block ">
+                    <a
+                      href="#/"
+                      className="font-size-xl text-black pb-2"
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      {item.status}
+                    </a>
+                    <div className="font-size-sm text-primary py-2">
+                      <FontAwesomeIcon
+                        icon={["far", "clock"]}
+                        className="mr-1"
+                      />
+                      {item.date}
+                    </div>
+                  </div>
+                  <div className="d-sm-none d-block ">
+                    <div className="d-flex align-items-center justify-content-start text-justify">
+                      {item.message}
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            );
+          })
+        )}
+      </>
+    );
     return (
       <>
         <Card className="card-box mb-5 bg-white">
           <div className="px-3 py-4">
             <div className="rounded bg-white ">
-              {/*<PerfectScrollbar>*/}
-              {this.state.current.map((item) => {
-                return (
-                  <Card className="card-box mb-3" key={item.id}>
-                    <div className={`card-indicator bg-${item.style}`} />
-                    <CardBody className="px-4 py-3">
-                      <div className="d-none d-sm-block">
-                        <div className=" pb-3 d-flex justify-content-between">
-                          <a
-                            href="#/"
-                            className="font-size-xl text-black"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            {item.from}
-                          </a>
-                          <div className="ml-auto font-size-sm text-primary px-2">
-                            <FontAwesomeIcon
-                              icon={["far", "clock"]}
-                              className="mr-1"
-                            />
-                            {item.date}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="d-sm-none d-block ">
-                        <a
-                          href="#/"
-                          className="font-size-xl text-black pb-2"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          {item.from}
-                        </a>
-                        <div className="font-size-sm text-primary py-2">
-                          <FontAwesomeIcon
-                            icon={["far", "clock"]}
-                            className="mr-1"
-                          />
-                          {item.date}
-                        </div>
-                      </div>
-
-                      <div className="d-flex align-items-center justify-content-start text-justify">
-                        {/*<Badge color="first" className="px-3 mx-2">
-                          On hold
-                          </Badge>*/}
-                        {item.msg}
-                      </div>
-                    </CardBody>
-                  </Card>
-                );
-              })}
-              {/*</PerfectScrollbar>*/}
-              <div className="d-flex align-items-center justify-content-center mt-4 mb-4">
-                <RcPagination
-                  defaultPageSize={this.state.totalRowsPerPage}
-                  onChange={this.handleChangePage}
-                  current={this.state.page}
-                  total={this.state.totalData}
-                  locale={localeInfo}
-                />
-              </div>
+              {notifications}
+              {!this.props.notifications.loading &&
+                this.state.current.length !== 0 && (
+                  <div className="d-flex align-items-center justify-content-center mt-4 mb-4">
+                    <RcPagination
+                      defaultPageSize={this.state.totalRowsPerPage}
+                      onChange={this.handleChangePage}
+                      current={this.state.page}
+                      total={this.state.totalData}
+                      locale={localeInfo}
+                    />
+                  </div>
+                )}
             </div>
           </div>
         </Card>
@@ -152,4 +204,11 @@ class NotificationList extends Component {
   }
 }
 
-export default NotificationList;
+const mapStateToProps = (state) => ({
+  notifications: state.notification.notifications,
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {
+  getNotifications,
+})(NotificationList);

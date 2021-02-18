@@ -19,7 +19,30 @@ import { NavLink } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { logout } from "../../actions/auth";
+import {
+  EMPLOYE_AGENCE,
+  RESPONSABLE_AGENCE,
+  CLIENT,
+} from "../../utils/choices";
 const HeaderUserbox = (props) => {
+  const solde = () => {
+    let result = "";
+    if (
+      props.isAuthenticated &&
+      props.role &&
+      (props.role.value === EMPLOYE_AGENCE ||
+        props.role.value === RESPONSABLE_AGENCE)
+    ) {
+      result = props.user.agence.solde + " MRU";
+    } else if (
+      props.isAuthenticated &&
+      props.role &&
+      props.role.value === CLIENT
+    ) {
+      result = props.user.solde + " MRU";
+    }
+    return result;
+  };
   return (
     <>
       <UncontrolledDropdown className="position-relative ml-2">
@@ -93,7 +116,10 @@ const HeaderUserbox = (props) => {
                       </div>
                       <div className="pl-3 line-height-sm">
                         <b className="font-size-lg">
-                          {props.user && props.user.agence.solde} MRU
+                          {/*props.user &&
+                            props.user.agence &&
+                          props.user.agence.solde*/}
+                          {solde()}
                         </b>
                         <span className="text-black-50 d-block">Revenue</span>
                       </div>
@@ -110,6 +136,8 @@ const HeaderUserbox = (props) => {
 };
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  role: state.auth.role,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { logout })(HeaderUserbox);

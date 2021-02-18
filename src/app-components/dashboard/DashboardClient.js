@@ -5,12 +5,13 @@ import CountUp from "react-countup";
 import TabsClient from "./TabsClient";
 import TransactionsClient from "./TransactionsClient";
 import RechargeCredit from "./RechargeCredit";
+import { connect } from "react-redux";
 
-export class DashboardClient extends Component {
+class DashboardClient extends Component {
   render() {
     return (
       <>
-        <DashboardAmount></DashboardAmount>
+        <DashboardAmount {...this.props}></DashboardAmount>
         <TabsClient></TabsClient>
         <RechargeCredit></RechargeCredit>
         <TransactionsClient></TransactionsClient>
@@ -18,8 +19,6 @@ export class DashboardClient extends Component {
     );
   }
 }
-
-export default DashboardClient;
 
 function DashboardAmount(props) {
   return (
@@ -46,7 +45,7 @@ function SmallFormat(props) {
           <div className="font-weight-bold font-size-xl text-black display-3 mt-4 mb-1">
             <CountUp
               start={0}
-              end={19045}
+              end={props.user && props.user.solde}
               duration={4}
               separator=""
               suffix=" MRU"
@@ -66,7 +65,7 @@ function SmallFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={15100}
+                                end={0}
                                 duration={4}
                                 separator=""
                                 suffix=" MRU"
@@ -86,7 +85,7 @@ function SmallFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={17}
+                                end={0}
                                 duration={4}
                                 separator=""
                                 suffix=" MRU"
@@ -124,7 +123,7 @@ function XlFormat(props) {
           <div className="font-weight-bold font-size-xxl text-black display-3 mt-4 mb-1">
             <CountUp
               start={0}
-              end={19045}
+              end={props.user && props.user.solde}
               duration={4}
               separator=""
               suffix=" MRU"
@@ -144,7 +143,7 @@ function XlFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={15100}
+                                end={0}
                                 duration={4}
                                 separator=""
                                 suffix=" MRU"
@@ -164,7 +163,7 @@ function XlFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={17145}
+                                end={0}
                                 duration={4}
                                 separator=""
                                 suffix=" MRU"
@@ -187,3 +186,9 @@ function XlFormat(props) {
     </Col>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {})(DashboardClient);

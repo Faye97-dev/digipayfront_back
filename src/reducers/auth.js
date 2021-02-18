@@ -10,10 +10,14 @@ import {
   AGENCE_STATUS_ERROR,
   UPDATE_SOLDE,
   USER_LOADED,
+  UPDATE_SOLDE_CLIENT_DIGIPAY,
 } from "../actions/types.js";
 
-// add refresh token method , and check forbidden 301 error , secure api , success and error alert ,profil info , profil page , 404 page , routes changement warning
-
+// add refresh token method , and check forbidden 301 error , secure api ,profil info , profil page , 404 page , routes changement warning
+// add new client modal  ,datatable niveau 3 , connect filter data with db ,
+// diconnect agence when logout , mouse cursor on ordering datatable , logout message de confirmation , check du solde avant retrait
+// refont code serare then betwenn files , agence transfert change methods , agence retrait add confirmation code , check solde ....
+// FormClientsend : reset form
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
@@ -113,15 +117,15 @@ export default function (state = initialState, action) {
           agence: { ...state.user.agence, solde, dette, retrait, frais },
         },
       };
-
-    /*case DATA_LOADING:
-      if (action.payload === CHANGE_ROLE) {
-        return {
-          ...state,
-          loading: "hello from auth js",
-        };
-      }*/
-
+    case UPDATE_SOLDE_CLIENT_DIGIPAY:
+      //const { solde } = { ...action.payload };
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          solde: action.payload.solde,
+        },
+      };
     default:
       return state;
   }

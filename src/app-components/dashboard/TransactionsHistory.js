@@ -329,7 +329,6 @@ class TransactionsHistory extends Component {
                     </span>
                   </div>
                 </td>
-
                 <td className="font-size-lg font-weight-bold text-center">
                   <span>
                     {getHighlightedText(

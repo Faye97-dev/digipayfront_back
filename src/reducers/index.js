@@ -5,6 +5,7 @@ import auth from "./auth";
 import transaction from "./transaction";
 import client from "./client";
 import employe from "./employe";
+import notification from "./notification";
 export default combineReducers({
   ThemeOptions,
   auth,
@@ -12,4 +13,5 @@ export default combineReducers({
   transaction,
   client,
   employe,
+  notification,
 });
