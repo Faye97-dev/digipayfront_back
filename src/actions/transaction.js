@@ -77,6 +77,7 @@ export const addRetrait = (transfert, removeRetrait, showAlert) => (
     payload: ADD_RETRAIT,
   });
   const agence = getState().auth.user.agence;
+  transfert.agence_destination = agence.id;
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -86,27 +87,39 @@ export const addRetrait = (transfert, removeRetrait, showAlert) => (
   axios
     .post(HOST + `api/func/retrait/add/`, transfert, config)
     .then((res) => {
-      //setTimeout(() => {
-      dispatch({
-        type: ADD_RETRAIT,
-        payload: res.data,
-      });
-      console.log(res.data);
-      removeRetrait(transfert.id);
-      showAlert(
-        "success",
-        "Transaction Complete!",
-        <FontAwesomeIcon icon={["fas", "check"]} />
-      );
-      //}, 5000);
-      updateSolde(agence.id).then((res) => {
-        if (res) {
-          dispatch({
-            type: UPDATE_SOLDE,
-            payload: res,
-          });
-        }
-      });
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        //setTimeout(() => {
+        dispatch({
+          type: ADD_RETRAIT,
+          payload: res.data,
+        });
+        console.log(res.data);
+        removeRetrait(transfert.id);
+        showAlert(
+          "success",
+          "Transaction Complete!",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        //}, 5000);
+        updateSolde(agence.id).then((res) => {
+          if (res) {
+            dispatch({
+              type: UPDATE_SOLDE,
+              payload: res,
+            });
+          }
+        });
+      } else {
+        dispatch({
+          type: ERROR_TRANS,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
     })
     .catch((err) => {
       dispatch({
