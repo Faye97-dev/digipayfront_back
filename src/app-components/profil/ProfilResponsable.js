@@ -50,7 +50,10 @@ import avatar7 from "../../assets/images/avatars/avatar7.jpg";
 
 import Switch from "rc-switch";
 import FormAgence from "./FormAgence";
-export default function ProfilResponsable() {
+//import { withFormik, Field, Form } from "formik";
+import { FlagIcon } from "react-flag-kit";
+import { connect } from "react-redux";
+function ProfilResponsable(props) {
   const [inputBg, setInputBg] = useState(false);
   const toggleInputBg = () => setInputBg(!inputBg);
 
@@ -180,11 +183,14 @@ export default function ProfilResponsable() {
                         <div className="my-3 my-md-0">
                           <div className="d-flex align-items-end">
                             <div className="font-size-xxl font-weight-bold">
-                              @emmaTaylor_1ET
+                              @{props.user && props.user.username}
                             </div>
                           </div>
                           <div className="font-weight-bold mt-1 font-size-lg text-white-50">
-                            Emma Taylor
+                            {props.user &&
+                              props.user.first_name +
+                                " " +
+                                props.user.last_name}
                           </div>
                         </div>
                         {/* spacing */}
@@ -219,21 +225,21 @@ export default function ProfilResponsable() {
                       </div>
                       <div className="d-flex font-size-xl py-4 align-items-center">
                         <div className="mr-2">
-                          438{" "}
+                          25{" "}
                           <span className="font-size-sm text-white-50">
-                            projects
+                            Transactions
                           </span>
                         </div>
                         <div className="mr-2">
-                          12,459{" "}
+                          12{" "}
                           <span className="font-size-sm text-white-50">
-                            messages
+                            Notifications
                           </span>
                         </div>
                         <div className="mr-2">
-                          84{" "}
+                          7{" "}
                           <span className="font-size-sm text-white-50">
-                            issues
+                            Connexions
                           </span>
                         </div>
                       </div>
@@ -272,7 +278,7 @@ export default function ProfilResponsable() {
                           }}
                         >
                           <span className="font-size-lg text-white px-2 py-1">
-                            Informations de l'agence
+                            Informations
                           </span>
                           <div className="divider" />
                         </NavLinkStrap>
@@ -287,7 +293,7 @@ export default function ProfilResponsable() {
                           }}
                         >
                           <span className="font-size-lg text-white px-2 py-1">
-                            Parametres <FontAwesomeIcon icon={["fas", "cog"]} />
+                            Paramètres <FontAwesomeIcon icon={["fas", "cog"]} />
                           </span>
                           <div className="divider" />
                         </NavLinkStrap>
@@ -302,7 +308,7 @@ export default function ProfilResponsable() {
           <Container className="z-over py-5">
             <TabContent activeTab={activeTab2}>
               <TabPane tabId="1">
-                <Row>
+                {/*<Row>
                   <Col lg="4">
                     <Card className="card-box mb-5 p-4">
                       <div className="card-tr-actions">
@@ -444,7 +450,7 @@ export default function ProfilResponsable() {
                       <div className="opacity-7">Latest statistics</div>
                     </Card>
                   </Col>
-                </Row>
+                </Row>*/}
                 <Card className="card-box mb-5">
                   <Row className="no-gutters">
                     <Col xl="6" className="p-4">
@@ -452,60 +458,60 @@ export default function ProfilResponsable() {
 
                       <div className="d-flex align-items-center justify-content-between">
                         <div>
-                          <b>Reports</b>
+                          <b>Paiements</b>
                           <div className="text-black-50">
-                            Monthly sales reports
+                            Paiements du mois précédent
                           </div>
                         </div>
                         <div className="font-weight-bold text-danger font-size-xl">
                           <CountUp
                             start={0}
-                            end={2.363}
+                            end={2363}
                             duration={6}
                             delay={2}
                             separator=""
                             decimals={3}
-                            decimal=","
+                            suffix=" MRU"
                           />
                         </div>
                       </div>
                       <div className="divider my-3" />
                       <div className="d-flex align-items-center justify-content-between">
                         <div>
-                          <b>User</b>
+                          <b>Transferts</b>
                           <div className="text-black-50">
-                            Visitors last week
+                            Transferts du mois précédent
                           </div>
                         </div>
                         <div className="font-weight-bold text-success font-size-xl">
                           <CountUp
                             start={0}
-                            end={987}
+                            end={9860}
                             duration={6}
                             delay={2}
                             separator=""
                             decimals={0}
-                            decimal=","
+                            suffix=" MRU"
                           />
                         </div>
                       </div>
                       <div className="divider my-3" />
                       <div className="d-flex align-items-center justify-content-between">
                         <div>
-                          <b>Sales</b>
+                          <b>Retraits</b>
                           <div className="text-black-50">
-                            Total average weekly report
+                            Retraits du mois précédent
                           </div>
                         </div>
                         <div className="font-weight-bold text-warning font-size-xl">
                           <CountUp
                             start={0}
-                            end={483}
+                            end={4830}
                             duration={6}
                             delay={2}
                             separator=""
                             decimals={0}
-                            decimal=","
+                            suffix=" MRU"
                           />
                         </div>
                       </div>
@@ -515,35 +521,25 @@ export default function ProfilResponsable() {
 
                       <div className="d-flex align-items-center justify-content-between">
                         <div>
-                          <b>Stats</b>
+                          <b>Achats credit</b>
                           <div className="text-black-50">
-                            Last month targets
+                            Achats credit du mois précédent
                           </div>
                         </div>
                         <div className="font-weight-bold text-warning font-size-xl">
-                          $1,23M
+                          1523.0 MRU
                         </div>
                       </div>
                       <div className="divider my-3" />
                       <div className="d-flex align-items-center justify-content-between">
                         <div>
-                          <b>Payments</b>
-                          <div className="text-black-50">Week's expenses</div>
+                          <b>Dettes</b>
+                          <div className="text-black-50">
+                            Dettes du mois précédent
+                          </div>
                         </div>
                         <div className="font-weight-bold text-danger font-size-xl">
-                          - $123,305
-                        </div>
-                      </div>
-                      <div className="divider my-3" />
-                      <div className="d-flex align-items-center justify-content-between">
-                        <div>
-                          <b>Orders</b>
-                          <div className="text-black-50">
-                            Total products ordered
-                          </div>
-                        </div>
-                        <div className="font-weight-bold text-warning font-size-xl">
-                          65
+                          -1230 MRU
                         </div>
                       </div>
                     </Col>
@@ -722,23 +718,56 @@ export default function ProfilResponsable() {
                       <CardHeader className="d-flex align-items-center bg-transparent card-header-alt px-0 pb-4">
                         <div>
                           <h6 className="font-weight-bold font-size-xl mb-1 text-black">
-                            Account
+                            Compte
                           </h6>
                           <p className="text-black-50 mb-0">
-                            Manage your account settings from the section below.
+                            Gérez les paramètres de votre compte dans la section
+                            ci-dessous.
                           </p>
                         </div>
                       </CardHeader>
                     </div>
                     <ListGroup className="mb-4">
+                      <ListGroupItem>
+                        <div className="font-weight-bold">
+                          Choix de la langue
+                        </div>
+                        <div
+                          className="pt-3"
+                          role="group"
+                          aria-labelledby="my-radio-group"
+                        >
+                          <label>
+                            <input type="radio" name="card_type" value="fr" />
+                            Français
+                            <span className="px-2">
+                              <FlagIcon code="FR" size={35} />
+                            </span>
+                          </label>
+                          <label className="pl-sm-3 px-0">
+                            <input type="radio" name="card_type" value="ar" />
+                            Arabe
+                            <span className="px-2">
+                              <FlagIcon code="MR" size={35} />
+                            </span>
+                          </label>
+                          <label className="pl-sm-3 px-0">
+                            <input type="radio" name="card_type" value="ch" />
+                            Chinois
+                            <span className="px-2">
+                              <FlagIcon code="CN" size={35} />
+                            </span>
+                          </label>
+                        </div>
+                      </ListGroupItem>
                       <ListGroupItem className="d-flex justify-content-between align-items-center py-3">
                         <div className="d-flex align-items-center mr-4">
                           <div>
                             <div className="font-weight-bold">
-                              Wallets Activity Alerts
+                              Activer les sms
                             </div>
                             <span className="opacity-6 d-block">
-                              Enable SMS alerts for any wallets activities.
+                              Vous permet de recevoir des notifications par sms
                             </span>
                           </div>
                         </div>
@@ -754,11 +783,11 @@ export default function ProfilResponsable() {
                         <div className="d-flex align-items-center mr-4">
                           <div>
                             <div className="font-weight-bold">
-                              Require Login Pin Code
+                              Activer la connexion avec code PIN
                             </div>
                             <span className="opacity-6 d-block">
-                              Enable the requirement of PIN code for all login
-                              attempts.
+                              Pour plus de sécurité ajouter cette étape de
+                              validation
                             </span>
                           </div>
                         </div>
@@ -776,11 +805,10 @@ export default function ProfilResponsable() {
                         <div className="d-flex align-items-center mr-0 mr-md-4">
                           <div>
                             <div className="font-weight-bold">
-                              Change Password
+                              Changement Password
                             </div>
                             <span className="opacity-6 d-block">
-                              You can change the password for your account using
-                              this dialog window.
+                              Choisissez un nouveau mot de passe
                             </span>
                           </div>
                         </div>
@@ -790,7 +818,7 @@ export default function ProfilResponsable() {
                             color="warning"
                             className="text-nowrap"
                           >
-                            Change Password
+                            Modifier
                           </Button>
                         </div>
                       </ListGroupItem>
@@ -798,23 +826,23 @@ export default function ProfilResponsable() {
                         <div className="d-flex align-items-center mr-0 mr-md-4">
                           <div>
                             <div className="font-weight-bold d-flex align-items-center">
-                              Two-Factor Authentication
+                              Authentification à deux facteurs
                               <Badge
                                 color="success"
                                 className="text-uppercase ml-2"
                               >
-                                Enabled
+                                Activé
                               </Badge>
                             </div>
                             <span className="opacity-6 d-block">
-                              Enable the requirement of PIN code for all login
-                              attempts.
+                              Activer l'usage du code pour pouvoir utiliser
+                              cette fonctionnalité
                             </span>
                           </div>
                         </div>
                         <div className="d-block d-md-flex mt-3 mt-lg-0 align-items-center">
                           <Button size="sm" active color="primary">
-                            Disabled
+                            Desactivé
                           </Button>
                         </div>
                       </ListGroupItem>
@@ -826,10 +854,10 @@ export default function ProfilResponsable() {
                       <CardHeader className="d-flex align-items-center bg-transparent card-header-alt px-0 pb-4">
                         <div>
                           <h6 className="font-weight-bold font-size-xl mb-1 text-black">
-                            All Logs
+                            Vos logs :
                           </h6>
                           <p className="text-black-50 mb-0">
-                            See your sign in activity logs below.
+                            Vos dernières connexions
                           </p>
                         </div>
                       </CardHeader>
@@ -841,22 +869,20 @@ export default function ProfilResponsable() {
                       >
                         <thead className="thead-light text-capitalize font-size-sm font-weight-bold">
                           <tr>
-                            <th className="text-left px-4">Browser</th>
-                            <th className="text-left px-4">IP Address</th>
-                            <th className="text-left px-4">Location</th>
-                            <th className="text-left px-4">Date/Time</th>
+                            <th className="text-left px-4">Navigateur</th>
+                            <th className="text-left px-4">Adresse IP</th>
+                            <th className="text-left px-4">Localisation</th>
+                            <th className="text-left px-4">Date</th>
                             <th className="text-center" />
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td className="px-4">Chrome on Linux</td>
+                            <td className="px-4">Chrome dans windows 8</td>
                             <td className="text-left px-4">192.168.0.1</td>
+                            <td className="text-left px-4">Tvz, Nouakchott</td>
                             <td className="text-left px-4">
-                              San Francisco, USA
-                            </td>
-                            <td className="text-left px-4">
-                              19 Feb, 2020 | 11:22 PM
+                              19 Fev, 2021 | 11:22
                             </td>
                             <td className="text-center">
                               <Button
@@ -871,11 +897,13 @@ export default function ProfilResponsable() {
                             </td>
                           </tr>
                           <tr>
-                            <td className="px-4">Chrome on UbuntuOS</td>
-                            <td className="text-left px-4">192.168.0.1</td>
-                            <td className="text-left px-4">Madrid, Spain</td>
+                            <td className="px-4">Chrome dans Samsung A20s</td>
+                            <td className="text-left px-4">194.167.25.1</td>
                             <td className="text-left px-4">
-                              23 Feb, 2020 | 07:35 AM
+                              Ksar, Nouackchott
+                            </td>
+                            <td className="text-left px-4">
+                              30 Jan, 2021 | 07:35
                             </td>
                             <td className="text-center">
                               <Button
@@ -890,13 +918,13 @@ export default function ProfilResponsable() {
                             </td>
                           </tr>
                           <tr>
-                            <td className="px-4">Edge on Windows</td>
-                            <td className="text-left px-4">192.168.0.1</td>
-                            <td className="text-left px-4">
-                              Bucharest, Romania
+                            <td className="px-4">
+                              Firefox dans Macbook Pro 2015
                             </td>
+                            <td className="text-left px-4">245.120.058.1</td>
+                            <td className="text-left px-4">Tvz, Nouackchott</td>
                             <td className="text-left px-4">
-                              25 Feb, 2020 | 08:49 AM
+                              15 Jan, 2021 | 14:49
                             </td>
                             <td className="text-center">
                               <Button
@@ -1132,3 +1160,8 @@ export default function ProfilResponsable() {
     </>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
+export default connect(mapStateToProps, {})(ProfilResponsable);

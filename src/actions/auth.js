@@ -8,6 +8,7 @@ import {
   AUTH_ERROR,
   USER_LOADED,
   LOGOUT,
+  CLEAN_SESSION,
 } from "./types";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -88,20 +89,28 @@ export const loadUser = () => (dispatch, getState) => {
     axios
       .get(HOST + url, config)
       .then((res) => {
+        //setTimeout(() => {
         dispatch({
           type: USER_LOADED,
           payload: res.data,
         });
+        //}, 25000);
       })
       .catch((err) => {
         dispatch({
           type: AUTH_ERROR,
+        });
+        dispatch({
+          type: CLEAN_SESSION,
         });
         console.log(err);
       });
   } else {
     dispatch({
       type: AUTH_ERROR,
+    });
+    dispatch({
+      type: CLEAN_SESSION,
     });
   }
 };
@@ -148,10 +157,16 @@ export const logout = () => (dispatch, getState) => {
       dispatch({
         type: LOGOUT,
       });
+      dispatch({
+        type: CLEAN_SESSION,
+      });
     })
     .catch((err) => {
       dispatch({
         type: AUTH_ERROR,
+      });
+      dispatch({
+        type: CLEAN_SESSION,
       });
       console.log(err);
     });

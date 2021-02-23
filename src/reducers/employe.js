@@ -1,4 +1,9 @@
-import { GET_EMPLOYES, DATA_LOADING, ERROR_EMPLOYE } from "../actions/types.js";
+import {
+  GET_EMPLOYES,
+  DATA_LOADING,
+  ERROR_EMPLOYE,
+  CLEAN_SESSION,
+} from "../actions/types.js";
 
 const initialState = {
   employes: { payload: [], loading: null },
@@ -33,6 +38,15 @@ export default function (state = initialState, action) {
         employes: {
           ...state.employes,
           loading: false,
+        },
+      };
+    case CLEAN_SESSION:
+      return {
+        ...state,
+        employes: {
+          ...state.employes,
+          payload: [],
+          loading: null,
         },
       };
     default:

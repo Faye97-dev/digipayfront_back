@@ -103,6 +103,7 @@ const HeaderUserbox = (props) => {
                 </NavItem>
               </Nav>
             </ListGroupItem>
+            {/*
             <ListGroupItem className="bg-transparent p-0">
               <div className="grid-menu grid-menu-2col">
                 <div className="py-3">
@@ -116,18 +117,16 @@ const HeaderUserbox = (props) => {
                       </div>
                       <div className="pl-3 line-height-sm">
                         <b className="font-size-lg">
-                          {/*props.user &&
-                            props.user.agence &&
-                          props.user.agence.solde*/}
                           {solde()}
                         </b>
                         <span className="text-black-50 d-block">Revenue</span>
-                      </div>
+                        </div>
                     </div>
                   </div>
                 </div>
               </div>
             </ListGroupItem>
+            */}
           </ListGroup>
         </DropdownMenu>
       </UncontrolledDropdown>

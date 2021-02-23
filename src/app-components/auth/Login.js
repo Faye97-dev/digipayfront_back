@@ -45,13 +45,13 @@ function Login(props) {
                             <div className="w-100 pr-0 pr-lg-5">
                               <div className="text-black mt-3">
                                 <span className="text-center">
-                                  <h1 className="display-4 mb-1 font-weight-bold">
-                                    Login to your account
+                                  <h1 className="display-4 mb-5 font-weight-bold">
+                                    Se connecter
                                   </h1>
-                                  <p className="font-size-lg mb-0 text-black-50">
+                                  {/*<p className="font-size-lg mb-0 text-black-50">
                                     We're glad you're working on your app. Login
                                     below to continue.
-                                  </p>
+                                  </p>*/}
                                 </span>
 
                                 <div>
@@ -60,12 +60,14 @@ function Login(props) {
                                   />
                                 </div>
                                 <div className="text-center pt-4 text-black-50">
-                                  Don't have an account?{" "}
+                                  Pas de compte ?
                                   <a
                                     href="#/"
                                     onClick={(e) => e.preventDefault()}
                                   >
-                                    Create an Account
+                                    <span className="pl-2">
+                                      Inscrivez-vous gratuitement
+                                    </span>
                                   </a>
                                 </div>
                               </div>

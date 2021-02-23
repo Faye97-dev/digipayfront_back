@@ -11,6 +11,7 @@ import {
   AUTH_ERROR,
   UPDATE_SOLDE_CLIENT_DIGIPAY,
   SUCCESS_TRANS,
+  CLEAN_SESSION,
 } from "./types";
 import { updateSolde, updateSolde_clientDigipay } from "./async";
 
@@ -61,6 +62,9 @@ export const getTransactions = (all, showAlert) => (dispatch, getState) => {
       if (err.response && err.response.status === 401) {
         dispatch({
           type: AUTH_ERROR,
+        });
+        dispatch({
+          type: CLEAN_SESSION,
         });
       }
       //console.log(getState(), err.response.status);

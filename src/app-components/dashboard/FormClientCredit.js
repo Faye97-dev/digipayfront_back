@@ -146,6 +146,8 @@ class MySelect extends React.Component {
           onBlur={this.handleBlur}
           value={this.props.value}
           placeholder="Selectionner ..."
+          menuPortalTarget={document.body}
+          styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
         />
         {!!this.props.error && this.props.touched && (
           <div style={{ color: "red", marginTop: ".5rem" }}>

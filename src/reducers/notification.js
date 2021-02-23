@@ -1,4 +1,9 @@
-import { GET_NOTIFS, DATA_LOADING, ERROR_NOTIF } from "../actions/types.js";
+import {
+  GET_NOTIFS,
+  DATA_LOADING,
+  ERROR_NOTIF,
+  CLEAN_SESSION,
+} from "../actions/types.js";
 
 const initialState = {
   notifications: { payload: [], loading: null },
@@ -35,7 +40,15 @@ export default function (state = initialState, action) {
           loading: false,
         },
       };
-
+    case CLEAN_SESSION:
+      return {
+        ...state,
+        notifications: {
+          ...state.notifications,
+          payload: [],
+          loading: null,
+        },
+      };
     default:
       return state;
   }

@@ -59,8 +59,8 @@ export default function TabsClient() {
                   <FormClientPay />
                 </div>
               </TabPane>
-              <TabPane tabId="3">
-                <div className=" my-5">
+              <TabPane tabId="3" className="px-0">
+                <div className=" my-4">
                   <FormClientSend />
                 </div>
               </TabPane>

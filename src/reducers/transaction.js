@@ -6,6 +6,7 @@ import {
   ADD_RETRAIT,
   ERROR_TRANS,
   SUCCESS_TRANS,
+  CLEAN_SESSION,
 } from "../actions/types.js";
 
 const initialState = {
@@ -66,6 +67,15 @@ export default function (state = initialState, action) {
           ...state.transactions,
           payload: [action.payload, ...state.transactions.payload],
           loading: false,
+        },
+      };
+    case CLEAN_SESSION:
+      return {
+        ...state,
+        transactions: {
+          ...state.transactions,
+          payload: [],
+          loading: null,
         },
       };
     default:

@@ -1,4 +1,9 @@
-import { GET_CLIENTS, DATA_LOADING, ERROR_CLIENT } from "../actions/types.js";
+import {
+  GET_CLIENTS,
+  DATA_LOADING,
+  ERROR_CLIENT,
+  CLEAN_SESSION,
+} from "../actions/types.js";
 
 const initialState = {
   clients: { payload: [], loading: null },
@@ -33,6 +38,15 @@ export default function (state = initialState, action) {
         clients: {
           ...state.clients,
           loading: false,
+        },
+      };
+    case CLEAN_SESSION:
+      return {
+        ...state,
+        clients: {
+          ...state.clients,
+          payload: [],
+          loading: null,
         },
       };
     default:

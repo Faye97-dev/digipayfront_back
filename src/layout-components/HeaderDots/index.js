@@ -274,7 +274,7 @@ const HeaderDots = (props) => {
     </>
   );
 
-  const fetchData = [
+  /*const fetchData = [
     {
       id: 1,
       from: "42158976",
@@ -302,7 +302,8 @@ const HeaderDots = (props) => {
       msg:
         "Vous avez envoye 250.0 pour le client dont le numero est : 20171400",
     },
-  ];
+  ];*/
+  const fetchData = [];
   const popover = (
     <>
       <div className="bg-composed-wrapper bg-primary mx-3 mt-3 border-0 text-center rounded-sm">
@@ -310,11 +311,14 @@ const HeaderDots = (props) => {
         <div className="bg-composed-wrapper--content text-white px-2 py-4">
           <h4 className="font-size-xl font-weight-bold mb-2">Notifications</h4>
           <p className=" mb-0">
-            You have <b className="text-success">4</b> new messages
+            You have <b className="text-success">0</b> new messages
           </p>
         </div>
       </div>
-      <div className="tabs-animated tabs-animated-shadow tabs-bordered">
+      <div
+        className="tabs-animated tabs-animated-shadow tabs-bordered"
+        style={{ height: "90px" }}
+      >
         <div className="scroll-area scroll-area-sm shadow-overflow">
           <PerfectScrollbar
             options={{
@@ -440,7 +444,7 @@ const HeaderDots = (props) => {
   return (
     <>
       <div className="d-flex align-items-center popover-header-wrapper">
-        {/*notif*/}
+        {notif}
         {OnlineToggle}
       </div>
     </>

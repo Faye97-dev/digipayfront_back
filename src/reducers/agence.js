@@ -1,4 +1,9 @@
-import { GET_AGENCES, DATA_LOADING, ERROR_AGENCE } from "../actions/types.js";
+import {
+  GET_AGENCES,
+  DATA_LOADING,
+  ERROR_AGENCE,
+  CLEAN_SESSION,
+} from "../actions/types.js";
 
 const initialState = {
   agences: { payload: [], loading: null },
@@ -35,7 +40,15 @@ export default function (state = initialState, action) {
           loading: false,
         },
       };
-
+    case CLEAN_SESSION:
+      return {
+        ...state,
+        agences: {
+          ...state.agences,
+          payload: [],
+          loading: null,
+        },
+      };
     default:
       return state;
   }

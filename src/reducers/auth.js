@@ -74,7 +74,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         isAuthenticated: false,
         agenceStatus_isLoading: false,
-        //role: {value:'EMPLOYE_AGENCE',label:'EMPLOYE_AGENCE'},
+        role: { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
       };
     case LOGOUT:
       localStorage.removeItem("access");
@@ -87,7 +87,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         isAuthenticated: false,
         agenceStatus_isLoading: false,
-        //role: {value:'EMPLOYE_AGENCE',label:'EMPLOYE_AGENCE'},
+        role: { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
       };
     case AGENCE_STATUS_LOADING:
       return {

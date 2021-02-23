@@ -42,12 +42,12 @@ const MyForm = (props) => {
       <Row>
         <Col xl="12" style={{ margin: "12px 0" }}>
           <Label for="username" className="font-weight-bold">
-            Username
+            Pseudo de l'utilisateur
           </Label>
           <Field
             name="username"
             type="text"
-            placeholder="Enter your username"
+            placeholder="Nom de l'utilisateur"
           />
 
           {errors.username && touched.username && (
@@ -60,13 +60,9 @@ const MyForm = (props) => {
       <Row>
         <Col xl="12" style={{ margin: "12px 0" }}>
           <Label for="password" className="font-weight-bold">
-            Password
+            Mot de passe
           </Label>
-          <Field
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-          />
+          <Field name="password" type="password" placeholder="Mot de passe" />
 
           {errors.password && touched.password && (
             <div style={{ color: "red", marginTop: ".5rem" }}>
@@ -75,28 +71,32 @@ const MyForm = (props) => {
           )}
         </Col>
       </Row>
-      {!props.loading ? (
-        <Button
-          size="lg"
-          type="submit"
-          disabled={isSubmitting}
-          className="btn-block text-uppercase font-weight-bold font-size-sm"
-          color="primary"
-        >
-          Login
-        </Button>
-      ) : (
-        <div className="d-flex align-items-center justify-content-center">
-          <Button
-            size="lg"
-            disabled
-            className="btn-block text-uppercase font-weight-bold font-size-sm"
-            color="primary"
-          >
-            <SyncLoader color={"var(--white)"} loading={true} />
-          </Button>
-        </div>
-      )}
+      <Row>
+        <Col xl="12" style={{ margin: "12px 0" }} className="my-3">
+          {!props.loading ? (
+            <Button
+              size="lg"
+              type="submit"
+              disabled={isSubmitting}
+              className="btn-block text-uppercase font-weight-bold font-size-sm"
+              color="primary"
+            >
+              Connexion
+            </Button>
+          ) : (
+            <div className="d-flex align-items-center justify-content-center">
+              <Button
+                size="lg"
+                disabled
+                className="btn-block text-uppercase font-weight-bold font-size-sm"
+                color="primary"
+              >
+                <SyncLoader color={"var(--white)"} loading={true} />
+              </Button>
+            </div>
+          )}
+        </Col>
+      </Row>
     </Form>
   );
 };
