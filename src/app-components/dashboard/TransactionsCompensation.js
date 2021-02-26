@@ -58,6 +58,9 @@ export default function TransactionsCompensation() {
   return (
     <>
       <Card className="card-box shadow-none">
+        <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+          <small>Demo</small>
+        </span>
         <div className="px-4 pt-4 text-primary">
           <h5 className="font-weight-bold text-dark">
             Historiques de compensations

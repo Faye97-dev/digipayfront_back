@@ -5,7 +5,7 @@ import TransactionsHistory from "./TransactionsHistory";
 import Charts from "./Chart";
 import EmployeGrid from "./EmployeGrid";
 
-export class DashboardResponsable extends Component {
+class DashboardResponsable extends Component {
   render() {
     return (
       <>

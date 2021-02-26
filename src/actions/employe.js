@@ -22,12 +22,14 @@ export const getEmployes = (showAlert) => (dispatch, getState) => {
       config,
     })
     .then((res) => {
+      //setTimeout(() => {
       dispatch({
         type: GET_EMPLOYES,
         payload: res.data,
       });
+      //}, 25000);
 
-      console.log(res.data);
+      //console.log(res.data);
     })
     .catch((err) => {
       dispatch({

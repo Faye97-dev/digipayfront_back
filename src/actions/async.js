@@ -24,13 +24,14 @@ export async function getNotWhitrated(tel, agence) {
       .post(HOST + `api/func/transaction/retrait_list/`, body, config)
       .then((res) => {
         //setTimeout(() => {
-        console.log(" Not Whithrated ... ", res.data);
-        data = res.data.slice(0, 3);
+        //console.log(" Not Whithrated ... ", res.data);
+        //data = res.data.slice(0, 3);
+        data = res.data;
         //data = [];
         //}, 15000);
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
         data = [];
       });
     return data;
@@ -59,7 +60,7 @@ export async function checkSecretKey(transaction, key, showAlert) {
       //console.log(res.data);
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       data = null;
       showAlert(
         "danger",
@@ -83,10 +84,10 @@ export const updateSolde = async (id) => {
     .get(HOST + `api/agence/get/${id}/`, config)
     .then((res) => {
       data = res.data;
-      console.log(res.data);
+      //console.log(res.data);
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       data = null;
     });
 
@@ -94,6 +95,7 @@ export const updateSolde = async (id) => {
 };
 
 export const updateSolde_clientDigipay = async (id, access) => {
+  /* same update function for vendor and client */
   let data;
   const config = {
     headers: {
@@ -107,10 +109,10 @@ export const updateSolde_clientDigipay = async (id, access) => {
     .get(HOST + url, config)
     .then((res) => {
       data = res.data;
-      console.log(res.data);
+      //console.log(res.data);
     })
     .catch((err) => {
-      console.log(err);
+      //console.log(err);
       data = null;
     });
 
@@ -138,6 +140,129 @@ export const checkClientDigipay = async (form, showAlert) => {
       showAlert(
         "danger",
         "Envoie Non-Complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //console.log(err.response.data);
+    });
+  return data;
+};
+
+export const check_byRole_ClientVendor = async (form, showAlert) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  /*if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }*/
+  let data;
+  await axios
+    .post(HOST + `api/func/client_digiPay_vendor/check/`, form, config)
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = {};
+      showAlert(
+        "danger",
+        "Recharge Non-Complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //console.log(err.response.data);
+    });
+  return data;
+};
+
+export const randomCodeRetrait = async (form, showAlert) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let data;
+  await axios
+    .post(HOST + `api/func/client_digiPay/retrait/`, form, config)
+    .then((res) => {
+      data = res.data;
+      const keys = Object.keys({ ...data });
+      if (keys.includes("msg")) {
+        showAlert(
+          "warning",
+          data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      } else {
+        showAlert(
+          "info",
+          "Veuillez consulter vos notifications pour le code de retrait !",
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
+    })
+    .catch((err) => {
+      data = {};
+      showAlert(
+        "danger",
+        "Retrait Non-Complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //console.log(err.response.data);
+    });
+  return data;
+};
+
+export const randomCodePayement = async (form, showAlert) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let data;
+  await axios
+    .post(HOST + `api/func/vendor/gen_codePayement/`, form, config)
+    .then((res) => {
+      data = res.data;
+      showAlert(
+        "info",
+        "Veuillez consulter vos notifications pour le code de payement !",
+        <FontAwesomeIcon icon={["far", "question-circle"]} />
+      );
+    })
+    .catch((err) => {
+      data = {};
+      showAlert(
+        "danger",
+        "Généreration d'un code de paiement non-complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //console.log(err.response.data);
+    });
+  return data;
+};
+
+export const checkCodePayement = async (form, showAlert) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let data;
+  await axios
+    .post(HOST + `api/func/client_digiPay/check_codePayement/`, form, config)
+    .then((res) => {
+      data = res.data;
+      //console.log(data);
+    })
+    .catch((err) => {
+      data = {};
+      showAlert(
+        "danger",
+        "Validation du code non-complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
       //console.log(err.response.data);

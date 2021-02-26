@@ -20,7 +20,7 @@ export const getClients = (showAlert) => (dispatch, getState) => {
         type: GET_CLIENTS,
         payload: res.data,
       });
-      console.log(res.data);
+      //console.log(res.data);
     })
     .catch((err) => {
       dispatch({

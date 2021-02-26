@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 
 import clsx from "clsx";
 
@@ -34,8 +34,508 @@ import {
 } from "react-feather";
 
 import { CardBody, UncontrolledTooltip, Progress } from "reactstrap";
+import { connect } from "react-redux";
+import { getTransactions } from "../../actions/transaction";
+import { showAlert } from "../../utils/alerts";
 
-export default function TransactionsVendor() {
+import empty from "../../assets/images/empty.png";
+import SkeletonLoader from "../../utils/SkeletonLoader";
+import {
+  mapColorStatus,
+  mapTypeNames,
+  mapColorTypes,
+} from "../../utils/choices";
+import FormFilter from "../transaction/FormFilter";
+import CollapseModel from "./CollapseModel";
+import { PaginateData } from "../../utils/dataTable";
+
+const filtersOptions = {
+  status: {
+    label: "Status",
+    name: "status",
+    content: [
+      { value: "NOT_WITHDRAWED", label: "VALIDER" },
+      { value: "TO_VALIDATE", label: "EN ATTENTE" },
+      { value: "WITHDRAWED", label: "RETIRER" },
+      { value: "CANCELED", label: "ANNULER" },
+    ],
+  },
+  type_transaction: {
+    label: "Type de Transaction",
+    name: "type_transaction",
+    content: [
+      { value: "01", label: "TRANSFERT" },
+      { value: "02", label: "RETRAIT" },
+      /*{ value: "03", label: "COMP_VERSEMENT" },
+      { value: "04", label: "COMP_RETRAIT" },*/
+    ],
+  },
+};
+
+class TransactionsVendor extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [],
+      init: true,
+      //totalPage: 1,
+      totalRowsPerPage: 5,
+      totalData: 0,
+      page: 1,
+      current: [],
+      searchOpen: false,
+    };
+
+    this.handleChangePage = this.handleChangePage.bind(this);
+    this.Paginate = this.Paginate.bind(this);
+  }
+
+  openSearch = () => this.setState({ ...this.state, searchOpen: true });
+  closeSearch = () => this.setState({ ...this.state, searchOpen: false });
+
+  componentDidMount() {
+    this.props.getTransactions(showAlert);
+    //this.Paginate([...fetchData], this.state.totalRowsPerPage);
+  }
+
+  UNSAFE_componentWillUpdate(nextProps) {
+    if (nextProps.transactions.loading === false && this.state.init) {
+      console.log(" sync transactions props with state  ...");
+      this.Paginate(
+        [...nextProps.transactions.payload],
+        this.state.totalRowsPerPage
+      );
+    }
+    if (
+      nextProps.transactions.loading === true &&
+      this.props.transactions.loading === false
+    ) {
+      console.log("reset init bolean ant sync props to state ....");
+      this.setState({
+        ...this.state,
+        init: true,
+      });
+    }
+    /*if (
+      nextState.search === "" &&
+      this.state.search !== "" &&
+      (nextState.filterValues === {} || allNull(nextState.filterValues))
+    ) {
+      this.reset();
+    }*/
+  }
+
+  Paginate(data, rows) {
+    const [page, paginated] = PaginateData(data, rows);
+    const temp = [...paginated].filter((item) => item.page === 1);
+
+    this.setState({
+      ...this.state,
+      data: [...paginated],
+      init: false,
+      totalData: paginated.length,
+      page: 1,
+      current: temp,
+    });
+  }
+
+  handleChangePage(page) {
+    this.setState({
+      ...this.state,
+      page,
+      current: [...this.state.data].filter((item) => item.page === page),
+    });
+  }
+  render() {
+    const transactions = this.props.transactions.loading ? (
+      <tr>
+        <td colSpan="8">
+          <SkeletonLoader />
+        </td>
+      </tr>
+    ) : (
+      <>
+        {this.state.current.length === 0 ? (
+          <tr>
+            <td colSpan="8">
+              <div className="d-flex align-items-center justify-content-center pt-3">
+                <img style={{ width: "17%" }} src={empty} />
+              </div>
+              <div className="d-flex align-items-center justify-content-center pt-1">
+                <span>Pas de données disponibles </span>
+              </div>
+            </td>
+          </tr>
+        ) : (
+          this.state.current.map((item) => {
+            const keys = Object.keys({ ...item.transaction });
+            return (
+              <tr key={item.id}>
+                <td className="text-center text-black-30">
+                  <span className="font-weight-bold">
+                    {item.code_transaction}
+                  </span>
+                </td>
+                <td className="text-center text-black-30">
+                  <span className="font-weight-bold">{item.date}</span>
+                </td>
+                <td className="text-center">
+                  <div>
+                    <a
+                      href="#/"
+                      onClick={(e) => e.preventDefault()}
+                      className="font-weight-bold text-black-30"
+                      title="..."
+                    >
+                      {!keys.includes("agence_origine") &&
+                        `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
+                      {keys.includes("agence_origine") &&
+                        item.transaction.expediteur &&
+                        item.transaction.expediteur.nom}
+                      {keys.includes("agence_origine") &&
+                        !item.transaction.expediteur &&
+                        item.transaction.agence_origine.nom}
+                    </a>
+                    <span className="text-black-50 d-block">
+                      {!keys.includes("agence_origine") &&
+                        item.transaction.expediteur &&
+                        item.transaction.expediteur.tel}
+                      {keys.includes("agence_origine") &&
+                        item.transaction.expediteur &&
+                        item.transaction.expediteur.tel}
+                      {keys.includes("agence_origine") &&
+                        !item.transaction.expediteur &&
+                        item.transaction.agence_origine.type_agence}
+                    </span>
+                  </div>
+                </td>
+                <td className="text-center">
+                  <div>
+                    <a
+                      href="#/"
+                      onClick={(e) => e.preventDefault()}
+                      className="font-weight-bold text-black-30"
+                      title="..."
+                    >
+                      {keys.includes("agence_origine")
+                        ? item.transaction.destinataire.nom
+                        : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                    </a>
+                    <span className="text-black-50 d-block">
+                      {item.transaction.destinataire.tel}
+                    </span>
+                  </div>
+                </td>
+                <td className="font-size-lg font-weight-bold text-center">
+                  <span>{item.transaction.montant}</span>
+                  <small className="px-2">MRU</small>
+                </td>
+                <td className="text-center">
+                  <Badge
+                    className={
+                      "px-4 py-1 h-auto text-" +
+                      mapColorTypes[item.type_transaction] +
+                      " border-1 border-" +
+                      mapColorTypes[item.type_transaction]
+                    }
+                    color={"neutral-" + mapColorTypes[item.type_transaction]}
+                  >
+                    {mapTypeNames[item.type_transaction]}
+                  </Badge>
+                </td>
+                <td className="text-center">
+                  <Badge
+                    className={
+                      "px-4 py-1 h-auto text-" +
+                      mapColorStatus[item.transaction.status] +
+                      " border-1 border-" +
+                      mapColorStatus[item.transaction.status]
+                    }
+                    color={"neutral-" + mapColorStatus[item.transaction.status]}
+                  >
+                    {item.transaction.status}
+                  </Badge>
+                </td>
+                <td className="text-center">
+                  <Button
+                    color="primary"
+                    className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
+                  >
+                    <FontAwesomeIcon
+                      icon={["fas", "eye"]}
+                      className="font-size-sm"
+                    />
+                  </Button>
+                </td>
+              </tr>
+            );
+          })
+        )}
+      </>
+    );
+    const transactions_mobile = this.props.transactions.loading ? (
+      <SkeletonLoader />
+    ) : this.state.current.length === 0 ? (
+      <>
+        <div className="d-flex align-items-center justify-content-center pt-3">
+          <img style={{ width: "17%" }} src={empty} />
+        </div>
+        <div className="d-flex align-items-center justify-content-center pt-1">
+          <span>Pas de données disponibles </span>
+        </div>
+      </>
+    ) : (
+      this.state.current.map((item) => {
+        const keys = Object.keys({ ...item.transaction });
+        return (
+          <div key={item.id}>
+            <CollapseModel
+              type_transaction={item.type_transaction}
+              montant={item.transaction.montant}
+            >
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Numero
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.code_transaction}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Date
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.date}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Origine
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {!keys.includes("agence_origine") &&
+                    `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
+                  {keys.includes("agence_origine") &&
+                    item.transaction.expediteur &&
+                    item.transaction.expediteur.nom}
+                  {keys.includes("agence_origine") &&
+                    !item.transaction.expediteur &&
+                    item.transaction.agence_origine.nom}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Beneficiaire
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {keys.includes("agence_origine")
+                    ? item.transaction.destinataire.nom
+                    : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                  {" - " + item.transaction.destinataire.tel}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Montant
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.transaction.montant}
+                  <small className="px-2 font-weight-normal">MRU</small>
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Status
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  <Badge
+                    className={
+                      "px-4 py-1 h-auto text-" +
+                      mapColorStatus[item.transaction.status] +
+                      " border-1 border-" +
+                      mapColorStatus[item.transaction.status]
+                    }
+                    color={"neutral-" + mapColorStatus[item.transaction.status]}
+                  >
+                    {item.transaction.status}
+                  </Badge>
+                </div>
+              </div>
+              <div className="divider my-3" />
+            </CollapseModel>
+          </div>
+        );
+      })
+    );
+    return (
+      <>
+        <Card className="card-box shadow-none d-none d-md-block">
+          <div className="px-4 pt-4 text-primary">
+            <h5 className="font-weight-bold text-dark">
+              Historiques de transactions
+            </h5>
+          </div>
+          <div className="d-flex justify-content-between px-4 py-3">
+            <div
+              className={clsx(
+                "search-wrapper search-wrapper--alternate search-wrapper--grow",
+                { "is-active": this.state.searchOpen }
+              )}
+            >
+              <span className="icon-wrapper text-black">
+                <FontAwesomeIcon icon={["fas", "search"]} />
+              </span>
+              <Input
+                type="search"
+                onFocus={this.openSearch}
+                onBlur={this.closeSearch}
+                placeholder="Search orders..."
+              />
+            </div>
+            <div className="d-flex align-items-center">
+              <UncontrolledDropdown>
+                <DropdownToggle
+                  outline
+                  color="primary"
+                  className="d-flex align-items-center justify-content-center d-40 mr-2 p-0 rounded-pill"
+                >
+                  <Filter className="w-50" />
+                </DropdownToggle>
+                <DropdownMenu right className="dropdown-menu-xxl p-0">
+                  <div className="p-3">
+                    <FormFilter
+                      handleFilter={() => console.log("in build ...")}
+                      filterValues={{}}
+                      filtersOptions={filtersOptions}
+                    />
+                  </div>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </div>
+          </div>
+          <div className="divider" />
+          <div className="p-4">
+            <CardBody>
+              <div className="table-responsive">
+                <Table hover borderless className="text-nowrap mb-0">
+                  <thead>
+                    <tr>
+                      <th
+                        className="text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Numero
+                      </th>
+                      <th
+                        className=" text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Date
+                      </th>
+                      <th
+                        className="text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Origine
+                      </th>
+                      <th
+                        className="text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Beneficiaire
+                      </th>
+                      <th
+                        className="text-center text-center text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Montant
+                      </th>
+                      <th
+                        className="text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Type
+                      </th>
+                      <th
+                        className="text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Status
+                      </th>
+                      <th
+                        className="text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>{transactions}</tbody>
+                </Table>
+              </div>
+            </CardBody>
+          </div>
+
+          {!this.props.transactions.loading && this.state.current.length !== 0 && (
+            <div className="d-flex align-items-center justify-content-center mt-4 mb-4">
+              <RcPagination
+                defaultPageSize={this.state.totalRowsPerPage}
+                onChange={this.handleChangePage}
+                current={this.state.page}
+                total={this.state.totalData}
+                locale={localeInfo}
+              />
+            </div>
+          )}
+        </Card>
+        {/*mobile version*/}
+        <Card className="card-box shadow-none d-block d-md-none">
+          <div className="px-4 pt-4 text-primary">
+            <h5 className="font-weight-bold text-dark">
+              Historiques de transactions
+            </h5>
+          </div>
+          <div className="divider" />
+          <div className="pb-1 pt-3 px-0">
+            <CardBody>{transactions_mobile}</CardBody>
+          </div>
+          {!this.props.transactions.loading && this.state.current.length !== 0 && (
+            <div className="d-flex align-items-center justify-content-center mt-2 mb-4">
+              <RcPagination
+                defaultPageSize={this.state.totalRowsPerPage}
+                onChange={this.handleChangePage}
+                current={this.state.page}
+                total={this.state.totalData}
+                locale={localeInfo}
+              />
+            </div>
+          )}
+        </Card>
+      </>
+    );
+  }
+}
+
+/*
+function TransactionsVendor(props) {
   const [searchOpen, setSearchOpen] = useState(false);
 
   const openSearch = () => setSearchOpen(true);
@@ -49,7 +549,134 @@ export default function TransactionsVendor() {
     { value: "processing", label: "Processing" },
     { value: "cancelled", label: "Cancelled" },
   ];
+  useEffect(() => props.getTransactions(showAlert), []);
 
+  const transactions = props.transactions.loading ? (
+    <tr>
+      <td colSpan="8">
+        <SkeletonLoader />
+      </td>
+    </tr>
+  ) : (
+    <>
+      {props.transactions.payload.length === 0 ? (
+        <tr>
+          <td colSpan="8">
+            <div className="d-flex align-items-center justify-content-center pt-3">
+              <img style={{ width: "17%" }} src={empty} />
+            </div>
+            <div className="d-flex align-items-center justify-content-center pt-1">
+              <span>Pas de données disponibles </span>
+            </div>
+          </td>
+        </tr>
+      ) : (
+        props.transactions.payload.map((item) => {
+          const keys = Object.keys({ ...item.transaction });
+          return (
+            <tr key={item.id}>
+              <td className="text-center text-black-30">
+                <span className="font-weight-bold">
+                  {item.code_transaction}
+                </span>
+              </td>
+              <td className="text-center text-black-30">
+                <span className="font-weight-bold">{item.date}</span>
+              </td>
+              <td className="text-center">
+                <div>
+                  <a
+                    href="#/"
+                    onClick={(e) => e.preventDefault()}
+                    className="font-weight-bold text-black-30"
+                    title="..."
+                  >
+                    {!keys.includes("agence_origine") &&
+                      `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
+                    {keys.includes("agence_origine") &&
+                      item.transaction.expediteur &&
+                      item.transaction.expediteur.nom}
+                    {keys.includes("agence_origine") &&
+                      !item.transaction.expediteur &&
+                      item.transaction.agence_origine.nom}
+                  </a>
+                  <span className="text-black-50 d-block">
+                    {!keys.includes("agence_origine") &&
+                      item.transaction.expediteur &&
+                      item.transaction.expediteur.tel}
+                    {keys.includes("agence_origine") &&
+                      item.transaction.expediteur &&
+                      item.transaction.expediteur.tel}
+                    {keys.includes("agence_origine") &&
+                      !item.transaction.expediteur &&
+                      item.transaction.agence_origine.type_agence}
+                  </span>
+                </div>
+              </td>
+              <td className="text-center">
+                <div>
+                  <a
+                    href="#/"
+                    onClick={(e) => e.preventDefault()}
+                    className="font-weight-bold text-black-30"
+                    title="..."
+                  >
+                    {keys.includes("agence_origine")
+                      ? item.transaction.destinataire.nom
+                      : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                  </a>
+                  <span className="text-black-50 d-block">
+                    {item.transaction.destinataire.tel}
+                  </span>
+                </div>
+              </td>
+              <td className="font-size-lg font-weight-bold text-center">
+                <span>{item.transaction.montant}</span>
+                <small className="px-2">MRU</small>
+              </td>
+              <td className="text-center">
+                <Badge
+                  className={
+                    "px-4 py-1 h-auto text-" +
+                    mapColorTypes[item.type_transaction] +
+                    " border-1 border-" +
+                    mapColorTypes[item.type_transaction]
+                  }
+                  color={"neutral-" + mapColorTypes[item.type_transaction]}
+                >
+                  {mapTypeNames[item.type_transaction]}
+                </Badge>
+              </td>
+              <td className="text-center">
+                <Badge
+                  className={
+                    "px-4 py-1 h-auto text-" +
+                    mapColorStatus[item.transaction.status] +
+                    " border-1 border-" +
+                    mapColorStatus[item.transaction.status]
+                  }
+                  color={"neutral-" + mapColorStatus[item.transaction.status]}
+                >
+                  {item.transaction.status}
+                </Badge>
+              </td>
+              <td className="text-center">
+                <Button
+                  color="primary"
+                  className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
+                >
+                  <FontAwesomeIcon
+                    icon={["fas", "eye"]}
+                    className="font-size-sm"
+                  />
+                </Button>
+              </td>
+            </tr>
+          );
+        })
+      )}
+    </>
+  );
   return (
     <>
       <Card className="card-box shadow-none">
@@ -86,147 +713,12 @@ export default function TransactionsVendor() {
               </DropdownToggle>
               <DropdownMenu right className="dropdown-menu-xxl p-0">
                 <div className="p-3">
-                  <Row>
-                    <Col md="12">
-                      <small className="font-weight-bold pb-2 text-uppercase text-primary d-block">
-                        Status
-                      </small>
-                      <Select
-                        placeholder="Select..."
-                        options={statusOptions}
-                        theme={(theme) => ({
-                          ...theme,
-                          borderRadius: "0.29rem",
-                          borderWidth: 1,
-                          colors: {
-                            ...theme.colors,
-                            primary25: "rgba(60,68,177,0.15)",
-                            primary50: "rgba(60,68,177,0.15)",
-                            primary: "#3c44b1",
-                          },
-                        })}
-                      />
-                    </Col>
-                  </Row>
+                  <FormFilter
+                    handleFilter={() => console.log("in build ...")}
+                    filterValues={{}}
+                    filtersOptions={filtersOptions}
+                  />
                 </div>
-                <div className="divider" />
-                <DropdownItem>
-                  <div className="p-3 text-center bg-secondary">
-                    {/* <Button color="primary" size="sm">*/}
-                    Filter results
-                    {/*</Button> */}
-                  </div>
-                </DropdownItem>
-
-                <div className="divider" />
-                <div className="p-3">
-                  <Row>
-                    <Col md="6">
-                      <DropdownItem>
-                        <Nav className="nav-neutral-danger flex-column p-0">
-                          <NavItem>
-                            <NavLinkStrap
-                              className="d-flex rounded-sm justify-content-center"
-                              href="#/"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <div className="nav-link-icon">
-                                <Trash />
-                              </div>
-                              <span>Cancel</span>
-                            </NavLinkStrap>
-                          </NavItem>
-                        </Nav>
-                      </DropdownItem>
-                    </Col>
-
-                    <Col md="6">
-                      <DropdownItem>
-                        <Nav className="nav-neutral-success flex-column p-0">
-                          <NavItem>
-                            <NavLinkStrap
-                              className="d-flex rounded-sm justify-content-center"
-                              href="#/"
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <div className="nav-link-icon">
-                                <Save />
-                              </div>
-                              <span>Save filter</span>
-                            </NavLinkStrap>
-                          </NavItem>
-                        </Nav>
-                      </DropdownItem>
-                    </Col>
-                  </Row>
-                </div>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            <UncontrolledDropdown>
-              <DropdownToggle
-                outline
-                color="primary"
-                className="d-flex align-items-center justify-content-center d-40 p-0 rounded-pill"
-              >
-                <Settings className="w-50" />
-              </DropdownToggle>
-              <DropdownMenu
-                right
-                className="dropdown-menu-lg overflow-hidden p-0"
-              >
-                <div className="font-weight-bold px-4 pt-3">Results</div>
-                <Nav className="nav-neutral-first nav-pills-rounded flex-column p-2">
-                  <NavItem>
-                    <NavLinkStrap href="#/" onClick={(e) => e.preventDefault()}>
-                      <div className="nav-link-icon mr-2">
-                        <Circle />
-                      </div>
-                      <span className="font-size-md">
-                        <b>10</b> results per page
-                      </span>
-                    </NavLinkStrap>
-                  </NavItem>
-                  <NavItem>
-                    <NavLinkStrap href="#/" onClick={(e) => e.preventDefault()}>
-                      <div className="nav-link-icon mr-2">
-                        <Circle />
-                      </div>
-                      <span className="font-size-md">
-                        <b>20</b> results per page
-                      </span>
-                    </NavLinkStrap>
-                  </NavItem>
-                  <NavItem>
-                    <NavLinkStrap href="#/" onClick={(e) => e.preventDefault()}>
-                      <div className="nav-link-icon mr-2">
-                        <Circle />
-                      </div>
-                      <span className="font-size-md">
-                        <b>30</b> results per page
-                      </span>
-                    </NavLinkStrap>
-                  </NavItem>
-                </Nav>
-                <div className="divider" />
-                <div className="font-weight-bold px-4 pt-4">Order</div>
-                <Nav className="nav-neutral-first nav-pills-rounded flex-column p-2">
-                  <NavItem>
-                    <NavLinkStrap href="#/" onClick={(e) => e.preventDefault()}>
-                      <div className="nav-link-icon mr-2">
-                        <ArrowUpCircle />
-                      </div>
-                      <span className="font-size-md">Ascending</span>
-                    </NavLinkStrap>
-                  </NavItem>
-                  <NavItem>
-                    <NavLinkStrap href="#/" onClick={(e) => e.preventDefault()}>
-                      <div className="nav-link-icon mr-2">
-                        <ArrowDownCircle />
-                      </div>
-                      <span className="font-size-md">Descending</span>
-                    </NavLinkStrap>
-                  </NavItem>
-                </Nav>
               </DropdownMenu>
             </UncontrolledDropdown>
           </div>
@@ -244,25 +736,29 @@ export default function TransactionsVendor() {
                     >
                       Numero
                     </th>
-
-                    <th
-                      className="text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Client
-                    </th>
-
-                    <th
-                      className="text-center text-center text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Montant
-                    </th>
                     <th
                       className=" text-center font-size-lg font-weight-normal   text-dark"
                       scope="col"
                     >
                       Date
+                    </th>
+                    <th
+                      className="text-center font-size-lg font-weight-normal   text-dark"
+                      scope="col"
+                    >
+                      Origine
+                    </th>
+                    <th
+                      className="text-center font-size-lg font-weight-normal   text-dark"
+                      scope="col"
+                    >
+                      Beneficiaire
+                    </th>
+                    <th
+                      className="text-center text-center text-center font-size-lg font-weight-normal   text-dark"
+                      scope="col"
+                    >
+                      Montant
                     </th>
                     <th
                       className="text-center font-size-lg font-weight-normal   text-dark"
@@ -284,65 +780,7 @@ export default function TransactionsVendor() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td className="text-center text-black-30">
-                      <span className="font-weight-bold"> 1604423704</span>
-                    </td>
-
-                    <td className="text-center">
-                      <div>
-                        <a
-                          href="#/"
-                          onClick={(e) => e.preventDefault()}
-                          className="font-weight-bold text-black-30"
-                          title="..."
-                        >
-                          Mohamed Mohamed
-                        </a>
-                        <span className="text-black-50 d-block">46461429</span>
-                      </div>
-                    </td>
-
-                    <td className="font-size-lg font-weight-bold text-center">
-                      <span>2.495</span>
-                      <small className="px-2">MRU</small>
-                    </td>
-
-                    <td className="text-center text-black-30">
-                      <span className="font-weight-bold">15-01-2020 12:10</span>
-                    </td>
-
-                    <td className="text-center">
-                      <Badge
-                        className="px-4 py-1 h-auto text-success border-1 border-success"
-                        color="neutral-success"
-                      >
-                        PAIEMENT
-                      </Badge>
-                    </td>
-                    <td className="text-center">
-                      <Badge
-                        className="px-4 py-1 h-auto text-success border-1 border-success"
-                        color="neutral-success"
-                      >
-                        VALIDE
-                      </Badge>
-                    </td>
-                    <td className="text-center">
-                      <Button
-                        color="primary"
-                        className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
-                      >
-                        <FontAwesomeIcon
-                          icon={["fas", "eye"]}
-                          className="font-size-sm"
-                        />
-                      </Button>
-                    </td>
-                  </tr>
-                  <tr className="divider"></tr>
-                </tbody>
+                <tbody>{transactions}</tbody>
               </Table>
             </div>
           </CardBody>
@@ -359,3 +797,12 @@ export default function TransactionsVendor() {
     </>
   );
 }
+*/
+
+const mapStateToProps = (state) => ({
+  transactions: state.transaction.transactions,
+});
+
+export default connect(mapStateToProps, {
+  getTransactions,
+})(TransactionsVendor);

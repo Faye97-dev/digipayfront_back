@@ -76,7 +76,7 @@ const formikEnhancer = withFormik({
       expediteur: values.expediteur.value,
       categorie_transaction: values.transaction_type.value,
     };
-    console.log(payload);
+    //console.log(payload);
     props.addTransfert(payload, resetForm, setSubmitting, showAlert);
   },
   displayName: "MyForm",
@@ -118,7 +118,7 @@ const MyForm = (props) => {
   };*/
 
   return (
-    <Form onSubmit={handleSubmit} className="px-5">
+    <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
       <Row>
         <Col xl="12">
           <MySelect

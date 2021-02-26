@@ -69,15 +69,16 @@ const formikEnhancer = withFormik({
   }),
   handleSubmit: (values, { props, resetForm, setSubmitting }) => {
     //{ setSubmitting, resetForm, addTransfert }
-    const payload = {
+    /*const payload = {
       ...values,
       agence_origine: props.user.agence.id,
       agence_destination: values.agence_destination.value,
       destinataire: values.destinataire.value,
       expediteur: values.expediteur.value,
       categorie_transaction: values.transaction_type.value,
-    };
-    console.log(payload);
+    };*/
+    console.log("in build ...");
+    setSubmitting(false);
     //props.addTransfert(payload, resetForm, setSubmitting, showAlert);
   },
   displayName: "MyForm",
@@ -102,10 +103,10 @@ const MyForm = (props) => {
   return (
     <Form onSubmit={handleSubmit} className="px-5 py-4">
       <Row>
-        <Col xl="6" style={{ margin: "12px 0" }}>
+        <Col sm="6" style={{ margin: "12px 0" }}>
           <Badge
             className={
-              "px-4 py-1 h-auto text-" +
+              "px-3 py-1 h-auto text-" +
               "success" +
               " border-1 border-" +
               "success"
@@ -116,22 +117,24 @@ const MyForm = (props) => {
           </Badge>
         </Col>
         <Col
-          xl="6"
-          className="d-flex justify-content-end"
+          sm="6"
+          className="d-flex justify-content-end "
           style={{ margin: "12px 0" }}
         >
-          <Label className="px-2">Dernier cloture</Label>
-          <Badge
-            className={
-              "px-3 py-1 h-auto text-" +
-              "danger" +
-              " border-1 border-" +
-              "danger"
-            }
-            color={"neutral-" + "danger"}
-          >
-            05-01-2021 17:55
-          </Badge>
+          <div className="d-none d-sm-block">
+            <Label className="px-2">Dernier cloture</Label>
+            <Badge
+              className={
+                "px-3 py-1 h-auto text-" +
+                "danger" +
+                " border-1 border-" +
+                "danger"
+              }
+              color={"neutral-" + "danger"}
+            >
+              05-01-2021 17:55
+            </Badge>
+          </div>
         </Col>
       </Row>
       <Row>

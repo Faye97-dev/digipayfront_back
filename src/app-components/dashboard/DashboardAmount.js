@@ -30,7 +30,7 @@ function SmallFormat(props) {
             <CountUp
               start={0}
               end={props.user && props.user.agence.solde}
-              duration={4}
+              duration={2}
               separator=""
               suffix=" MRU"
             />
@@ -54,7 +54,7 @@ function SmallFormat(props) {
                                   props.user.agence.solde -
                                     props.user.agence.frais
                                 }
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -74,7 +74,7 @@ function SmallFormat(props) {
                               <CountUp
                                 start={0}
                                 end={props.user && props.user.agence.retrait}
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -112,7 +112,7 @@ function XlFormat(props) {
             <CountUp
               start={0}
               end={props.user && props.user.agence.solde}
-              duration={4}
+              duration={2}
               separator=""
               suffix=" MRU"
             />
@@ -136,7 +136,7 @@ function XlFormat(props) {
                                   props.user.agence.solde -
                                     props.user.agence.frais
                                 }
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -156,7 +156,7 @@ function XlFormat(props) {
                               <CountUp
                                 start={0}
                                 end={props.user && props.user.agence.retrait}
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />

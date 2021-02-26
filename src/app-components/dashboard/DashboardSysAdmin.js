@@ -7,7 +7,7 @@ import TopAgenceEmploye from "./SysAdmin/TopAgenceEmploye";
 import Progress, { HeaderProgress } from "./SysAdmin/Progress";
 import Messenger from "./SysAdmin/Messenger";
 
-export class DashboardSysAdmin extends Component {
+class DashboardSysAdmin extends Component {
   render() {
     return (
       <>

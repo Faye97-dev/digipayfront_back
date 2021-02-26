@@ -23,8 +23,13 @@ const formikEnhancer = withFormik({
       ...values,
     };
 
+    setTimeout(() => {
+      alert(JSON.stringify(payload, null, 2));
+      setSubmitting(false);
+    }, 1000);
+
     //payload["sender"] = props.user.id;
-    checkCodePayement(payload, showAlert).then((res) => {
+    /*checkCodePayement(payload, showAlert).then((res) => {
       //console.log(res);
       setSubmitting(false);
       //
@@ -39,7 +44,8 @@ const formikEnhancer = withFormik({
         props.handleItem(res);
         props.showDivInfo();
       }
-    });
+    
+    });*/
   },
   displayName: "MyForm",
 });
@@ -91,7 +97,7 @@ const MyForm = (props) => {
 
 const MyEnhancedForm = formikEnhancer(MyForm);
 
-const FormClientPay = (props) => {
+const FormVendorPay = (props) => {
   const [modalPayementinfo, setModalPayementinfo] = useState(false);
   const showDivInfo = () => setModalPayementinfo(!modalPayementinfo);
 
@@ -205,5 +211,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, { addPayement_clientDigipay })(
-  FormClientPay
+  FormVendorPay
 );

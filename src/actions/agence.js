@@ -32,8 +32,8 @@ export const getAgences = (showAlert) => (dispatch, getState) => {
         type: GET_AGENCES,
         payload: res.data,
       });
-      console.log(res.data);
-      //}, 5000);
+      //console.log(res.data);
+      //}, 35000);
     })
     .catch((err) => {
       dispatch({
@@ -70,7 +70,7 @@ export const updateStatusAgence = (status, showAlert) => (
         type: AGENCE_ONLINE,
         payload: res.data,
       });
-      console.log(res.data);
+      //console.log(res.data);
       //}, 5000);
     })
     .catch((err) => {
@@ -79,9 +79,9 @@ export const updateStatusAgence = (status, showAlert) => (
       });
       showAlert(
         "danger",
-        "Erreur de changement de status de l'agence !",
+        "Erreur de changement du status de l'agence !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      console.log(err);
+      //console.log(err.response);
     });
 };

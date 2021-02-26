@@ -331,7 +331,7 @@ class EmployeList extends Component {
               <span className="icon-wrapper text-black">
                 <FontAwesomeIcon icon={["fas", "search"]} />
               </span>
-              <Input
+              {/*<Input
                 type="search"
                 onFocus={this.openSearch}
                 onBlur={this.closeSearch}
@@ -340,6 +340,12 @@ class EmployeList extends Component {
                 value={this.state.search}
                 onChange={this.handleSearchChange}
                 disabled={this.props.employes.loading}
+              />*/}
+              <Input
+                type="search"
+                onFocus={this.openSearch}
+                onBlur={this.closeSearch}
+                placeholder="Rechercher par ..."
               />
             </div>
             <div className="d-flex align-items-center">

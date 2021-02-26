@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Row, Col, Card } from "reactstrap";
 import CountUp from "react-countup";
@@ -6,6 +6,8 @@ import TabsClient from "./TabsClient";
 import TransactionsClient from "./TransactionsClient";
 import RechargeCredit from "./RechargeCredit";
 import { connect } from "react-redux";
+import { updateSolde_clientDigipay } from "../../actions/async";
+import { UPDATE_SOLDE_CLIENT_DIGIPAY } from "../../actions/types";
 
 class DashboardClient extends Component {
   render() {
@@ -21,6 +23,9 @@ class DashboardClient extends Component {
 }
 
 function DashboardAmount(props) {
+  useEffect(() => {
+    props.updateSolde(props.user, props.access);
+  }, []);
   return (
     <>
       <div className="d-flex justify-content-center">
@@ -34,7 +39,7 @@ function DashboardAmount(props) {
 function SmallFormat(props) {
   return (
     <Col xs="12" sm="9" md="7" className="d-block d-xl-none">
-      <Card className="card-box mb-5">
+      <Card className="card-box mb-4">
         <div className="card-content-overlay text-center pb-2 pt-4">
           <div className="d-70 rounded-circle bg-primary text-white btn-icon mx-auto text-center shadow-primary">
             <FontAwesomeIcon
@@ -46,7 +51,7 @@ function SmallFormat(props) {
             <CountUp
               start={0}
               end={props.user && props.user.solde}
-              duration={4}
+              duration={2}
               separator=""
               suffix=" MRU"
             />
@@ -66,7 +71,7 @@ function SmallFormat(props) {
                               <CountUp
                                 start={0}
                                 end={0}
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -86,7 +91,7 @@ function SmallFormat(props) {
                               <CountUp
                                 start={0}
                                 end={0}
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -112,7 +117,7 @@ function SmallFormat(props) {
 function XlFormat(props) {
   return (
     <Col xl="7" className="d-none d-xl-block">
-      <Card className="card-box mb-5">
+      <Card className="card-box mb-4">
         <div className="card-content-overlay text-center pb-2 pt-4">
           <div className="d-70 rounded-circle bg-primary text-white btn-icon mx-auto text-center shadow-primary">
             <FontAwesomeIcon
@@ -124,7 +129,7 @@ function XlFormat(props) {
             <CountUp
               start={0}
               end={props.user && props.user.solde}
-              duration={4}
+              duration={2}
               separator=""
               suffix=" MRU"
             />
@@ -144,7 +149,7 @@ function XlFormat(props) {
                               <CountUp
                                 start={0}
                                 end={0}
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -164,7 +169,7 @@ function XlFormat(props) {
                               <CountUp
                                 start={0}
                                 end={0}
-                                duration={4}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -189,6 +194,22 @@ function XlFormat(props) {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  access: state.auth.access,
 });
 
-export default connect(mapStateToProps, {})(DashboardClient);
+const mapDispatchToProps = (dispatch) => ({
+  updateSolde: (user, access) => {
+    if (user) {
+      updateSolde_clientDigipay(user.id, access).then((res) => {
+        if (res) {
+          dispatch({
+            type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+            payload: res,
+          });
+        }
+      });
+    }
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardClient);

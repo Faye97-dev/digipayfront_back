@@ -152,6 +152,9 @@ export class Charts extends Component {
         <Row className="py-5">
           <Col xs={12} lg={12}>
             <Card className="card-box mb-4">
+              <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+                <small>Demo</small>
+              </span>
               <div className="card-footer  text-center">
                 <div className="pt-4 pr-4 pl-4">
                   <Chart

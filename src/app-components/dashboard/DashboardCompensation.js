@@ -5,7 +5,7 @@ import TransactionsCompensation from "./TransactionsCompensation";
 import Clotures from "./Clotures";
 import Charts from "./Chart";
 
-export class DashboardCompensation extends Component {
+class DashboardCompensation extends Component {
   render() {
     return (
       <>

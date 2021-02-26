@@ -7,7 +7,7 @@ import ScrollToTop from "./utils/ScrollToTop";
 import { ToastContainer, toast } from "react-toastify";
 import { loadUser } from "./actions/auth";
 import "./assets/base.scss";
-
+import "./utils/utils.css";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   fab,
@@ -279,7 +279,8 @@ class App extends Component {
             enableMultiContainer
             containerId={"B"}
             position={toast.POSITION.TOP_RIGHT}
-            style={{ width: "25%" }}
+            //style={{ width: "25%" }}
+            //className="my-alert-width"
             autoClose={4500}
             closeButton={false}
           />

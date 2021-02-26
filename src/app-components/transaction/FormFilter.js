@@ -48,13 +48,15 @@ const MyForm = (props) => {
 
   const customSubmit = (e) => {
     e.preventDefault();
-    const data = {
+    /*const data = {
       type_transaction: values.type_transaction.value,
       //online: values.online.value,
       "transaction#status": values.status.value,
     };
     props.handleFilter(data);
+    setSubmitting(false);*/
     setSubmitting(false);
+    console.log("in build ...");
   };
   return (
     <>

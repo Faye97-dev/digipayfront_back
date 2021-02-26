@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Tabs from "./Tabs";
 import TransactionsHistory from "./TransactionsHistory";
 
-export class DashboardEmploye extends Component {
+class DashboardEmploye extends Component {
   render() {
     return (
       <>

@@ -1,4 +1,4 @@
-export const HOST = "https://digipaybackend.herokuapp.com/"; //"http://127.0.0.1:8000/";
+export const HOST = "http://127.0.0.1:8000/"; //"http://192.168.1.14:8000/";
 export const CHANGE_ROLE = "CHANGE_ROLE";
 export const DATA_LOADING = "DATA_LOADING";
 
@@ -15,6 +15,8 @@ export const GET_TRANSACTIONS = "GET_TRANSACTIONS";
 export const HISTORY_TRANSACTIONS = "HISTORY_TRANSACTIONS";
 export const ADD_TRANSFERT = "ADD_TRANSFERT";
 export const ADD_RETRAIT = "ADD_RETRAIT";
+export const ADD_RECHARGE = "ADD_RECHARGE";
+export const ADD_PAIEMENT = "ADD_PAIEMENT";
 export const GET_TRANSFERT = "GET_TRANSFERT";
 
 export const ERROR_CLIENT = "ERROR_CLIENT";

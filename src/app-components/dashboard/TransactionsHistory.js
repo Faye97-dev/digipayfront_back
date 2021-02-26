@@ -42,6 +42,7 @@ import empty from "../../assets/images/empty.png";
 import { showAlert } from "../../utils/alerts";
 import SkeletonLoader from "../../utils/SkeletonLoader";
 import ModalTransDetails from "../transaction/ModalTransDetails";
+import CollapseModel from "./CollapseModel";
 const filtersOptions = {
   status: {
     label: "Status",
@@ -382,13 +383,127 @@ class TransactionsHistory extends Component {
         )}
       </>
     );
+    const transactions_mobile = this.props.transactions.loading ? (
+      <SkeletonLoader />
+    ) : this.state.current.length === 0 ? (
+      <>
+        <div className="d-flex align-items-center justify-content-center pt-3">
+          <img style={{ width: "17%" }} src={empty} />
+        </div>
+        <div className="d-flex align-items-center justify-content-center pt-1">
+          <span>Pas de données disponibles </span>
+        </div>
+      </>
+    ) : (
+      this.state.current.map((item) => {
+        return (
+          <div key={item.id}>
+            <CollapseModel
+              type_transaction={item.type_transaction}
+              montant={item.transaction.montant}
+            >
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Numero
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.code_transaction}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Date
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.date}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Agence d'origine
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.transaction.agence_origine.nom}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Agence de destination
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.transaction.agence_destination.nom}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Destinataire
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.transaction.destinataire.nom +
+                    " - " +
+                    item.transaction.destinataire.tel}
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Montant
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  {item.transaction.montant}
+                  <small className="px-2 font-weight-normal">MRU</small>
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
+                    Status
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  <Badge
+                    className={
+                      "px-4 py-1 h-auto text-" +
+                      mapColorStatus[item.transaction.status] +
+                      " border-1 border-" +
+                      mapColorStatus[item.transaction.status]
+                    }
+                    color={"neutral-" + mapColorStatus[item.transaction.status]}
+                  >
+                    {item.transaction.status}
+                  </Badge>
+                </div>
+              </div>
+              <div className="divider my-3" />
+            </CollapseModel>
+          </div>
+        );
+      })
+    );
 
     return (
       <>
-        <Card className="card-box shadow-none">
+        <Card className="card-box shadow-none d-none d-md-block">
           <div className="px-4 pt-4 text-primary">
             <h5 className="font-weight-bold text-dark">
-              Historiques transactions
+              Historiques de transactions
             </h5>
           </div>
           <div className="d-flex justify-content-between px-4 py-3">
@@ -401,7 +516,7 @@ class TransactionsHistory extends Component {
               <span className="icon-wrapper text-black">
                 <FontAwesomeIcon icon={["fas", "search"]} />
               </span>
-              <Input
+              {/*<Input
                 type="search"
                 onFocus={this.openSearch}
                 onBlur={this.closeSearch}
@@ -410,6 +525,12 @@ class TransactionsHistory extends Component {
                 value={this.state.search}
                 onChange={this.handleSearchChange}
                 disabled={this.props.transactions.loading}
+              />*/}
+              <Input
+                type="search"
+                onFocus={this.openSearch}
+                onBlur={this.closeSearch}
+                placeholder="Rechercher par ..."
               />
             </div>
             <div className="d-flex align-items-center">
@@ -547,6 +668,29 @@ class TransactionsHistory extends Component {
           </div>
           {!this.props.transactions.loading && this.state.current.length !== 0 && (
             <div className="d-flex align-items-center justify-content-center mb-5">
+              <RcPagination
+                defaultPageSize={this.state.totalRowsPerPage}
+                onChange={this.handleChangePage}
+                current={this.state.page}
+                total={this.state.totalData}
+                locale={localeInfo}
+              />
+            </div>
+          )}
+        </Card>
+        {/*mobile version*/}
+        <Card className="card-box shadow-none d-block d-md-none">
+          <div className="px-4 pt-4 text-primary">
+            <h5 className="font-weight-bold text-dark">
+              Historiques de transactions
+            </h5>
+          </div>
+          <div className="divider" />
+          <div className="pb-1 pt-3 px-0">
+            <CardBody>{transactions_mobile}</CardBody>
+          </div>
+          {!this.props.transactions.loading && this.state.current.length !== 0 && (
+            <div className="d-flex align-items-center justify-content-center mt-2 mb-4">
               <RcPagination
                 defaultPageSize={this.state.totalRowsPerPage}
                 onChange={this.handleChangePage}

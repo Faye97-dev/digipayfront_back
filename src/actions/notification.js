@@ -30,7 +30,7 @@ export const getNotifications = (showAlert) => (dispatch, getState) => {
         type: GET_NOTIFS,
         payload: res.data,
       });
-      console.log(res.data);
+      //console.log(res.data);
       //}, 5000);
     })
     .catch((err) => {

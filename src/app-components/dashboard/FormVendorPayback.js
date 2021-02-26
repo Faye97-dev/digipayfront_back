@@ -29,7 +29,7 @@ const MyForm = (props) => {
   const { touched, errors, handleSubmit, isSubmitting } = props;
   return (
     <>
-      <Form onSubmit={handleSubmit} className="px-5">
+      <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
         <Row>
           <Col xl="12" style={{ margin: "12px 0" }}>
             <Label for="numero_transaction">Numero de transaction</Label>

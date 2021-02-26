@@ -7,6 +7,8 @@ import {
   ERROR_TRANS,
   SUCCESS_TRANS,
   CLEAN_SESSION,
+  ADD_RECHARGE,
+  ADD_PAIEMENT,
 } from "../actions/types.js";
 
 const initialState = {
@@ -20,7 +22,9 @@ export default function (state = initialState, action) {
         action.payload === GET_TRANSACTIONS ||
         action.payload === HISTORY_TRANSACTIONS ||
         action.payload === ADD_TRANSFERT ||
-        action.payload === ADD_RETRAIT
+        action.payload === ADD_RETRAIT ||
+        action.payload === ADD_RECHARGE ||
+        action.payload === ADD_PAIEMENT
       ) {
         return {
           ...state,
@@ -59,6 +63,8 @@ export default function (state = initialState, action) {
           loading: false,
         },
       };
+    case ADD_PAIEMENT:
+    case ADD_RECHARGE:
     case ADD_TRANSFERT:
     case ADD_RETRAIT:
       return {

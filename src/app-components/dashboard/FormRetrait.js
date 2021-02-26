@@ -21,13 +21,14 @@ import { connect } from "react-redux";
 import { showAlert } from "../../utils/alerts";
 import { ClipLoader } from "react-spinners";
 import FormSecretKey from "./FormSecretKey";
+import FormUserSecretKey from "./FormUserSecretKey";
+
 function FormRetrait(props) {
   return (
     <>
-      <div className="mx-5 my-4">
+      <div className="mx-sm-5 mx-1 my-4">
         <label className="py-2">
-          Veuillez saisir le numero de telephone du destinataire pour effectuer
-          un retrait
+          Veuillez saisir un numero de telephone pour effectuer un retrait
         </label>
         <SearchBar
           agence={props.agence}
@@ -59,7 +60,7 @@ function SearchBar(props) {
         if (res.length === 0)
           showAlert(
             "warning",
-            "Pas de retraits disponibles pour ce numero de telephone !",
+            "Pas de retraits disponibles pour ce numéro de téléphone !",
             <FontAwesomeIcon icon={["far", "question-circle"]} />
           );
       });
@@ -85,7 +86,7 @@ function SearchBar(props) {
           onFocus={toggleSearch5}
           onBlur={toggleSearch5}
           onKeyDown={handleSumbit}
-          defaultValue="2035699"
+          //defaultValue="2035699"
           placeholder="Rechercher par numero de telephone ..."
         />
       </div>
@@ -104,19 +105,30 @@ class ListRetraits extends Component {
     super(props);
     this.state = {
       modalSecretKey: false,
-      confirmedKey: false,
+      modalSecretKeyUser: false, // second modal for retrait client and vendor
+      //confirmedKey: false,
       transactionId: null,
     };
 
     this.handleModal = this.handleModal.bind(this);
-    this.setConfirmedKey = this.setConfirmedKey.bind(this);
+    this.handleModalUser = this.handleModalUser.bind(this);
+    //this.setConfirmedKey = this.setConfirmedKey.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.closeModalUser = this.closeModalUser.bind(this);
   }
 
   handleModal(id) {
     this.setState({
       ...this.state,
       modalSecretKey: !this.state.modalSecretKey,
+      transactionId: id,
+    });
+  }
+  // second modal for retrait client and vendor
+  handleModalUser(id) {
+    this.setState({
+      ...this.state,
+      modalSecretKeyUser: !this.state.modalSecretKeyUser,
       transactionId: id,
     });
   }
@@ -128,13 +140,21 @@ class ListRetraits extends Component {
       transactionId: null,
     });
   }
+  // second modal for retrait client and vendor
+  closeModalUser() {
+    this.setState({
+      ...this.state,
+      modalSecretKeyUser: false,
+      transactionId: null,
+    });
+  }
 
-  setConfirmedKey(bool) {
+  /*setConfirmedKey(bool) {
     this.setState({
       ...this.state,
       confirmedKey: bool,
     });
-  }
+  }*/
 
   UNSAFE_componentWillUpdate(nextProps, nextState) {
     if (
@@ -144,8 +164,20 @@ class ListRetraits extends Component {
       console.log(" reset secret key code  ...");
       this.setState({
         ...this.state,
-        confirmedKey: false,
+        //confirmedKey: false,
         modalSecretKey: false,
+      });
+    }
+    // second modal for retrait client and vendor
+    if (
+      nextState.modalSecretKeyUser === false &&
+      this.state.modalSecretKeyUser === true
+    ) {
+      console.log(" reset secret key code vendor or client  ...");
+      this.setState({
+        ...this.state,
+        //confirmedKey: false,
+        modalSecretKeyUser: false,
       });
     }
   }
@@ -175,11 +207,48 @@ class ListRetraits extends Component {
                       <Card className="card-box mb-4">
                         <CardBody>
                           <FormSecretKey
-                            confirmedKey={this.state.confirmedKey}
-                            setConfirmedKey={this.setConfirmedKey}
+                            //confirmedKey={this.state.confirmedKey}
+                            //setConfirmedKey={this.setConfirmedKey}
                             transactionId={this.state.transactionId}
                             removeRetrait={this.props.removeRetrait}
                             closeModal={this.closeModal}
+                          />
+                        </CardBody>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        </Modal>
+
+        {/*second modal for retrait client and vendor*/}
+        <Modal
+          zIndex={2000}
+          centered
+          size="lg"
+          isOpen={this.state.modalSecretKeyUser}
+          toggle={this.handleModalUser}
+          contentClassName="border-0"
+        >
+          <Row className="no-gutters">
+            <Col xl="12">
+              <div className="bg-white rounded ">
+                <div className="px-4 pt-4 pb-2">
+                  <h1 className="pb-2 display-4 font-weight-bold font-size-lg text-primary text-center">
+                    <span>
+                      Veuillez entrer le code de confirmation de la transaction
+                    </span>
+                  </h1>
+                  <div className="rounded">
+                    <div className="px-1 py-0">
+                      <Card className="card-box mb-4">
+                        <CardBody>
+                          <FormUserSecretKey
+                            transactionId={this.state.transactionId}
+                            removeRetrait={this.props.removeRetrait}
+                            closeModal={this.closeModalUser}
                           />
                         </CardBody>
                       </Card>
@@ -199,10 +268,10 @@ class ListRetraits extends Component {
                     {this.props.data.map((item) => {
                       return (
                         <div key={item.id}>
-                          <div className="d-flex justify-content-between">
+                          <div className="d-flex justify-content-between flex-wrap">
                             {item.agence_origine && (
                               <>
-                                <div className="pl-2">
+                                <div className="pl-2 py-2 py-sm-0">
                                   <div className="font-weight-bold">
                                     <a
                                       href="#/"
@@ -212,32 +281,34 @@ class ListRetraits extends Component {
                                       {item.agence_origine.nom}
                                     </a>
                                   </div>
-                                  <small className="d-flex pt-2 align-items-center"></small>
                                 </div>
-                                <div className="text-center pl-2">
+                                <div className="text-center pl-2 py-2 py-sm-0">
                                   <a
                                     href="#/"
                                     className="font-weight-bold text-black"
                                     onClick={(e) => e.preventDefault()}
                                   >
                                     {item.destinataire.nom}
+                                    <span className="font-weight-normal">
+                                      {" - " + item.destinataire.tel}
+                                    </span>
                                   </a>
-                                  <br />
-                                  <span>{item.destinataire.tel}</span>
+                                  {/*<br />
+                                  <span>{item.destinataire.tel}</span>*/}
                                 </div>
-                                <div className="pl-2">
+                                <div className="pl-2 py-2 py-sm-0">
                                   <span className="text-black">
                                     {item.date_creation}
                                   </span>
                                 </div>
-                                <div className="pl-2">
+                                <div className="pl-2 py-2 py-sm-0">
                                   <span className=" font-weight-bold text-primary">
                                     {item.montant + " "}
                                   </span>
                                   MRU
                                 </div>
 
-                                <div>
+                                <div className="py-2 py-sm-0 pl-2">
                                   {this.props.loading ? (
                                     <ClipLoader
                                       color={"var(--primary)"}
@@ -263,7 +334,7 @@ class ListRetraits extends Component {
                             )}
                             {!item.agence_origine && (
                               <>
-                                <div className="pl-2">
+                                <div className="pl-2 py-2 py-sm-0">
                                   <div className="font-weight-bold">
                                     <a
                                       href="#/"
@@ -273,13 +344,13 @@ class ListRetraits extends Component {
                                       {item.expediteur.first_name +
                                         " " +
                                         item.expediteur.last_name}
+                                      <span className="font-weight-normal">
+                                        {" - " + item.expediteur.tel}
+                                      </span>
                                     </a>
                                   </div>
-                                  <span className="d-flex pt-2 align-items-center">
-                                    {item.expediteur.tel}
-                                  </span>
                                 </div>
-                                <div className="text-center pl-2">
+                                <div className="text-center pl-2 py-2 py-sm-0">
                                   <a
                                     href="#/"
                                     className="font-weight-bold text-black"
@@ -288,38 +359,58 @@ class ListRetraits extends Component {
                                     {item.destinataire}
                                   </a>
                                 </div>
-                                <div className="pl-2">
+                                <div className="pl-2 py-2 py-sm-0">
                                   <span className="text-black">
                                     {item.date_creation}
                                   </span>
                                 </div>
-                                <div className="pl-2">
+                                <div className="pl-2 py-2 py-sm-0">
                                   <span className=" font-weight-bold text-primary">
                                     {item.montant + " "}
                                   </span>
                                   MRU
                                 </div>
-                                <div>
+                                <div className="py-2 py-sm-0 pl-2">
                                   {this.props.loading ? (
                                     <ClipLoader
                                       color={"var(--warning)"}
                                       loading={true}
                                     />
                                   ) : (
-                                    <Button
-                                      color="warning btn btn-sm"
-                                      disabled={this.props.loading}
-                                      onClick={() => {
-                                        this.handleModal(item.id);
-                                      }}
-                                    >
-                                      Retirer
-                                      <span className="pl-2">
-                                        <FontAwesomeIcon
-                                          icon={["fa", "lock"]}
-                                        />
-                                      </span>
-                                    </Button>
+                                    <>
+                                      {item.expediteur.tel.toString() !==
+                                      item.destinataire.toString() ? (
+                                        <Button
+                                          color="warning btn btn-sm"
+                                          disabled={this.props.loading}
+                                          onClick={() => {
+                                            this.handleModal(item.id);
+                                          }}
+                                        >
+                                          Retirer
+                                          <span className="pl-2">
+                                            <FontAwesomeIcon
+                                              icon={["fa", "lock"]}
+                                            />
+                                          </span>
+                                        </Button>
+                                      ) : (
+                                        <Button
+                                          color="info btn btn-sm"
+                                          disabled={this.props.loading}
+                                          onClick={() => {
+                                            this.handleModalUser(item.id);
+                                          }}
+                                        >
+                                          Retirer
+                                          <span className="pl-2">
+                                            <FontAwesomeIcon
+                                              icon={["fa", "lock"]}
+                                            />
+                                          </span>
+                                        </Button>
+                                      )}
+                                    </>
                                   )}
                                 </div>
                               </>

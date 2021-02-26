@@ -61,7 +61,7 @@ const MyForm = (props) => {
   } = props;
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
         <Row>
           <Col xl="12">
             <div role="group" aria-labelledby="my-radio-group">
@@ -230,11 +230,12 @@ class MySelect extends React.Component {
 }
 const MyEnhancedForm = formikEnhancer(MyForm);
 
-const FormBanquaire = () => (
+const FormBanquaire = () => <MyEnhancedForm />;
+/*const FormBanquaire = () => (
   <Card>
     <div className="m-4">
       <MyEnhancedForm />
     </div>
   </Card>
-);
+);*/
 export default FormBanquaire;

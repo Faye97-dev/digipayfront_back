@@ -225,19 +225,19 @@ function ProfilResponsable(props) {
                       </div>
                       <div className="d-flex font-size-xl py-4 align-items-center">
                         <div className="mr-2">
-                          25{" "}
+                          ---{" "}
                           <span className="font-size-sm text-white-50">
                             Transactions
                           </span>
                         </div>
                         <div className="mr-2">
-                          12{" "}
+                          ---{" "}
                           <span className="font-size-sm text-white-50">
                             Notifications
                           </span>
                         </div>
                         <div className="mr-2">
-                          7{" "}
+                          ---{" "}
                           <span className="font-size-sm text-white-50">
                             Connexions
                           </span>
@@ -293,7 +293,8 @@ function ProfilResponsable(props) {
                           }}
                         >
                           <span className="font-size-lg text-white px-2 py-1">
-                            Paramètres <FontAwesomeIcon icon={["fas", "cog"]} />
+                            Paramètres{" "}
+                            {/*<FontAwesomeIcon icon={["fas", "cog"]} />*/}
                           </span>
                           <div className="divider" />
                         </NavLinkStrap>
@@ -452,6 +453,9 @@ function ProfilResponsable(props) {
                   </Col>
                 </Row>*/}
                 <Card className="card-box mb-5">
+                  <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+                    <small>Demo</small>
+                  </span>
                   <Row className="no-gutters">
                     <Col xl="6" className="p-4">
                       <div className="divider-v divider-v-lg" />
@@ -548,6 +552,9 @@ function ProfilResponsable(props) {
               </TabPane>
               <TabPane tabId="2">
                 <Card className="bg-white ">
+                  <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+                    <small>Demo</small>
+                  </span>
                   <FormAgence />
                 </Card>
                 {/*<Row>
@@ -713,6 +720,9 @@ function ProfilResponsable(props) {
               </TabPane>
               <TabPane tabId="3">
                 <Card className="bg-white p-3">
+                  <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+                    <small>Demo</small>
+                  </span>
                   <Container className="py-3">
                     <div>
                       <CardHeader className="d-flex align-items-center bg-transparent card-header-alt px-0 pb-4">

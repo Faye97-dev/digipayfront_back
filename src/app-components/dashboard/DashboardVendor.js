@@ -1,15 +1,19 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Row, Col, Card } from "reactstrap";
 import CountUp from "react-countup";
 import TabsVendor from "./TabsVendor";
 import TransactionsVendor from "./TransactionsVendor";
 import ChartVendor from "./ChartVendor";
+
+import { connect } from "react-redux";
+import { updateSolde_clientDigipay } from "../../actions/async";
+import { UPDATE_SOLDE_CLIENT_DIGIPAY } from "../../actions/types";
 class DashboardVendor extends Component {
   render() {
     return (
       <>
-        <DashboardAmount></DashboardAmount>
+        <DashboardAmount {...this.props}></DashboardAmount>
         <TabsVendor></TabsVendor>
         <TransactionsVendor></TransactionsVendor>
         <ChartVendor />
@@ -18,9 +22,10 @@ class DashboardVendor extends Component {
   }
 }
 
-export default DashboardVendor;
-
 function DashboardAmount(props) {
+  useEffect(() => {
+    props.updateSolde(props.user, props.access);
+  }, []);
   return (
     <>
       <div className="d-flex justify-content-center">
@@ -34,7 +39,7 @@ function DashboardAmount(props) {
 function SmallFormat(props) {
   return (
     <Col xs="12" sm="9" md="7" className="d-block d-xl-none">
-      <Card className="card-box mb-5">
+      <Card className="card-box mb-4">
         <div className="card-content-overlay text-center pb-2 pt-4">
           <div className="d-70 rounded-circle bg-primary text-white btn-icon mx-auto text-center shadow-primary">
             <FontAwesomeIcon
@@ -45,8 +50,8 @@ function SmallFormat(props) {
           <div className="font-weight-bold font-size-xl text-black display-3 mt-4 mb-1">
             <CountUp
               start={0}
-              end={19045}
-              duration={4}
+              end={props.user && props.user.solde}
+              duration={2}
               separator=""
               suffix=" MRU"
             />
@@ -65,8 +70,8 @@ function SmallFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={15100}
-                                duration={4}
+                                end={0}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -85,8 +90,8 @@ function SmallFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={17}
-                                duration={4}
+                                end={0}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -112,7 +117,7 @@ function SmallFormat(props) {
 function XlFormat(props) {
   return (
     <Col xl="7" className="d-none d-xl-block">
-      <Card className="card-box mb-5">
+      <Card className="card-box mb-4">
         <div className="card-content-overlay text-center pb-2 pt-4">
           <div className="d-70 rounded-circle bg-primary text-white btn-icon mx-auto text-center shadow-primary">
             <FontAwesomeIcon
@@ -123,8 +128,8 @@ function XlFormat(props) {
           <div className="font-weight-bold font-size-xxl text-black display-3 mt-4 mb-1">
             <CountUp
               start={0}
-              end={19045}
-              duration={4}
+              end={props.user && props.user.solde}
+              duration={2}
               separator=""
               suffix=" MRU"
             />
@@ -143,8 +148,8 @@ function XlFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={15100}
-                                duration={4}
+                                end={0}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -163,8 +168,8 @@ function XlFormat(props) {
                             <span>
                               <CountUp
                                 start={0}
-                                end={17145}
-                                duration={4}
+                                end={0}
+                                duration={2}
                                 separator=""
                                 suffix=" MRU"
                               />
@@ -186,3 +191,26 @@ function XlFormat(props) {
     </Col>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+  access: state.auth.access,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  updateSolde: (user, access) => {
+    if (user) {
+      //console.log("syucess fhhf");
+      updateSolde_clientDigipay(user.id, access).then((res) => {
+        if (res) {
+          dispatch({
+            type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+            payload: res,
+          });
+        }
+      });
+    }
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardVendor);

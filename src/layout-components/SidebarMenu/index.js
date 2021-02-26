@@ -1361,7 +1361,7 @@ const SidebarMenu = (props) => {
         "VENDOR",
       ],
     },
-    {
+    /*{
       id: 2,
       label: "Recharge",
       link: "/Recharge",
@@ -1377,8 +1377,25 @@ const SidebarMenu = (props) => {
           link: "/RechargeBanquaire",
         },
       ],
+    },*/
+    {
+      id: 2,
+      label: "Recharge",
+      icon: <Repeat />,
+      roles: ["CLIENT"],
+      click: handleModal,
+      link: "/Agence",
+      /*children: [
+        {
+          label: "Recharge Especes",
+          click: handleModal,
+        },
+        {
+          label: "Recharge Banquaire",
+          link: "/RechargeBanquaire",
+        },
+      ],*/
     },
-
     {
       id: 4,
       label: "Employes",
@@ -1492,24 +1509,46 @@ const SidebarMenu = (props) => {
       {Links.filter((item) => item.roles.includes(props.role)).map(
         (item, index) => {
           if (!item.children) {
-            return (
-              <ul key={item.id}>
-                <li>
-                  <NavLink
-                    activeClassName="active"
-                    onClick={toggleSidebarMobile}
-                    className="nav-link-simple"
-                    to={item.link}
-                  >
-                    <span className="sidebar-icon">{item.icon}</span>
-                    {item.label}
-                    <span className="sidebar-icon-indicator sidebar-icon-indicator-right">
-                      <ChevronRight />
-                    </span>
-                  </NavLink>
-                </li>
-              </ul>
-            );
+            if (item.link && !item.click) {
+              return (
+                <ul key={item.id}>
+                  <li>
+                    <NavLink
+                      activeClassName="active"
+                      onClick={toggleSidebarMobile}
+                      className="nav-link-simple"
+                      to={item.link}
+                    >
+                      <span className="sidebar-icon">{item.icon}</span>
+                      {item.label}
+                      <span className="sidebar-icon-indicator sidebar-icon-indicator-right">
+                        <ChevronRight />
+                      </span>
+                    </NavLink>
+                  </li>
+                </ul>
+              );
+            }
+            if (item.link && item.click) {
+              return (
+                <ul key={item.id}>
+                  <li>
+                    <NavLink
+                      onClick={item.click}
+                      to={item.link}
+                      activeClassName="active"
+                      className="nav-link-simple"
+                    >
+                      <span className="sidebar-icon">{item.icon}</span>
+                      {item.label}
+                      <span className="sidebar-icon-indicator sidebar-icon-indicator-right">
+                        <ChevronRight />
+                      </span>
+                    </NavLink>
+                  </li>
+                </ul>
+              );
+            }
           } else {
             return (
               <ul key={item.id}>

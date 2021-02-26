@@ -7,7 +7,7 @@ import { checkSecretKey } from "../../actions/async";
 import { showAlert } from "../../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ClipLoader } from "react-spinners";
-import { addRetraitBySms } from "../../actions/transaction";
+import { addRetraitByRandomCode } from "../../actions/transaction";
 import { connect } from "react-redux";
 const formikEnhancer = withFormik({
   /*validationSchema: Yup.object().shape({
@@ -17,7 +17,7 @@ const formikEnhancer = withFormik({
   }),*/
   mapPropsToValues: (props) => ({
     secret_key: "",
-    nom_destinataire: "",
+    //nom_destinataire: "",
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
     const payload = {
@@ -31,16 +31,9 @@ const formikEnhancer = withFormik({
     ).then((res) => {
       if (res) {
         if (res.checked) {
-          //props.setConfirmedKey(true);
-          /*showAlert(
-            "success",
-            "Code de transaction confirmer avec succes !",
-            <FontAwesomeIcon icon={["fas", "check"]} />
-          );*/
-          props.addRetraitBySms(
+          props.addRetraitByRandomCode(
             {
               id: props.transactionId,
-              nom_destinataire: payload.nom_destinataire,
             },
             props.removeRetrait,
             showAlert,
@@ -60,12 +53,6 @@ const formikEnhancer = withFormik({
         setSubmitting(false);
       }
     });
-    //}
-    //if (props.confirmedKey === true) {
-    /**/
-    //console.log(props);
-    //setSubmitting(false);
-    //}
   },
   displayName: "MyForm",
 });
@@ -80,14 +67,6 @@ const MyForm = (props) => {
             <Label for="secret_key">Code de confirmation</Label>
             <Field name="secret_key" type="text" />
           </Col>
-          {
-            //props.confirmedKey && (
-            <Col xl="12" style={{ margin: "12px 0" }}>
-              <Label for="nom_destinataire">Nom du Client</Label>
-              <Field name="nom_destinataire" type="text" />
-            </Col>
-            //)
-          }
         </Row>
         <Row>
           <Col xl="12" style={{ margin: "12px 0" }}>
@@ -98,7 +77,6 @@ const MyForm = (props) => {
               </>
             ) : (
               <Button color="primary" type="submit" disabled={isSubmitting}>
-                {/*!props.confirmedKey ? "Valider" : "Enregistrer le retrait"*/}
                 Valider
               </Button>
             )}
@@ -110,9 +88,7 @@ const MyForm = (props) => {
 };
 
 const MyEnhancedForm = formikEnhancer(MyForm);
-const FormSecretKey = (props) => <MyEnhancedForm {...props} />;
-
-//export default FormSecretKey;
+const FormUserSecretKey = (props) => <MyEnhancedForm {...props} />;
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
@@ -120,5 +96,5 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  addRetraitBySms,
-})(FormSecretKey);
+  addRetraitByRandomCode,
+})(FormUserSecretKey);

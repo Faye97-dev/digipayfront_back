@@ -46,7 +46,7 @@ export const login = (data, resetForm, setSubmitting, showAlert) => (
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
-      console.log(res.data);
+      //console.log(res.data);
       //setSubmitting(false);
       //resetForm();
       showAlert(
@@ -66,7 +66,7 @@ export const login = (data, resetForm, setSubmitting, showAlert) => (
         "Login Echec!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      console.log(err);
+      //console.log(err);
     });
 };
 
@@ -103,7 +103,7 @@ export const loadUser = () => (dispatch, getState) => {
         dispatch({
           type: CLEAN_SESSION,
         });
-        console.log(err);
+        //console.log(err);
       });
   } else {
     dispatch({
@@ -168,6 +168,6 @@ export const logout = () => (dispatch, getState) => {
       dispatch({
         type: CLEAN_SESSION,
       });
-      console.log(err);
+      //console.log(err);
     });
 };

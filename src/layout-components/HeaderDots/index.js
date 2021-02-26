@@ -311,13 +311,13 @@ const HeaderDots = (props) => {
         <div className="bg-composed-wrapper--content text-white px-2 py-4">
           <h4 className="font-size-xl font-weight-bold mb-2">Notifications</h4>
           <p className=" mb-0">
-            You have <b className="text-success">0</b> new messages
+            Vous avez <b className="text-success">0</b> nouveaux notifications
           </p>
         </div>
       </div>
       <div
         className="tabs-animated tabs-animated-shadow tabs-bordered"
-        style={{ height: "90px" }}
+        style={{ height: "80px" }}
       >
         <div className="scroll-area scroll-area-sm shadow-overflow">
           <PerfectScrollbar

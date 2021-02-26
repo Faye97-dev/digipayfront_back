@@ -32,7 +32,7 @@ function CollapseRechargeCredit() {
 
   return (
     <>
-      <div className="accordion mb-5">
+      <div className="accordion mb-5 mt-4">
         <Card className={clsx("card-box", { "panel-open": isOpen })}>
           <Card>
             <CardHeader>

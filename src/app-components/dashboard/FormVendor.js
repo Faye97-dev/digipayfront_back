@@ -3,24 +3,31 @@ import React from "react";
 import { withFormik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { Button, Row, Col, Label } from "reactstrap";
+import { connect } from "react-redux";
+import { randomCodePayement } from "../../actions/async";
+import { showAlert } from "../../utils/alerts";
+import { SyncLoader } from "react-spinners";
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     montant: Yup.number()
-      .min(0, "Montant doit etre positif !")
-      .required("Montant est obligatoire !"),
+      .min(1, " Montant doit etre superieur a zero !")
+      .required(" Montant est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({
     montant: "",
   }),
-  handleSubmit: (values, { setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting, resetForm }) => {
     const payload = {
       ...values,
     };
-    setTimeout(() => {
-      alert(JSON.stringify(payload, null, 2));
+
+    payload["id"] = props.user.id;
+
+    randomCodePayement(payload, showAlert).then((res) => {
       setSubmitting(false);
-    }, 1000);
+      resetForm();
+    });
   },
   displayName: "MyForm",
 });
@@ -29,7 +36,7 @@ const MyForm = (props) => {
   const { touched, errors, handleSubmit, isSubmitting } = props;
   return (
     <>
-      <Form onSubmit={handleSubmit} className="px-5">
+      <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
         <Row>
           <Col xl="12" style={{ margin: "12px 0" }}>
             <Label for="montant">Montant</Label>
@@ -44,9 +51,16 @@ const MyForm = (props) => {
         </Row>
         <Row>
           <Col xl="12" style={{ margin: "12px 0" }}>
-            <Button color="primary" type="submit" disabled={isSubmitting}>
+            {/*<Button color="primary" type="submit" disabled={isSubmitting}>
               {props.submit}
-            </Button>
+            </Button>*/}
+            {isSubmitting ? (
+              <SyncLoader color={"var(--primary)"} loading={true} />
+            ) : (
+              <Button color="primary" type="submit" disabled={isSubmitting}>
+                {props.submit}
+              </Button>
+            )}
           </Col>
         </Row>
       </Form>
@@ -56,5 +70,12 @@ const MyForm = (props) => {
 
 const MyEnhancedForm = formikEnhancer(MyForm);
 
-const FormVendor = (props) => <MyEnhancedForm submit={props.submit} />;
-export default FormVendor;
+const FormVendor = (props) => <MyEnhancedForm {...props} />;
+//export default FormVendor;
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+  transactions: state.transaction.transactions,
+});
+
+export default connect(mapStateToProps, {})(FormVendor);

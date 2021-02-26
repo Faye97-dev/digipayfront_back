@@ -47,13 +47,15 @@ const MyForm = (props) => {
 
   const customSubmit = (e) => {
     e.preventDefault();
-    const data = {
+    /*const data = {
       type_agence: values.type_agence.value,
       online: values.online.value,
       "commune#commune_code": values.commune_code.value,
     };
     props.handleFilter(data);
+    setSubmitting(false);*/
     setSubmitting(false);
+    console.log("in build ...");
   };
   return (
     <>
