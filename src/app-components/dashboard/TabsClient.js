@@ -7,7 +7,7 @@ import FormClientPay from "./FormClientPay";
 import FormClientSend from "./FormClientSend";
 import FormClientWithdraw from "./FormClientWithdraw";
 import FormBanquaire from "../recharge/FormBanquaire";
-
+import RechargeCredit from "./RechargeCredit";
 export default function TabsClient(props) {
   /*const [activeTab, setActiveTab] = useState("2");
 
@@ -81,8 +81,9 @@ function SmallFormat(props) {
         </Col>
       </Row>
 
+      <RechargeCredit />
       {/* second tabs */}
-      <Row className="py-4">
+      <Row className="pt-2 pb-5">
         <Col lg="12">
           <Card className="shadow-xxl px-3">
             <div className="nav-tabs-primary tabs-animated tabs-animated-line">
@@ -97,7 +98,7 @@ function SmallFormat(props) {
                     <span className="px-3 py-2 font-weight-bold">Retirer</span>
                   </NavLinkStrap>
                 </NavItem>
-                <NavItem>
+                {/*<NavItem>
                   <NavLinkStrap
                     className={clsx({ active: activeTab2 === "2" })}
                     onClick={() => {
@@ -106,7 +107,7 @@ function SmallFormat(props) {
                   >
                     <span className="px-3 py-2 font-weight-bold">Recharge</span>
                   </NavLinkStrap>
-                </NavItem>
+                  </NavItem>*/}
               </Nav>
             </div>
             <TabContent activeTab={activeTab2}>
@@ -115,11 +116,11 @@ function SmallFormat(props) {
                   <FormClientWithdraw />
                 </div>
               </TabPane>
-              <TabPane tabId="2" className="px-0">
+              {/*<TabPane tabId="2" className="px-0">
                 <div className=" my-4">
                   <FormBanquaire />
                 </div>
-              </TabPane>
+                </TabPane>*/}
             </TabContent>
           </Card>
         </Col>
@@ -136,64 +137,70 @@ function XlFormat(props) {
   };
 
   return (
-    <div className="d-none d-xl-block">
-      <Row className="py-5">
-        <Col lg="12">
-          <Card className="shadow-xxl px-3">
-            <div className="nav-tabs-primary tabs-animated tabs-animated-line">
-              <Nav tabs justified className="justify-content-center">
-                <NavItem>
-                  <NavLinkStrap
-                    className={clsx({ active: activeTab === "2" })}
-                    onClick={() => {
-                      toggle("2");
-                    }}
-                  >
-                    <span className="px-3 py-2 font-weight-bold">Payer</span>
-                  </NavLinkStrap>
-                </NavItem>
-                <NavItem>
-                  <NavLinkStrap
-                    className={clsx({ active: activeTab === "3" })}
-                    onClick={() => {
-                      toggle("3");
-                    }}
-                  >
-                    <span className="px-3 py-2 font-weight-bold">Envoyer</span>
-                  </NavLinkStrap>
-                </NavItem>
-                <NavItem>
-                  <NavLinkStrap
-                    className={clsx({ active: activeTab === "4" })}
-                    onClick={() => {
-                      toggle("4");
-                    }}
-                  >
-                    <span className="px-3 py-2 font-weight-bold">Retirer</span>
-                  </NavLinkStrap>
-                </NavItem>
-              </Nav>
-            </div>
-            <TabContent activeTab={activeTab}>
-              <TabPane tabId="2">
-                <div className=" my-5">
-                  <FormClientPay />
-                </div>
-              </TabPane>
-              <TabPane tabId="3" className="px-0">
-                <div className=" my-4">
-                  <FormClientSend />
-                </div>
-              </TabPane>
-              <TabPane tabId="4">
-                <div className=" my-5">
-                  <FormClientWithdraw />
-                </div>
-              </TabPane>
-            </TabContent>
-          </Card>
-        </Col>
-      </Row>
-    </div>
+    <>
+      <div className="d-none d-xl-block">
+        <Row className="pt-5 pb-4">
+          <Col lg="12">
+            <Card className="shadow-xxl px-3">
+              <div className="nav-tabs-primary tabs-animated tabs-animated-line">
+                <Nav tabs justified className="justify-content-center">
+                  <NavItem>
+                    <NavLinkStrap
+                      className={clsx({ active: activeTab === "2" })}
+                      onClick={() => {
+                        toggle("2");
+                      }}
+                    >
+                      <span className="px-3 py-2 font-weight-bold">Payer</span>
+                    </NavLinkStrap>
+                  </NavItem>
+                  <NavItem>
+                    <NavLinkStrap
+                      className={clsx({ active: activeTab === "3" })}
+                      onClick={() => {
+                        toggle("3");
+                      }}
+                    >
+                      <span className="px-3 py-2 font-weight-bold">
+                        Envoyer
+                      </span>
+                    </NavLinkStrap>
+                  </NavItem>
+                  <NavItem>
+                    <NavLinkStrap
+                      className={clsx({ active: activeTab === "4" })}
+                      onClick={() => {
+                        toggle("4");
+                      }}
+                    >
+                      <span className="px-3 py-2 font-weight-bold">
+                        Retirer
+                      </span>
+                    </NavLinkStrap>
+                  </NavItem>
+                </Nav>
+              </div>
+              <TabContent activeTab={activeTab}>
+                <TabPane tabId="2">
+                  <div className=" my-5">
+                    <FormClientPay />
+                  </div>
+                </TabPane>
+                <TabPane tabId="3" className="px-0">
+                  <div className=" my-4">
+                    <FormClientSend />
+                  </div>
+                </TabPane>
+                <TabPane tabId="4">
+                  <div className=" my-5">
+                    <FormClientWithdraw />
+                  </div>
+                </TabPane>
+              </TabContent>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
   );
 }

@@ -16,8 +16,9 @@ import {
 // add refresh token method , and check forbidden 301 error , secure api ,profil info , profil page , 404 page , routes changement warning
 // add new client modal  ,datatable niveau 3 , connect filter data with db ,
 // diconnect agence when logout , mouse cursor on ordering datatable , logout message de confirmation , check du solde avant retrait
-// refont code serare then betwenn files , agence transfert change methods , agence retrait add confirmation code , check solde ....
+// refont code separe then between files , agence transfert change methods , agence retrait add confirmation code , check solde ....
 // FormClientsend : reset form
+// asyn file handle forbidden issue
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),

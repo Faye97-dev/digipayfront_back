@@ -141,6 +141,7 @@ export const loadUser = () => (dispatch, getState) => {
 };*/
 
 export const logout = () => (dispatch, getState) => {
+  dispatch({ type: AUTH_LOADING });
   const refresh = getState().auth.refresh;
   const body = { refresh };
   const config = {
@@ -151,15 +152,14 @@ export const logout = () => (dispatch, getState) => {
   axios
     .post(HOST + "api/logout/", body, config)
     .then(() => {
-      /*dispatch({
-        type: CLEAN_SESSION,
-      });*/
+      //setTimeout(() => {
       dispatch({
         type: LOGOUT,
       });
       dispatch({
         type: CLEAN_SESSION,
       });
+      //}, 25000);
     })
     .catch((err) => {
       dispatch({

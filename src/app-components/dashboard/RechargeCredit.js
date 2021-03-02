@@ -45,7 +45,7 @@ function CollapseRechargeCredit() {
                   >
                     <div>
                       <h3 className="font-weight-bold mb-1 text-primary">
-                        Recharge crédit téléphone
+                        Crédit téléphone
                       </h3>
                     </div>
                     <FontAwesomeIcon

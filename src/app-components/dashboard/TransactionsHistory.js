@@ -401,6 +401,7 @@ class TransactionsHistory extends Component {
             <CollapseModel
               type_transaction={item.type_transaction}
               montant={item.transaction.montant}
+              destinataire={item.transaction.destinataire.nom}
             >
               <div className="d-flex align-items-center justify-content-between flex-wrap">
                 <div>

@@ -5,30 +5,49 @@ import * as Yup from "yup";
 import { Button, Row, Col, Label, Badge } from "reactstrap";
 import Select from "react-select";
 
+import { showAlert } from "../../utils/alerts";
+import { achatCredit_clientDigipay } from "../../actions/transaction";
+import { SyncLoader } from "react-spinners";
+import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     //operateur: Yup.object().required("L'operateur est obligatoire !"),
     carte: Yup.object().required("La carte est obligatoire !"),
     tel: Yup.number()
-      .min(0, "Numero de telephone invalid  !")
-      .max(100000000, "Numero de telephone invalid  !")
-      .required("Numero de telephone est obligatoire !"),
+      .min(20000000, " Numero de telephone invalid  !")
+      .max(99999999, " Numero de telephone invalid  !")
+      .required(" Numero de telephone est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({
     //operateur: "",
     carte: "",
     tel: 45121830,
   }),
-  handleSubmit: (values, { setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting }) => {
     const payload = {
       ...values,
       carte: { ...values.carte },
       //operateur: { ...values.operateur },
     };
-    setTimeout(() => {
-      alert(JSON.stringify(payload, null, 2));
-      setSubmitting(false);
-    }, 1000);
+    payload.montant = parseInt(payload.carte.value);
+    payload.client = props.user.id;
+
+    if (
+      payload.tel.toString().trim().startsWith("4") ||
+      payload.tel.toString().trim().startsWith("3") ||
+      payload.tel.toString().trim().startsWith("2")
+    ) {
+      //console.log("sucess! ", payload);
+      props.achatCredit_clientDigipay(payload, showAlert);
+    } else {
+      showAlert(
+        "warning",
+        "Aucun de nos opérateurs ne prend en charge ce numéro de téléphone !",
+        <FontAwesomeIcon icon={["far", "question-circle"]} />
+      );
+    }
+    setSubmitting(false);
   },
   displayName: "MyForm",
 });
@@ -100,9 +119,19 @@ const MyForm = (props) => {
         </Row>
         <Row>
           <Col xl="12" style={{ margin: "9px 0" }}>
-            <Button color="primary" type="submit" disabled={isSubmitting}>
-              Acheter
-            </Button>
+            <>
+              {isSubmitting || props.transactions.loading ? (
+                <SyncLoader color={"var(--primary)"} loading={true} />
+              ) : (
+                <Button
+                  color="primary"
+                  type="submit"
+                  disabled={isSubmitting || props.transactions.loading}
+                >
+                  Acheter
+                </Button>
+              )}
+            </>
           </Col>
         </Row>
       </Form>
@@ -111,6 +140,8 @@ const MyForm = (props) => {
 };
 
 const optionsCarte = [
+  { value: "10", label: "10 MRU" },
+  { value: "20", label: "20 MRU" },
   { value: "50", label: "50 MRU" },
   { value: "100", label: "100 MRU" },
   { value: "200", label: "200 MRU" },
@@ -160,5 +191,13 @@ class MySelect extends React.Component {
 }
 const MyEnhancedForm = formikEnhancer(MyForm);
 
-const FormClientCredit = () => <MyEnhancedForm />;
-export default FormClientCredit;
+const FormClientCredit = (props) => <MyEnhancedForm {...props} />;
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+  transactions: state.transaction.transactions,
+});
+
+export default connect(mapStateToProps, { achatCredit_clientDigipay })(
+  FormClientCredit
+);

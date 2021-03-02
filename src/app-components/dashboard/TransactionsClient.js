@@ -293,6 +293,11 @@ class TransactionsClient extends Component {
             <CollapseModel
               type_transaction={item.type_transaction}
               montant={item.transaction.montant}
+              destinataire={
+                keys.includes("agence_origine")
+                  ? item.transaction.destinataire.nom
+                  : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`
+              }
             >
               <div className="d-flex align-items-center justify-content-between flex-wrap">
                 <div>

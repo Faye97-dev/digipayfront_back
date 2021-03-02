@@ -1385,16 +1385,6 @@ const SidebarMenu = (props) => {
       roles: ["CLIENT"],
       click: handleModal,
       link: "/Agence",
-      /*children: [
-        {
-          label: "Recharge Especes",
-          click: handleModal,
-        },
-        {
-          label: "Recharge Banquaire",
-          link: "/RechargeBanquaire",
-        },
-      ],*/
     },
     {
       id: 4,
@@ -1606,23 +1596,23 @@ const SidebarMenu = (props) => {
         <Modal
           zIndex={2000}
           centered
-          size="lg"
+          size="md"
           isOpen={modalRechargeEspece}
           toggle={handleModal}
           contentClassName="border-0"
         >
           <Row className="no-gutters">
-            <Col xl="5" className="p-3 p-xl-0">
+            {/* <Col xl="5" className="p-3 p-xl-0">
               <img
                 alt="..."
                 className="rounded br-xl-right-0 img-fit-container"
                 src={svgImage1}
               />
-            </Col>
+            </Col>*/}
             <Col xl="7">
               <div className="bg-white rounded br-xl-left-0">
                 <div className="p-5">
-                  <p className="font-size-lg text-black">
+                  <p className="font-size-lg text-black text-center">
                     Merci de vous rendre auprès de l'une de nos agences
                     partenaires.
                   </p>

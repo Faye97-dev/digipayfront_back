@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Row,
@@ -9,18 +9,13 @@ import {
   Collapse,
   Button,
 } from "reactstrap";
-import FormClientCredit from "./FormClientCredit";
 
 import clsx from "clsx";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import stock1 from "../../assets/images/stock-photos/stock-5.jpg";
+
 import Badge from "reactstrap/lib/Badge";
-import {
-  mapColorStatus,
-  mapTypeNames,
-  mapColorTypes,
-} from "../../utils/choices";
+import { mapTypeNames, mapColorTypes } from "../../utils/choices";
 export default function CollapseModel(props) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -39,11 +34,9 @@ export default function CollapseModel(props) {
                     className="d-flex align-items-center justify-content-between py-3"
                     onClick={toggle}
                   >
-                    <div className="d-flex aligns-items-center justify-content-center flex-wrap">
-                      <h5 className="font-weight-normal">
-                        {/*<Badge color="warning" className="px-2 py-1 h-auto">
-                          {props.type_transaction} REMBOURSEMENT
-                        </Badge>*/}
+                    <div className="d-flex aligns-items-center justify-content-between flex-wrap">
+                      {/*<h5 className="font-weight-normal">
+                        
                         <Badge
                           className={
                             "px-4 py-1 h-auto text-" +
@@ -57,16 +50,44 @@ export default function CollapseModel(props) {
                         >
                           {mapTypeNames[props.type_transaction]}
                         </Badge>
-                      </h5>
-                      <h6 className="ml-2 font-weight-bold py-1 my-0">
+                        </h5>*/}
+
+                      <div>
+                        <a
+                          href="#/"
+                          onClick={(e) => e.preventDefault()}
+                          className="font-weight-bold text-black"
+                          title="..."
+                        >
+                          {mapTypeNames[props.type_transaction]}
+                        </a>
+                        <span className="text-black-50 d-block">
+                          {props.destinataire}
+                        </span>
+                      </div>
+
+                      {/*<h6 className="ml-2 font-weight-bold py-1 my-0">
                         {props.montant}
                         <small className="px-2 font-weight-normal">MRU</small>
-                      </h6>
+                      </h6>*/}
                     </div>
-                    <FontAwesomeIcon
-                      icon={["fas", "angle-up"]}
-                      className="font-size-xl accordion-icon"
-                    />
+
+                    <div className="ml-auto">
+                      <div
+                        className={
+                          "font-weight-bold text-" +
+                          mapColorTypes[props.type_transaction] +
+                          " font-size-lg"
+                        }
+                      >
+                        {props.montant}
+                        <small className="px-2 font-weight-normal">MRU</small>
+                      </div>
+                      {/*<FontAwesomeIcon
+                        icon={["fa", "angle-down"]}
+                        className="font-size-xl text-center"
+                      />*/}
+                    </div>
                   </Button>
                 </div>
               </div>

@@ -269,3 +269,29 @@ export const checkCodePayement = async (form, showAlert) => {
     });
   return data;
 };
+
+export const checkCodePayement_Vendor = async (form, showAlert) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let data;
+  await axios
+    .post(HOST + `api/func/vendor/check_codePayement/`, form, config)
+    .then((res) => {
+      data = res.data;
+      //console.log(data);
+    })
+    .catch((err) => {
+      data = {};
+      showAlert(
+        "danger",
+        "Validation du code non-complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //console.log(err.response.data);
+    });
+  return data;
+};

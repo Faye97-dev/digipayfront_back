@@ -240,15 +240,6 @@ export const addRecharge = (
           <FontAwesomeIcon icon={["fas", "check"]} />
         );
         //}, 5000);
-
-        /*updateSolde(agence.id).then((res) => {
-        if (res) {
-          dispatch({
-            type: UPDATE_SOLDE,
-            payload: res,
-          });
-        }
-        });*/
       } else {
         dispatch({
           type: ERROR_TRANS,
@@ -593,4 +584,152 @@ export const addPayement_clientDigipay = (transfert, showAlert) => (
       //console.log(err.response);
     });
 };
+
+export const achatCredit_clientDigipay = (body, showAlert) => (
+  dispatch,
+  getState
+) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: ADD_PAIEMENT,
+  });
+
+  const user = getState().auth.user;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  axios
+    .post(HOST + `api/func/client_digiPay/achat_credit/`, body, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        //setTimeout(() => {
+        dispatch({
+          type: ADD_PAIEMENT,
+          payload: res.data,
+        });
+
+        showAlert(
+          "success",
+          "Transaction Complete!",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        setTimeout(() => {
+          showAlert(
+            "info",
+            "Veuillez consulter vos notifications pour le code de recharge !",
+            <FontAwesomeIcon icon={["far", "question-circle"]} />
+          );
+        }, 2000);
+
+        updateSolde_clientDigipay(user.id, getState().auth.access).then(
+          (res) => {
+            if (res) {
+              dispatch({
+                type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+                payload: res,
+              });
+            }
+          }
+        );
+        //}, 10000);
+      } else if (keys.includes("msg")) {
+        dispatch({
+          type: ERROR_TRANS,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
+    })
+    .catch((err) => {
+      //setTimeout(() => {
+      dispatch({
+        type: ERROR_TRANS,
+      });
+      //setSubmitting(false);
+      showAlert(
+        "danger",
+        "Transaction Non-Complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //}, 10000);
+      //console.log(err.response);
+    });
+};
+
 /* vendor */
+export const addPayement_Vendor = (transfert, showAlert) => (
+  dispatch,
+  getState
+) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: ADD_PAIEMENT,
+  });
+
+  const user = getState().auth.user;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  axios
+    .post(HOST + `api/func/vendor/payement/`, transfert, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        //setTimeout(() => {
+        dispatch({
+          type: ADD_PAIEMENT,
+          payload: res.data,
+        });
+
+        showAlert(
+          "success",
+          "Transaction Complete!",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        updateSolde_clientDigipay(user.id, getState().auth.access).then(
+          (res) => {
+            if (res) {
+              dispatch({
+                type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+                payload: res,
+              });
+            }
+          }
+        );
+        //}, 10000);
+      } else if (keys.includes("msg")) {
+        dispatch({
+          type: ERROR_TRANS,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
+    })
+    .catch((err) => {
+      //setTimeout(() => {
+      dispatch({
+        type: ERROR_TRANS,
+      });
+
+      showAlert(
+        "danger",
+        "Transaction Non-Complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //}, 10000);
+      //console.log(err.response);
+    });
+};

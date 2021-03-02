@@ -5,10 +5,10 @@ import * as Yup from "yup";
 import { Button, Row, Col, Label, Badge, Card, CardBody } from "reactstrap";
 import { showAlert } from "../../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { checkCodePayement } from "../../actions/async";
+import { checkCodePayement_Vendor } from "../../actions/async";
 import { connect } from "react-redux";
 import { SyncLoader } from "react-spinners";
-import { addPayement_clientDigipay } from "../../actions/transaction";
+import { addPayement_Vendor } from "../../actions/transaction";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     code: Yup.string().required(
@@ -23,13 +23,13 @@ const formikEnhancer = withFormik({
       ...values,
     };
 
-    setTimeout(() => {
+    /*setTimeout(() => {
       alert(JSON.stringify(payload, null, 2));
       setSubmitting(false);
-    }, 1000);
+    }, 1000);*/
 
-    //payload["sender"] = props.user.id;
-    /*checkCodePayement(payload, showAlert).then((res) => {
+    payload["vendorId"] = props.user.id;
+    checkCodePayement_Vendor(payload, showAlert).then((res) => {
       //console.log(res);
       setSubmitting(false);
       //
@@ -44,8 +44,7 @@ const formikEnhancer = withFormik({
         props.handleItem(res);
         props.showDivInfo();
       }
-    
-    });*/
+    });
   },
   displayName: "MyForm",
 });
@@ -107,11 +106,11 @@ const FormVendorPay = (props) => {
   const handleSubmit = () => {
     let payload = {};
 
-    payload["client"] = props.user.id;
+    payload["vendor"] = props.user.id;
     payload["pre_transaction"] = item.id;
 
     //console.log(payload);
-    props.addPayement_clientDigipay(payload, showAlert);
+    props.addPayement_Vendor(payload, showAlert);
     showDivInfo();
     // reset form ??
   };
@@ -142,21 +141,21 @@ const FormVendorPay = (props) => {
                     <div className="px-sm-4 px-1 py-0">
                       <Card className="mb-4">
                         <CardBody>
-                          <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                          <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                             <div className=" font-size-md">Nom</div>
                             <div className=" font-size-lg text-primary">
                               {`${item.expediteur.first_name} ${item.expediteur.last_name}`}
                             </div>
                           </div>
                           <div className="divider my-2"></div>
-                          <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                          <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                             <div className=" font-size-md">Telephone</div>
                             <div className=" font-size-lg text-primary">
                               {item.expediteur.tel}
                             </div>
                           </div>
                           <div className="divider my-2"></div>
-                          <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                          <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                             <div className=" font-size-md">Email</div>
                             <div className=" font-size-lg text-primary">
                               {item.expediteur.email
@@ -165,7 +164,7 @@ const FormVendorPay = (props) => {
                             </div>
                           </div>
                           <div className="divider my-2"></div>
-                          <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                          <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                             <div className=" font-size-md">Adresse</div>
                             <div className=" font-size-lg text-primary">
                               {item.expediteur.adresse
@@ -210,6 +209,4 @@ const mapStateToProps = (state) => ({
   transactions: state.transaction.transactions,
 });
 
-export default connect(mapStateToProps, { addPayement_clientDigipay })(
-  FormVendorPay
-);
+export default connect(mapStateToProps, { addPayement_Vendor })(FormVendorPay);

@@ -221,21 +221,21 @@ const FormClientSend = (props) => {
                       <div className="px-sm-4 px-1 py-0">
                         <Card className="mb-4">
                           <CardBody>
-                            <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                            <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                               <div className=" font-size-md">Nom</div>
                               <div className=" font-size-lg text-primary">
                                 {`${item.client.first_name} ${item.client.last_name}`}
                               </div>
                             </div>
                             <div className="divider my-2"></div>
-                            <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                            <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                               <div className=" font-size-md">Telephone</div>
                               <div className=" font-size-lg text-primary">
                                 {item.client.tel}
                               </div>
                             </div>
                             <div className="divider my-2"></div>
-                            <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                            <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                               <div className=" font-size-md">Email</div>
                               <div className=" font-size-lg text-primary">
                                 {item.client.email
@@ -244,7 +244,7 @@ const FormClientSend = (props) => {
                               </div>
                             </div>
                             <div className="divider my-2"></div>
-                            <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                            <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                               <div className=" font-size-md">Adresse</div>
                               <div className=" font-size-lg text-primary">
                                 {item.client.adresse
