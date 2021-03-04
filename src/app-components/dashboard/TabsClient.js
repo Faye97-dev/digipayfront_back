@@ -81,9 +81,9 @@ function SmallFormat(props) {
         </Col>
       </Row>
 
-      <RechargeCredit />
+      {/*<RechargeCredit />*/}
       {/* second tabs */}
-      <Row className="pt-2 pb-5">
+      <Row className="pt-3 pb-4">
         <Col lg="12">
           <Card className="shadow-xxl px-3">
             <div className="nav-tabs-primary tabs-animated tabs-animated-line">

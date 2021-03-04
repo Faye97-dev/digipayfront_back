@@ -499,14 +499,6 @@ class TransactionsClient extends Component {
               </div>
             </CardBody>
           </div>
-          {/*<div className="d-flex align-items-center justify-content-center pt-3 mb-5">
-            <RcPagination
-              defaultPageSize={5}
-              defaultCurrent={1}
-              total={10}
-              locale={localeInfo}
-            />
-              </div>*/}
           {!this.props.transactions.loading && this.state.current.length !== 0 && (
             <div className="d-flex align-items-center justify-content-center mt-4 mb-4">
               <RcPagination

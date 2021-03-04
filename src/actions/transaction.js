@@ -14,6 +14,7 @@ import {
   CLEAN_SESSION,
   ADD_RECHARGE,
   ADD_PAIEMENT,
+  ADD_PAYBACK,
 } from "./types";
 import { updateSolde, updateSolde_clientDigipay } from "./async";
 
@@ -688,6 +689,73 @@ export const addPayement_Vendor = (transfert, showAlert) => (
         //setTimeout(() => {
         dispatch({
           type: ADD_PAIEMENT,
+          payload: res.data,
+        });
+
+        showAlert(
+          "success",
+          "Transaction Complete!",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        updateSolde_clientDigipay(user.id, getState().auth.access).then(
+          (res) => {
+            if (res) {
+              dispatch({
+                type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+                payload: res,
+              });
+            }
+          }
+        );
+        //}, 10000);
+      } else if (keys.includes("msg")) {
+        dispatch({
+          type: ERROR_TRANS,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
+    })
+    .catch((err) => {
+      //setTimeout(() => {
+      dispatch({
+        type: ERROR_TRANS,
+      });
+
+      showAlert(
+        "danger",
+        "Transaction Non-Complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //}, 10000);
+      //console.log(err.response);
+    });
+};
+
+export const addPayback = (transfert, showAlert) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: ADD_PAYBACK,
+  });
+
+  const user = getState().auth.user;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  axios
+    .post(HOST + `api/func/vendor/payback/`, transfert, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        //setTimeout(() => {
+        dispatch({
+          type: ADD_PAYBACK,
           payload: res.data,
         });
 

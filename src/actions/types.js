@@ -17,6 +17,7 @@ export const ADD_TRANSFERT = "ADD_TRANSFERT";
 export const ADD_RETRAIT = "ADD_RETRAIT";
 export const ADD_RECHARGE = "ADD_RECHARGE";
 export const ADD_PAIEMENT = "ADD_PAIEMENT";
+export const ADD_PAYBACK = "ADD_PAYBACK";
 export const GET_TRANSFERT = "GET_TRANSFERT";
 
 export const ERROR_CLIENT = "ERROR_CLIENT";

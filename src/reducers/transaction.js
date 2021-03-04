@@ -9,6 +9,7 @@ import {
   CLEAN_SESSION,
   ADD_RECHARGE,
   ADD_PAIEMENT,
+  ADD_PAYBACK,
 } from "../actions/types.js";
 
 const initialState = {
@@ -24,7 +25,8 @@ export default function (state = initialState, action) {
         action.payload === ADD_TRANSFERT ||
         action.payload === ADD_RETRAIT ||
         action.payload === ADD_RECHARGE ||
-        action.payload === ADD_PAIEMENT
+        action.payload === ADD_PAIEMENT ||
+        action.payload === ADD_PAYBACK
       ) {
         return {
           ...state,
@@ -63,6 +65,7 @@ export default function (state = initialState, action) {
           loading: false,
         },
       };
+    case ADD_PAYBACK:
     case ADD_PAIEMENT:
     case ADD_RECHARGE:
     case ADD_TRANSFERT:

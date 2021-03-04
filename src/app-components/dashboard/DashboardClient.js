@@ -15,9 +15,9 @@ class DashboardClient extends Component {
       <>
         <DashboardAmount {...this.props}></DashboardAmount>
         <TabsClient></TabsClient>
-        <div className="d-none d-xl-block">
-          <RechargeCredit></RechargeCredit>
-        </div>
+        {/*<div className="d-none d-xl-block">*/}
+        <RechargeCredit></RechargeCredit>
+        {/*</div>*/}
         <TransactionsClient></TransactionsClient>
       </>
     );
