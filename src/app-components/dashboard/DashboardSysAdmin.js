@@ -16,7 +16,7 @@ class DashboardSysAdmin extends Component {
         <TopAgenceEmploye></TopAgenceEmploye>
         <Chart />
         <Progress />
-        <Messenger />
+        {/*<Messenger />*/}
         <EmployeGrid />
       </>
     );

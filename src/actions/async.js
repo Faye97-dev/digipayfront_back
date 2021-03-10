@@ -40,6 +40,32 @@ export async function getNotWhitrated(tel, agence) {
   }
 }
 
+export const checkExistTel_Client = async (form, showAlert) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  let data;
+  await axios
+    .post(HOST + `api/func/client/check_existant_tel/`, form, config)
+    .then((res) => {
+      data = res.data;
+      //console.log(data);
+    })
+    .catch((err) => {
+      data = {};
+      showAlert(
+        "danger",
+        "Erreur Verifier votre connexion!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      //console.log(err.response.data);
+    });
+  return data;
+};
+
 export async function checkSecretKey(transaction, key, showAlert) {
   let data;
   const config = {

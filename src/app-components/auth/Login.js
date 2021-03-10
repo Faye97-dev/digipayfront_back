@@ -16,7 +16,7 @@ const SuspenseLoading = () => {
           <RiseLoader color={"#3c44b1"} loading={true} />
         </div>
         <div className="text-muted font-size-xl text-center pt-4">
-          Lancement de digiPay , veuillez patientez svp ...
+          Lancement de digiPay ...
           <span className="font-size-lg d-block text-dark"></span>
         </div>
       </div>

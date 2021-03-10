@@ -53,27 +53,12 @@ function SmallFormat(props) {
                     <span className="px-3 py-2 font-weight-bold">Payer</span>
                   </NavLinkStrap>
                 </NavItem>
-                <NavItem>
-                  <NavLinkStrap
-                    className={clsx({ active: activeTab === "2" })}
-                    onClick={() => {
-                      toggle("2");
-                    }}
-                  >
-                    <span className="px-3 py-2 font-weight-bold">Envoyer</span>
-                  </NavLinkStrap>
-                </NavItem>
               </Nav>
             </div>
             <TabContent activeTab={activeTab}>
               <TabPane tabId="1" className="px-0">
                 <div className=" my-4">
                   <FormClientPay />
-                </div>
-              </TabPane>
-              <TabPane tabId="2" className="px-0">
-                <div className=" my-4">
-                  <FormClientSend />
                 </div>
               </TabPane>
             </TabContent>
@@ -95,6 +80,16 @@ function SmallFormat(props) {
                       toggle2("1");
                     }}
                   >
+                    <span className="px-3 py-2 font-weight-bold">Envoyer</span>
+                  </NavLinkStrap>
+                </NavItem>
+                <NavItem>
+                  <NavLinkStrap
+                    className={clsx({ active: activeTab2 === "2" })}
+                    onClick={() => {
+                      toggle2("2");
+                    }}
+                  >
                     <span className="px-3 py-2 font-weight-bold">Retirer</span>
                   </NavLinkStrap>
                 </NavItem>
@@ -113,9 +108,15 @@ function SmallFormat(props) {
             <TabContent activeTab={activeTab2}>
               <TabPane tabId="1" className="px-0">
                 <div className=" my-4">
+                  <FormClientSend />
+                </div>
+              </TabPane>
+              <TabPane tabId="2" className="px-0">
+                <div className=" my-4">
                   <FormClientWithdraw />
                 </div>
               </TabPane>
+
               {/*<TabPane tabId="2" className="px-0">
                 <div className=" my-4">
                   <FormBanquaire />

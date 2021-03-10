@@ -42,7 +42,7 @@ const MyForm = (props) => {
       <Row>
         <Col xl="12" style={{ margin: "12px 0" }}>
           <Label for="username" className="font-weight-bold">
-            Pseudo de l'utilisateur
+            Téléphone
           </Label>
           <Field
             name="username"

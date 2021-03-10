@@ -12,8 +12,11 @@ export default function Progress() {
   return (
     <>
       <Row>
-        <Col lg="6" xl="3">
+        <Col xl="6">
           <Card className="card-box p-3 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 value={81}
@@ -28,9 +31,10 @@ export default function Progress() {
                 </div>
               </CircularProgressbarWithChildren>
               <div className="pl-3">
-                <div className="text-black-50 font-weight-bold">Stocks</div>
+                <div className="text-black-50 font-weight-bold">
+                  Transferts Complets
+                </div>
                 <div className="display-4 font-weight-bold pt-2 text-black">
-                  $
                   <CountUp
                     start={0}
                     end={683.57}
@@ -40,13 +44,17 @@ export default function Progress() {
                     decimals={2}
                     decimal=","
                   />
+                  <small className="pl-2">MRU</small>
                 </div>
               </div>
             </div>
           </Card>
         </Col>
-        <Col lg="6" xl="3">
+        <Col xl="6">
           <Card className="card-box p-3 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 value={54}
@@ -61,7 +69,9 @@ export default function Progress() {
                 </div>
               </CircularProgressbarWithChildren>
               <div className="pl-3">
-                <div className="text-black-50 font-weight-bold">Sales</div>
+                <div className="text-black-50 font-weight-bold">
+                  Transferts Non-retirés
+                </div>
                 <div className="display-4 font-weight-bold pt-2 text-black">
                   <CountUp
                     start={0}
@@ -77,8 +87,11 @@ export default function Progress() {
             </div>
           </Card>
         </Col>
-        <Col lg="6" xl="3">
+        <Col xl="6">
           <Card className="card-box bg-danger p-3 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 styles={buildStyles({
@@ -98,7 +111,9 @@ export default function Progress() {
                 </div>
               </CircularProgressbarWithChildren>
               <div className="pl-3">
-                <div className="text-white-50 font-weight-bold">Issues</div>
+                <div className="text-white-50 font-weight-bold">
+                  Transferts Annulés
+                </div>
                 <div className="display-4 font-weight-bold pt-2 text-white">
                   <CountUp
                     start={0}
@@ -114,8 +129,11 @@ export default function Progress() {
             </div>
           </Card>
         </Col>
-        <Col md="6" xl="3">
+        <Col xl="6">
           <Card className="card-box bg-plum-plate p-3 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 styles={buildStyles({
@@ -135,9 +153,10 @@ export default function Progress() {
                 </div>
               </CircularProgressbarWithChildren>
               <div className="pl-3">
-                <div className="text-white-50 font-weight-bold">Users</div>
+                <div className="text-white-50 font-weight-bold">
+                  Transferts en attente
+                </div>
                 <div className="display-4 font-weight-bold pt-2 text-white">
-                  $
                   <CountUp
                     start={0}
                     end={8.357}
@@ -147,6 +166,7 @@ export default function Progress() {
                     decimals={3}
                     decimal=","
                   />
+                  <small className="pl-2">MRU</small>
                 </div>
               </div>
             </div>
@@ -163,81 +183,95 @@ export function HeaderProgress() {
       <Row>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-first-sm p-4 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-first text-white text-center font-size-lg mr-3">
-                <FontAwesomeIcon icon={["far", "keyboard"]} />
+                <FontAwesomeIcon icon={["fas", "money-bill"]} />
               </div>
-              <div className="text-black-50">Orders</div>
+              <div className="text-black-50">Transferts</div>
             </div>
             <div className="display-3 text-center line-height-sm text-second text-center d-flex align-items-center pt-3 justify-content-center">
               <FontAwesomeIcon
                 icon={["fas", "arrow-down"]}
                 className="font-size-sm text-danger mr-2"
               />
-              <div>$3,485</div>
+              <div className="font-size-lg">
+                25.269.200<small className="pl-2">MRU</small>
+              </div>
             </div>
-            <div className="text-black-50 text-center pt-3">
+            {/*<div className="text-black-50 text-center pt-3">
               <b>+36%</b> from last month
-            </div>
+              </div>*/}
           </Card>
         </Col>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-success-sm p-4 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-success text-white text-center font-size-lg mr-3">
-                <FontAwesomeIcon icon={["far", "file-excel"]} />
+                <FontAwesomeIcon icon={["fas", "money-bill"]} />
               </div>
-              <div className="text-black-50">Reports</div>
+              <div className="text-black-50">Retraits</div>
             </div>
             <div className="display-3 text-center line-height-sm text-second text-center d-flex align-items-center pt-3 justify-content-center">
               <FontAwesomeIcon
                 icon={["far", "dot-circle"]}
                 className="font-size-sm text-warning mr-2"
               />
-              <div>436</div>
+              <div className="font-size-lg">
+                1.500.296<small className="pl-2">MRU</small>
+              </div>
             </div>
-            <div className="text-black-50 text-center pt-3">
+            {/*<div className="text-black-50 text-center pt-3">
               <b>+65%</b> from last month
-            </div>
+            </div>*/}
           </Card>
         </Col>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-danger-sm p-4 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-danger text-white text-center font-size-lg mr-3">
                 <FontAwesomeIcon icon={["far", "user"]} />
               </div>
-              <div className="text-black-50">Customers</div>
+              <div className="text-black-50">Paiements</div>
             </div>
             <div className="display-3 text-center line-height-sm text-second text-center d-flex align-items-center pt-3 justify-content-center">
               <FontAwesomeIcon
                 icon={["fas", "arrow-up"]}
                 className="font-size-sm text-success mr-2"
               />
-              <div>4867</div>
-            </div>
-            <div className="text-black-50 text-center pt-3">
-              <b>+22%</b> from last month
+              <div className="font-size-lg">
+                4.256.150<small className="pl-2">MRU</small>
+              </div>
             </div>
           </Card>
         </Col>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-primary-sm p-4 mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-primary text-white text-center font-size-lg mr-3">
                 <FontAwesomeIcon icon={["far", "user"]} />
               </div>
-              <div className="text-black-50">Sales</div>
+              <div className="text-black-50">Recharges</div>
             </div>
             <div className="display-3 text-center line-height-sm text-second text-center d-flex align-items-center pt-3 justify-content-center">
               <FontAwesomeIcon
                 icon={["fas", "arrow-down"]}
                 className="font-size-sm text-first mr-2"
               />
-              <div>433</div>
-            </div>
-            <div className="text-black-50 text-center pt-3">
-              <b>+32%</b> from last month
+              <div className="font-size-lg">
+                8.958.023<small className="pl-2">MRU</small>
+              </div>
             </div>
           </Card>
         </Col>

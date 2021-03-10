@@ -244,7 +244,7 @@ const Routes = (props) => {
             <RiseLoader color={"#3c44b1"} loading={true} />
           </div>
           <div className="text-muted font-size-xl text-center pt-4">
-            Lancement de digiPay , veuillez patientez svp ...
+            Lancement de digiPay ...
             <span className="font-size-lg d-block text-dark"></span>
           </div>
         </div>
@@ -271,62 +271,60 @@ const Routes = (props) => {
               </Switch>
             </PresentationLayout>
           </Route>
+          <Route
+            path={[
+              "/Dashboard",
+              "/Transaction",
+              "/Agence",
+              "/Employe",
+              "/RechargeBanquaire",
+              "/Compensation",
+              "/Statistique",
+              "/Notification",
+              "/Contact",
+              "/DashboardMonitoring",
+            ]}
+          >
+            <LeftSidebar>
+              <Switch location={location} key={location.pathname}>
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  {RoutesSidebar.filter((item) =>
+                    item.roles.includes(props.role)
+                  ).map((item, index) => {
+                    return (
+                      <PrivateRoute
+                        key={index}
+                        path={item.link}
+                        component={item.component}
+                      />
+                    );
+                  })}
 
-          <>
-            <Route
-              path={[
-                "/Dashboard",
-                "/Transaction",
-                "/Agence",
-                "/Employe",
-                "/RechargeBanquaire",
-                "/Compensation",
-                "/Statistique",
-                "/Notification",
-                "/Contact",
-                "/DashboardMonitoring",
-              ]}
-            >
-              <LeftSidebar>
-                <Switch location={location} key={location.pathname}>
-                  <motion.div
-                    initial="initial"
-                    animate="in"
-                    exit="out"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                  >
-                    {RoutesSidebar.filter((item) =>
-                      item.roles.includes(props.role)
-                    ).map((item, index) => {
-                      return (
-                        <PrivateRoute
-                          key={index}
-                          path={item.link}
-                          component={item.component}
-                        />
-                      );
-                    })}
-
-                    {/*<Route
+                  {/*<Route
                     path="/DashboardMonitoring"
                     component={DashboardMonitoring}
                   />*/}
-                  </motion.div>
-                </Switch>
-              </LeftSidebar>
-            </Route>
-            <Route path={["/Chat", "/Profil"]}>
-              <CollapsedSidebar>
-                <Switch location={location} key={location.pathname}>
-                  <motion.div
-                    initial="initial"
-                    animate="in"
-                    exit="out"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                  >
-                    {/*RoutesCollapsed.filter((item) =>
+                </motion.div>
+              </Switch>
+            </LeftSidebar>
+          </Route>
+          <Route path={["/Chat", "/Profil"]}>
+            <CollapsedSidebar>
+              <Switch location={location} key={location.pathname}>
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  {/*RoutesCollapsed.filter((item) =>
                     item.roles.includes(props.role)
                   ).map((item, index) => {
                     return (
@@ -337,36 +335,35 @@ const Routes = (props) => {
                       />
                     );
                   })*/}
-                    {/*<PrivateRoute path="/Chat" component={Mesenger} />*/}
-                    <PrivateRoute path="/Profil" component={Profil} />
-                  </motion.div>
-                </Switch>
-              </CollapsedSidebar>
-            </Route>
-            <Route path={["/PageLoginBasic", "/PageError505"]}>
-              <MinimalLayout>
-                <Switch location={location} key={location.pathname}>
-                  <motion.div
-                    initial="initial"
-                    animate="in"
-                    exit="out"
-                    variants={pageVariants}
-                    transition={pageTransition}
-                  >
-                    <PrivateRoute
-                      path="/PageLoginBasic"
-                      component={PageLoginBasic}
-                    />
+                  {/*<PrivateRoute path="/Chat" component={Mesenger} />*/}
+                  <PrivateRoute path="/Profil" component={Profil} />
+                </motion.div>
+              </Switch>
+            </CollapsedSidebar>
+          </Route>
+          <Route path={["/PageLoginBasic", "/PageError505"]}>
+            <MinimalLayout>
+              <Switch location={location} key={location.pathname}>
+                <motion.div
+                  initial="initial"
+                  animate="in"
+                  exit="out"
+                  variants={pageVariants}
+                  transition={pageTransition}
+                >
+                  <PrivateRoute
+                    path="/PageLoginBasic"
+                    component={PageLoginBasic}
+                  />
+                  {/*path="/PageError505"
+                    <Route component={PageError505} />*/}
+                </motion.div>
+              </Switch>
+            </MinimalLayout>
+          </Route>
 
-                    <PrivateRoute
-                      path="/PageError505"
-                      component={PageError505}
-                    />
-                  </motion.div>
-                </Switch>
-              </MinimalLayout>
-            </Route>
-          </>
+          {/*<Route component={PageError505} />*/}
+          {/*<Route path="*" exact={true} component={PageError505} />*/}
         </Switch>
       </Suspense>
     </AnimatePresence>

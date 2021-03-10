@@ -1,15 +1,17 @@
 import "./formik-demo.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { withFormik, Field, Form } from "formik";
 import * as Yup from "yup";
 import Select from "react-select";
-import { Button, Row, Col, Label } from "reactstrap";
+import { Button, Row, Col, Label, Card, Modal, CardBody } from "reactstrap";
 import { connect } from "react-redux";
 import { getAgences } from "../../actions/agence";
 import { getClients } from "../../actions/client";
 import { addTransfert } from "../../actions/transaction";
 import { showAlert } from "../../utils/alerts";
 import { SyncLoader } from "react-spinners";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FormAddClient from "./FormAddClient";
 const objectAttributeExist = (item, value) => {
   if (!item) {
     return false;
@@ -40,11 +42,11 @@ const formikEnhancer = withFormik({
         objectAttributeExist(transaction_type, "SUP_3000"),
 
       then: Yup.number()
-        .min(3001, "Montant doit etre plus 3000 MRU")
+        .min(30001, "Montant doit etre plus 30000 MRU")
         .required("Montant est obligatoire!"),
       otherwise: Yup.number()
         .min(10, "Montant invalid")
-        .max(3000, "Montant ne peut depasser 3000 MRU")
+        .max(30000, "Montant ne peut depasser 30000 MRU")
         .required("Montant est obligatoire!"),
     }),
 
@@ -116,6 +118,16 @@ const MyForm = (props) => {
     console.log(payload);
     props.addTransfert(payload, resetForm, setSubmitting);
   };*/
+  const addIcon = (
+    <Button
+      color="primary"
+      outline
+      className="my-1 p-2 rounded-sm shadow-none hover-scale-sm d-10 border-0  d-inline-flex align-items-center justify-content-center"
+      onClick={() => props.showModal()}
+    >
+      <FontAwesomeIcon icon={["fas", "plus"]} className="font-size-sm" />
+    </Button>
+  );
 
   return (
     <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
@@ -125,8 +137,8 @@ const MyForm = (props) => {
             label="Type de transaction"
             name="transaction_type"
             option={[
-              { value: "INF_3000", label: "Inferieure a 3000 MRU" },
-              { value: "SUP_3000", label: "Superieure a 3000 MRU" },
+              { value: "INF_3000", label: "Inferieure a 30000 MRU" },
+              { value: "SUP_3000", label: "Superieure a 30000 MRU" },
             ]}
             value={values.transaction_type}
             onChange={setFieldValue}
@@ -191,6 +203,7 @@ const MyForm = (props) => {
                     error={errors.destinataire}
                     touched={touched.destinataire}
                     placeholder="Selectionner un destinataire ..."
+                    addIcon={addIcon}
                   />
                 </Col>
                 <Col xl="6">
@@ -212,6 +225,7 @@ const MyForm = (props) => {
                     error={errors.expediteur}
                     touched={touched.expediteur}
                     placeholder="Selectionner un expediteur ..."
+                    addIcon={addIcon}
                   />
                 </Col>
               </>
@@ -235,6 +249,7 @@ const MyForm = (props) => {
                   error={errors.destinataire}
                   touched={touched.destinataire}
                   placeholder="Selectionner un destinataire ..."
+                  addIcon={addIcon}
                 />
               </Col>
             )}
@@ -327,14 +342,33 @@ class MySelect extends React.Component {
     return (
       <div style={{ margin: "12px 0" }}>
         <label htmlFor={this.props.name}>{this.props.label}</label>
-        <Select
-          id={this.props.name}
-          options={this.props.option}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          value={this.props.value}
-          placeholder={this.props.placeholder}
-        />
+        {this.props.addIcon ? (
+          <Row>
+            <Col xs="10" sm="10" md="11">
+              <Select
+                id={this.props.name}
+                options={this.props.option}
+                onChange={this.handleChange}
+                onBlur={this.handleBlur}
+                value={this.props.value}
+                placeholder={this.props.placeholder}
+              />
+            </Col>
+            <Col xs="2" sm="2" md="1" className="p-0">
+              {this.props.addIcon}
+            </Col>
+          </Row>
+        ) : (
+          <Select
+            id={this.props.name}
+            options={this.props.option}
+            onChange={this.handleChange}
+            onBlur={this.handleBlur}
+            value={this.props.value}
+            placeholder={this.props.placeholder}
+          />
+        )}
+
         {!!this.props.error && this.props.touched && (
           <div style={{ color: "red", marginTop: ".5rem" }}>
             {this.props.error}
@@ -345,18 +379,69 @@ class MySelect extends React.Component {
   }
 }
 
+const MyEnhancedForm = formikEnhancer(MyForm);
+
+const FormTransfert = (props) => {
+  const [modalAddClient, setModalAddClient] = useState(false);
+  const showModal = () => setModalAddClient(!modalAddClient);
+
+  const [item, setItem] = useState(null);
+  const handleItem = (obj) => setItem(obj);
+
+  return (
+    <>
+      <MyEnhancedForm
+        showModal={showModal}
+        modalAddClient={modalAddClient}
+        handleItem={handleItem}
+        {...props}
+      />
+      <Modal
+        zIndex={2000}
+        centered
+        size="lg"
+        isOpen={modalAddClient}
+        toggle={showModal}
+        contentClassName="border-0"
+      >
+        {modalAddClient && (
+          <Row className="no-gutters">
+            <Col xl="12">
+              <div className="bg-white rounded ">
+                <div className="px-4 pt-4 pb-2">
+                  <h1 className="pb-2 display-4 font-weight-bold font-size-lg text-primary text-center">
+                    <span>
+                      Enregistrer les informations d'un nouveau client
+                    </span>
+                  </h1>
+                  <div className="rounded">
+                    <div className="px-1 py-0">
+                      <Card className="card-box mb-4">
+                        <CardBody>
+                          <FormAddClient showModal={showModal} />
+                        </CardBody>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Col>
+          </Row>
+        )}
+      </Modal>
+    </>
+  );
+};
+
 const mapStateToProps = (state) => ({
   agences: state.agence.agences,
   clients: state.client.clients,
   user: state.auth.user,
   transactions: state.transaction.transactions,
 });
-const MyEnhancedForm = connect(mapStateToProps, {
+
+export default connect(mapStateToProps, {
   getAgences,
   getClients,
   addTransfert,
-})(formikEnhancer(MyForm));
-
-const FormTransfert = () => <MyEnhancedForm />;
-
-export default FormTransfert;
+})(FormTransfert);

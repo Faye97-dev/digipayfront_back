@@ -3,6 +3,7 @@ import {
   DATA_LOADING,
   ERROR_CLIENT,
   CLEAN_SESSION,
+  ADD_CLIENT,
 } from "../actions/types.js";
 
 const initialState = {
@@ -12,7 +13,7 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case DATA_LOADING:
-      if (action.payload === GET_CLIENTS) {
+      if (action.payload === GET_CLIENTS || action.payload === ADD_CLIENT) {
         return {
           ...state,
           clients: {
@@ -29,6 +30,15 @@ export default function (state = initialState, action) {
         clients: {
           ...state.clients,
           payload: action.payload,
+          loading: false,
+        },
+      };
+    case ADD_CLIENT:
+      return {
+        ...state,
+        clients: {
+          ...state.clients,
+          payload: [action.payload, ...state.clients.payload],
           loading: false,
         },
       };

@@ -18,7 +18,7 @@ import {
 // diconnect agence when logout , mouse cursor on ordering datatable , logout message de confirmation , check du solde avant retrait
 // refont code separe then between files , agence transfert change methods , agence retrait add confirmation code , check solde ....
 // FormClientsend : reset form
-// asyn file handle forbidden issue
+// asyn file handle forbidden issue , agence check destinataire !== expediteur
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),

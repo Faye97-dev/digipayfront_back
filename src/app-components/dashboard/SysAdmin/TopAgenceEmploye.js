@@ -137,7 +137,7 @@ function ChartData() {
     legend: {
       show: false,
     },
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: ["Jan", "Fev", "Mar", "Avr", "Mai", "Jui", "Juil"],
   };
   const chartDashboardStatistics2AData = [
     {
@@ -179,7 +179,7 @@ function ChartData() {
     legend: {
       show: false,
     },
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: ["Jan", "Fev", "Mar", "Avr", "Mai", "Jui", "Juil"],
   };
   const chartDashboardStatistics2BData = [
     {
@@ -197,15 +197,18 @@ function ChartData() {
       <Row>
         <Col xl="6">
           <Card className="card-box mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <CardHeader>
               <div className="card-header--title">
                 <h4 className="font-size-lg mb-0 py-2 font-weight-bold">
-                  Income Reports
+                  Rapports de revenus
                 </h4>
               </div>
               <div className="card-header--actions">
                 <Button size="sm" color="neutral-primary">
-                  <span className="btn-wrapper--label">Export</span>
+                  <span className="btn-wrapper--label">Exporter</span>
                   <span className="btn-wrapper--icon">
                     <FontAwesomeIcon
                       icon={["fas", "chevron-down"]}
@@ -219,27 +222,15 @@ function ChartData() {
               <Row className="pt-3">
                 <Col sm="6" md="5">
                   <div className="pb-4 px-3">
-                    <span className="text-dark pb-4">YoY Income</span>
+                    <span className="text-dark pb-4"> Revenu annuel</span>
                     <span className="font-size-lg d-block">
-                      <small>$</small> 165,239
-                    </span>
-                  </div>
-                  <div className="pb-4 px-3">
-                    <span className="text-dark pb-4">Orders Volume</span>
-                    <span className="font-size-lg d-block">
-                      <small>$</small> 384
+                      12.236.010<small> MRU</small>
                     </span>
                   </div>
                 </Col>
                 <Col sm="6" md="7">
                   <div className="pb-4 px-3">
-                    <span className="text-dark pb-4">Best Seller</span>
-                    <span className="font-size-lg d-block">
-                      Personal Computer
-                    </span>
-                  </div>
-                  <div className="pb-4 px-3">
-                    <span className="text-dark pb-4">Sales Target</span>
+                    <span className="text-dark pb-4">Revenu cible</span>
                     <span className="d-flex align-items-center font-size-lg d-block">
                       <Progress
                         value="65"
@@ -250,6 +241,16 @@ function ChartData() {
                       />
                       <span className="pl-3">65%</span>
                     </span>
+                  </div>
+                </Col>
+              </Row>
+              <Row className="pt-3">
+                <Col xl="12">
+                  <div className="pb-4 px-3">
+                    <span className="text-dark pb-4">
+                      Nombre de transactions
+                    </span>
+                    <span className="font-size-lg d-block">27569</span>
                   </div>
                 </Col>
               </Row>
@@ -264,11 +265,12 @@ function ChartData() {
         </Col>
         <Col xl="6">
           <Card className="card-box mb-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <CardHeader>
               <div className="card-header--title">
-                <h4 className="font-size-lg mb-0 py-2 font-weight-bold">
-                  Users list
-                </h4>
+                <h4 className="font-size-lg mb-0 py-2 font-weight-bold"></h4>
               </div>
               <div className="card-header--actions">
                 <Button size="sm" color="neutral-first">
@@ -292,7 +294,7 @@ function ChartData() {
               <Row>
                 <Col md="6">
                   <div className="p-3">
-                    <div className="mb-1 font-weight-bold">Orders</div>
+                    <div className="mb-1 font-weight-bold">Transferts</div>
                     <Progress
                       animated
                       className="progress-xs progress-animated-alt"
@@ -307,7 +309,7 @@ function ChartData() {
                 </Col>
                 <Col md="6">
                   <div className="p-3">
-                    <div className="mb-1 font-weight-bold">Sales</div>
+                    <div className="mb-1 font-weight-bold">Paiements</div>
                     <Progress
                       animated
                       className="progress-xs progress-animated-alt"
@@ -322,7 +324,7 @@ function ChartData() {
                 </Col>
                 <Col md="6">
                   <div className="p-3">
-                    <div className="mb-1 font-weight-bold">Users</div>
+                    <div className="mb-1 font-weight-bold">Retraits</div>
                     <Progress
                       animated
                       className="progress-xs progress-animated-alt"
@@ -337,7 +339,7 @@ function ChartData() {
                 </Col>
                 <Col md="6">
                   <div className="p-3">
-                    <div className="mb-1 font-weight-bold">Customers</div>
+                    <div className="mb-1 font-weight-bold">Clients</div>
                     <Progress
                       animated
                       className="progress-xs progress-animated-alt"
@@ -391,17 +393,17 @@ export default function TopAgenceEmploye() {
       show: false,
     },
     labels: [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-      "Last Week",
-      "Last Month",
-      "Last Year",
-      "Last Decade",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi",
+      "Dimanche",
+      "Semaine précédente",
+      "Mois précédent",
+      "Trimestre précédent",
+      "Année précédente",
     ],
     xaxis: {
       crosshairs: {
@@ -428,13 +430,16 @@ export default function TopAgenceEmploye() {
       <Row className="pt-5">
         <Col xl="6">
           <Card className="card-box mb-md-5">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <CardHeader className="pr-2">
               <div className="card-header--title py-2 font-size-lg font-weight-bold">
-                Top sellers
+                Top Paiements
               </div>
               <div className="card-header--actions">
                 <Button size="sm" color="neutral-primary" className="mr-3">
-                  View all
+                  Voir tout
                 </Button>
               </div>
             </CardHeader>
@@ -442,9 +447,9 @@ export default function TopAgenceEmploye() {
               <div className="align-box-row">
                 <div className="font-weight-bold">
                   <small className="text-black-50 d-block mt-2 mb-2 text-uppercase font-weight-bold">
-                    New Accounts
+                    Nouveaux comptes
                   </small>
-                  <span className="font-size-xxl ">45,372</span>
+                  <span className="font-size-xxl ">772</span>
                 </div>
                 <div className="ml-auto">
                   <div className="bg-white text-center text-primary font-size-xl d-50 rounded-circle">
@@ -457,8 +462,8 @@ export default function TopAgenceEmploye() {
                   icon={["fas", "arrow-up"]}
                   className="text-danger"
                 />
-                <span className="text-success px-1">15.4%</span>
-                <span className="text-black-50">increase this month</span>
+                <span className="text-success px-1">7.4%</span>
+                <span className="text-black-50">hausse de ce mois</span>
               </div>
               <div>
                 <Chart
@@ -471,7 +476,7 @@ export default function TopAgenceEmploye() {
             </div>
             <div className="divider bg-dark opacity-3" />
             <div className="text-uppercase px-3 pt-3 pb-1 text-black-50">
-              Top sellers
+              Top Vendeurs
             </div>
             <div className="scroll-area-sm shadow-overflow">
               <PerfectScrollbar>
@@ -498,23 +503,22 @@ export default function TopAgenceEmploye() {
                           className="font-weight-bold text-black"
                           title="..."
                         >
-                          Shanelle Wynn
+                          Bana Blanc
                         </a>
                         <div>
                           <Badge
                             className="font-size-sm mt-1"
                             color="neutral-dark"
                           >
-                            168
+                            6789
                           </Badge>
                         </div>
                       </div>
                     </div>
                     <div className="text-black font-size-lg d-flex align-items-center">
-                      <span className="opacity-6 pr-1">$</span>
                       <CountUp
                         start={0}
-                        end={587}
+                        end={587000}
                         duration={4}
                         separator=""
                         decimals={0}
@@ -522,6 +526,7 @@ export default function TopAgenceEmploye() {
                         prefix=""
                         suffix=""
                       />
+                      <span className="opacity-6 pl-1">MRU</span>
                     </div>
                   </li>
                   <li className="d-flex justify-content-between align-items-center py-2 pl-3 pr-4">
@@ -546,23 +551,22 @@ export default function TopAgenceEmploye() {
                           className="font-weight-bold text-black"
                           title="..."
                         >
-                          Shawn Galloway
+                          Gallery Tata
                         </a>
                         <div>
                           <Badge
                             className="font-size-sm mt-1"
                             color="neutral-dark"
                           >
-                            567
+                            5670
                           </Badge>
                         </div>
                       </div>
                     </div>
                     <div className="text-black font-size-lg d-flex align-items-center">
-                      <span className="opacity-6 pr-1">$</span>
                       <CountUp
                         start={0}
-                        end={3463}
+                        end={346300}
                         duration={4}
                         separator=""
                         decimals={0}
@@ -571,6 +575,7 @@ export default function TopAgenceEmploye() {
                         suffix=""
                       />
                     </div>
+                    <span className="opacity-6 pl-1">MRU</span>
                   </li>
                   <li className="d-flex justify-content-between align-items-center py-2 pl-3 pr-4">
                     <div className="d-flex align-items-center flex-grow-1">
@@ -594,23 +599,22 @@ export default function TopAgenceEmploye() {
                           className="font-weight-bold text-black"
                           title="..."
                         >
-                          Latisha Allison
+                          Station Total BMD
                         </a>
                         <div>
                           <Badge
                             className="font-size-sm mt-1"
                             color="neutral-dark"
                           >
-                            937
+                            4502
                           </Badge>
                         </div>
                       </div>
                     </div>
                     <div className="text-black font-size-lg d-flex align-items-center">
-                      <span className="opacity-6 pr-1">$</span>
                       <CountUp
                         start={0}
-                        end={762}
+                        end={352000}
                         duration={4}
                         separator=""
                         decimals={0}
@@ -619,6 +623,7 @@ export default function TopAgenceEmploye() {
                         suffix=""
                       />
                     </div>
+                    <span className="opacity-6 pl-1">MRU</span>
                   </li>
                   <li className="d-flex justify-content-between align-items-center py-2 pl-3 pr-4">
                     <div className="d-flex align-items-center flex-grow-1">
@@ -642,23 +647,22 @@ export default function TopAgenceEmploye() {
                           className="font-weight-bold text-black"
                           title="..."
                         >
-                          Lilly-Mae White
+                          Patisserie Prince
                         </a>
                         <div>
                           <Badge
                             className="font-size-sm mt-1"
                             color="neutral-dark"
                           >
-                            367
+                            3670
                           </Badge>
                         </div>
                       </div>
                     </div>
                     <div className="text-black font-size-lg d-flex align-items-center">
-                      <span className="opacity-6 pr-1">$</span>
                       <CountUp
                         start={0}
-                        end={5743}
+                        end={257430}
                         duration={4}
                         separator=""
                         decimals={0}
@@ -666,6 +670,7 @@ export default function TopAgenceEmploye() {
                         prefix=""
                         suffix=""
                       />
+                      <span className="opacity-6 pl-1">MRU</span>
                     </div>
                   </li>
                   <li className="d-flex justify-content-between align-items-center py-2 pl-3 pr-4">
@@ -690,23 +695,22 @@ export default function TopAgenceEmploye() {
                           className="font-weight-bold text-black"
                           title="..."
                         >
-                          Julie Prosser
+                          Boutique Nivea TVZ
                         </a>
                         <div>
                           <Badge
                             className="font-size-sm mt-1"
                             color="neutral-dark"
                           >
-                            283
+                            2830
                           </Badge>
                         </div>
                       </div>
                     </div>
                     <div className="text-black font-size-lg d-flex align-items-center">
-                      <span className="opacity-6 pr-1">$</span>
                       <CountUp
                         start={0}
-                        end={3463}
+                        end={234630}
                         duration={4}
                         separator=""
                         decimals={0}
@@ -714,53 +718,7 @@ export default function TopAgenceEmploye() {
                         prefix=""
                         suffix=""
                       />
-                    </div>
-                  </li>
-                  <li className="d-flex justify-content-between align-items-center py-2 pl-3 pr-4">
-                    <div className="d-flex align-items-center flex-grow-1">
-                      <CircularProgressbarWithChildren
-                        value={32}
-                        styles={buildStyles({ rotation: 1 / 2 + 1 / 4 })}
-                        strokeWidth={6}
-                        className="circular-progress-xs circular-progress-danger justify-content-center d-flex"
-                      >
-                        <div className="bg-danger text-white mr-3 rounded-circle d-30 btn-icon mx-auto">
-                          <FontAwesomeIcon
-                            icon={["fas", "chevron-down"]}
-                            className="font-size-xs"
-                          />
-                        </div>
-                      </CircularProgressbarWithChildren>
-                      <div className="pb-1 pl-3">
-                        <a
-                          href="#/"
-                          onClick={(e) => e.preventDefault()}
-                          className="font-weight-bold text-black"
-                          title="..."
-                        >
-                          Amin Hamer
-                        </a>
-                        <div>
-                          <Badge
-                            className="font-size-sm mt-1"
-                            color="neutral-dark"
-                          >
-                            793
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-black font-size-lg d-flex align-items-center">
-                      <span className="opacity-6 pr-1">$</span>
-                      <CountUp
-                        start={0}
-                        end={1587}
-                        duration={6}
-                        delay={2}
-                        separator=""
-                        decimals={0}
-                        decimal=","
-                      />
+                      <span className="opacity-6 pl-1">MRU</span>
                     </div>
                   </li>
                 </ListGroup>
@@ -769,61 +727,68 @@ export default function TopAgenceEmploye() {
           </Card>
         </Col>
         <Col xl="6">
-          <Card className="card-box ">
+          <Card className="card-box mb-xl-0 mb-5 ">
+            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+              <small>Demo</small>
+            </span>
             <CardHeader>
               <h4 className="font-size-lg mb-0 py-2 font-weight-bold">
-                Reports
+                Revenue{" "}
               </h4>
             </CardHeader>
             <CardBody className="pb-0">
               <Row className="no-gutters">
-                <Col md="6">
+                <Col md="12">
                   <div className="divider-v divider-v-md" />
                   <div className="d-flex align-items-center justify-content-between p-3">
                     <div>
-                      <b>Reports</b>
-                      <div className="text-black-50">Monthly sales</div>
+                      <b>Revenue</b>
+                      <div className="text-black-50">Transferts du mois</div>
                     </div>
                     <div className="font-weight-bold text-danger font-size-xl">
                       <CountUp
                         start={0}
-                        end={2.363}
+                        end={1836300}
                         duration={6}
                         delay={2}
                         separator=""
-                        decimals={3}
-                        decimal=","
                       />
+                      <small> MRU</small>
                     </div>
                   </div>
                   <div className="divider" />
                   <div className="d-flex align-items-center justify-content-between p-3">
                     <div>
-                      <b>User</b>
-                      <div className="text-black-50">Weekly visitors</div>
+                      <b>Utilisateurs</b>
+                      <div className="text-black-50">
+                        Clients de cette semaine
+                      </div>
                     </div>
                     <div className="font-weight-bold text-success font-size-xl">
                       <CountUp
                         start={0}
-                        end={584}
+                        end={208400}
                         duration={6}
                         delay={2}
                         separator=""
                         decimals={0}
                         decimal=","
                       />
+                      <small> MRU</small>
                     </div>
                   </div>
                   <div className="divider" />
-                  <div className="d-flex align-items-center justify-content-between p-3">
+                  {/*<div className="d-flex align-items-center justify-content-between p-3">
                     <div>
-                      <b>Sales</b>
-                      <div className="text-black-50">Weekly report</div>
+                      <b>Paiements</b>
+                      <div className="text-black-50">
+                        Revue de cette semaine
+                      </div>
                     </div>
                     <div className="font-weight-bold text-warning font-size-xl">
                       <CountUp
                         start={0}
-                        end={483}
+                        end={9896}
                         duration={6}
                         delay={2}
                         separator=""
@@ -831,30 +796,29 @@ export default function TopAgenceEmploye() {
                         decimal=","
                       />
                     </div>
-                  </div>
+                </div>*/}
                 </Col>
-                <Col md="6">
+                <Col md="12">
                   <div className="d-flex align-items-center justify-content-between p-3">
                     <div>
-                      <b>Stats</b>
-                      <div className="text-black-50">YoY targets</div>
+                      <b>Statistiques</b>
+                      <div className="text-black-50">Revenu annuel cible</div>
                     </div>
                     <div className="font-weight-bold text-warning font-size-xl">
-                      $1,23M
+                      65M MRU
                     </div>
                   </div>
                   <div className="divider" />
                   <div className="d-flex align-items-center justify-content-between p-3">
                     <div>
-                      <b>Payments</b>
-                      <div className="text-black-50">Current Expenses</div>
+                      <b>Dettes</b>
                     </div>
                     <div className="font-weight-bold text-danger font-size-xl">
-                      - $12,35
+                      - 3.2M MRU
                     </div>
                   </div>
                   <div className="divider" />
-                  <div className="d-flex align-items-center justify-content-between p-3">
+                  {/*<div className="d-flex align-items-center justify-content-between p-3">
                     <div>
                       <b>Orders</b>
                       <div className="text-black-50">Products ordered</div>
@@ -862,24 +826,24 @@ export default function TopAgenceEmploye() {
                     <div className="font-weight-bold text-warning font-size-xl">
                       65
                     </div>
-                  </div>
+                  </div>*/}
                 </Col>
               </Row>
               <div className="card-footer rounded bg-secondary border-0 my-3 p-4 text-center">
                 <Button size="sm" className="hover-scale-lg" color="second">
-                  <span className="btn-wrapper--label">View details</span>
+                  <span className="btn-wrapper--label">Voir plus</span>
                   <span className="btn-wrapper--icon">
                     <FontAwesomeIcon icon={["fas", "arrow-right"]} />
                   </span>
                 </Button>
               </div>
             </CardBody>
-            <div className="sparkline-full-wrapper">
+            {/*<div className="sparkline-full-wrapper">
               <Line
                 data={chartDashboardCommerce4B}
                 options={chartDashboardCommerce4BOptions}
               />
-            </div>
+                </div>*/}
           </Card>
         </Col>
       </Row>
