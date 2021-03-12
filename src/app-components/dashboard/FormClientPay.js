@@ -55,23 +55,26 @@ const formikEnhancer = withFormik({
 });
 
 const ModalScanQrCode = (props) => {
-  //const [modalQrCode, setModalQrCode] = useState(false);
-  /*const handleModal = () => {
-    setModalQrCode(!modalQrCode);
-    setScanResultFile("");
-  };*/
-  // Qr reader ...
-  const [scanResultWebCam, setScanResultWebCam] = useState("");
+  // Qr scan file ...
+  const [scanResultWebCam, setScanResultWebCam] = useState(null);
   const handleErrorWebCam = (error) => {
     console.log(error);
+    showAlert(
+      "warning",
+      "Pas de camera détecter !",
+      <FontAwesomeIcon icon={["far", "question-circle"]} />
+    );
   };
   const handleScanWebCam = (result) => {
     if (result) {
       setScanResultWebCam(result);
+      processBeforePayement(result);
+      handleModal();
     }
   };
 
-  const [scanResultFile, setScanResultFile] = useState("");
+  // Qr reader file ...
+  const [scanResultFile, setScanResultFile] = useState(null);
   const qrRef = useRef(null);
 
   const handleErrorFile = (error) => {
@@ -82,22 +85,7 @@ const ModalScanQrCode = (props) => {
     console.log("scaned qr code ...", result);
     if (result) {
       setScanResultFile(result);
-      props.setSubmitting(true);
-      checkCodePayement({ code: result }, showAlert).then((res) => {
-        props.setSubmitting(false);
-        const keys = Object.keys({ ...res });
-        if (keys.includes("msg")) {
-          showAlert(
-            "warning",
-            res.msg,
-            <FontAwesomeIcon icon={["far", "question-circle"]} />
-          );
-        } else {
-          //handleModal();
-          props.handleItem(res);
-          props.showDivInfo();
-        }
-      });
+      processBeforePayement(result);
     } else {
       showAlert(
         "warning",
@@ -108,8 +96,34 @@ const ModalScanQrCode = (props) => {
   };
   const onScanFile = () => {
     //handleModal();
-    setScanResultFile("");
+    setScanResultFile(null);
     qrRef.current.openImageDialog();
+  };
+
+  // modal data
+  const [modalQrCode, setModalQrCode] = useState(false);
+  const handleModal = () => {
+    setModalQrCode(!modalQrCode);
+    setScanResultWebCam(null);
+  };
+
+  const processBeforePayement = (result) => {
+    props.setSubmitting(true);
+    checkCodePayement({ code: result }, showAlert).then((res) => {
+      props.setSubmitting(false);
+      const keys = Object.keys({ ...res });
+      if (keys.includes("msg")) {
+        showAlert(
+          "warning",
+          res.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      } else {
+        //handleModal();
+        props.handleItem(res);
+        props.showDivInfo();
+      }
+    });
   };
 
   return (
@@ -117,23 +131,26 @@ const ModalScanQrCode = (props) => {
       {props.isSubmitting || props.transactionsLoading ? (
         <SyncLoader color={"var(--info)"} loading={true} />
       ) : (
-        <Button
-          color="info"
-          className="ml-0"
-          onClick={onScanFile}
-          disabled={props.isSubmitting || props.transactionsLoading}
-        >
-          QrCode
-        </Button>
+        <>
+          <Button
+            color="info"
+            className="ml-0"
+            onClick={onScanFile}
+            disabled={props.isSubmitting || props.transactionsLoading}
+          >
+            Import QrCode
+          </Button>
+          <Button
+            color="warning"
+            className="ml-2"
+            onClick={handleModal}
+            disabled={props.isSubmitting || props.transactionsLoading}
+          >
+            Scan QrCode
+          </Button>
+        </>
       )}
-      {/*<Modal
-        zIndex={2000}
-        centered
-        size="sm"
-        isOpen={modalQrCode}
-        toggle={handleModal}
-        contentClassName="border-0"
-      >*/}
+      {/**/}
       <div className="d-none ">
         <div className="p-1 d-flex justify-content-center">
           <QrReader
@@ -147,16 +164,29 @@ const ModalScanQrCode = (props) => {
         </div>
         <h6 className="text-center">Code: {scanResultFile}</h6>
       </div>
-      <div>
-        <QrReader
-          delay={300}
-          style={{ width: "20%" }}
-          onError={handleErrorWebCam}
-          onScan={handleScanWebCam}
-        />
-        <h6 className="text-center">Code: {scanResultWebCam}</h6>
-      </div>
-      {/*</Modal>*/}
+      <Modal
+        zIndex={2000}
+        centered
+        size="md"
+        isOpen={modalQrCode}
+        toggle={handleModal}
+        contentClassName="border-0"
+      >
+        <h6 className="text-center py-3 font-weight-bold">
+          Veuillez scanner un QrCode :
+        </h6>
+        <div className="px-1 pb-3 d-flex justify-content-center">
+          <QrReader
+            delay={300}
+            style={{ width: "90%" }}
+            onError={handleErrorWebCam}
+            onScan={handleScanWebCam}
+          />
+        </div>
+        {scanResultWebCam && (
+          <h6 className="text-center pb-2">Code: {scanResultWebCam}</h6>
+        )}
+      </Modal>
     </>
   );
 };
@@ -206,7 +236,7 @@ const MyForm = (props) => {
             </Row>
             <ModalScanQrCode
               isSubmitting={isSubmitting}
-              setFieldValue={setFieldValue}
+              //setFieldValue={setFieldValue}
               handleItem={props.handleItem}
               showDivInfo={props.showDivInfo}
               transactionsLoading={props.transactions.loading}
