@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 
 import clsx from "clsx";
-import { Row, Col, Card, TabContent, TabPane, Nav, NavItem } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  Modal,
+} from "reactstrap";
 import { NavLink as NavLinkStrap } from "reactstrap";
 
 import FormVendor from "./FormVendor";
 import FormVendorWithdraw from "./FormVendorWithdraw";
 import FormVendorPayback from "./FormVendorPayback";
 import FormVendorPay from "./FormVendorPay";
-export default function TabsVendor(props) {
+import QRCode from "qrcode";
+import { connect } from "react-redux";
+function TabsVendor(props) {
   return (
     <>
       <XlFormat {...props} />
@@ -17,11 +28,33 @@ export default function TabsVendor(props) {
   );
 }
 
-function CodeGenerator() {
+function CodeGenerator(props) {
   const [activeTab, setActiveTab] = useState("1");
-
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
+  };
+  const [modalQrCode, setModalQrCode] = useState(false);
+  const handleModal = () => setModalQrCode(!modalQrCode);
+
+  const [imageUrl, setImageUrl] = useState("");
+  const generateQrCode = async (text) => {
+    var opts = {
+      //errorCorrectionLevel: 'H',
+      type: "image/jpeg",
+      quality: 1,
+      margin: 0.5,
+      color: {
+        dark: "#3c44b1",
+        //light: "#FFBF60FF",
+      },
+    };
+    try {
+      const response = await QRCode.toDataURL(text, opts);
+      setImageUrl(response);
+      handleModal(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -48,7 +81,29 @@ function CodeGenerator() {
             <TabContent activeTab={activeTab}>
               <TabPane tabId="1">
                 <div className=" my-5">
-                  <FormVendor submit="Générer" />
+                  <FormVendor
+                    submit="Générer"
+                    generateQrCode={generateQrCode}
+                    handleModal={handleModal}
+                    setImageUrl={setImageUrl}
+                  />
+
+                  <Modal
+                    zIndex={2000}
+                    centered
+                    size="sm"
+                    isOpen={modalQrCode}
+                    toggle={handleModal}
+                    contentClassName="border-0"
+                  >
+                    <div className="p-1">
+                      {imageUrl ? (
+                        <a href={imageUrl} download={`QrCode${Date.now()}`}>
+                          <img src={imageUrl} alt="img" width="100%" />
+                        </a>
+                      ) : null}
+                    </div>
+                  </Modal>
                 </div>
               </TabPane>
             </TabContent>
@@ -74,7 +129,7 @@ function SmallFormat(props) {
 
   return (
     <div className="d-block d-xl-none">
-      <CodeGenerator />
+      <CodeGenerator {...props} />
       {/* second tabs */}
       <Row className="py-4">
         <Col lg="12">
@@ -226,3 +281,9 @@ function XlFormat(props) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {})(TabsVendor);

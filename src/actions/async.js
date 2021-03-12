@@ -254,12 +254,12 @@ export const randomCodePayement = async (form, showAlert) => {
       data = res.data;
       showAlert(
         "info",
-        "Veuillez consulter vos notifications pour le code de payement !",
+        "Veuillez consulter vos notifications pour le code de payement ou scanner le QR-Code !",
         <FontAwesomeIcon icon={["far", "question-circle"]} />
       );
     })
     .catch((err) => {
-      data = {};
+      data = null;
       showAlert(
         "danger",
         "Généreration d'un code de paiement non-complete!",

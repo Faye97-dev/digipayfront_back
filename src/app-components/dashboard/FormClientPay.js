@@ -1,14 +1,25 @@
 import "./formik-demo.css";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { withFormik, Field, Form } from "formik";
 import * as Yup from "yup";
-import { Button, Row, Col, Label, Badge, Card, CardBody } from "reactstrap";
+import {
+  Button,
+  Row,
+  Col,
+  Label,
+  Badge,
+  Card,
+  CardBody,
+  Modal,
+} from "reactstrap";
 import { showAlert } from "../../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { checkCodePayement } from "../../actions/async";
 import { connect } from "react-redux";
 import { SyncLoader } from "react-spinners";
 import { addPayement_clientDigipay } from "../../actions/transaction";
+import QrReader from "react-qr-reader";
+
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     code: Yup.string().required(
@@ -23,7 +34,6 @@ const formikEnhancer = withFormik({
       ...values,
     };
 
-    //payload["sender"] = props.user.id;
     checkCodePayement(payload, showAlert).then((res) => {
       //console.log(res);
       setSubmitting(false);
@@ -44,48 +54,168 @@ const formikEnhancer = withFormik({
   displayName: "MyForm",
 });
 
-const MyForm = (props) => {
-  const { touched, errors, handleSubmit, isSubmitting } = props;
+const ModalScanQrCode = (props) => {
+  //const [modalQrCode, setModalQrCode] = useState(false);
+  /*const handleModal = () => {
+    setModalQrCode(!modalQrCode);
+    setScanResultFile("");
+  };*/
+  // Qr reader ...
+  const [scanResultWebCam, setScanResultWebCam] = useState("");
+  const handleErrorWebCam = (error) => {
+    console.log(error);
+  };
+  const handleScanWebCam = (result) => {
+    if (result) {
+      setScanResultWebCam(result);
+    }
+  };
+
+  const [scanResultFile, setScanResultFile] = useState("");
+  const qrRef = useRef(null);
+
+  const handleErrorFile = (error) => {
+    console.log(error);
+  };
+
+  const handleScanFile = (result) => {
+    console.log("scaned qr code ...", result);
+    if (result) {
+      setScanResultFile(result);
+      props.setSubmitting(true);
+      checkCodePayement({ code: result }, showAlert).then((res) => {
+        props.setSubmitting(false);
+        const keys = Object.keys({ ...res });
+        if (keys.includes("msg")) {
+          showAlert(
+            "warning",
+            res.msg,
+            <FontAwesomeIcon icon={["far", "question-circle"]} />
+          );
+        } else {
+          //handleModal();
+          props.handleItem(res);
+          props.showDivInfo();
+        }
+      });
+    } else {
+      showAlert(
+        "warning",
+        "Le QrCode fourni est inavalid !",
+        <FontAwesomeIcon icon={["far", "question-circle"]} />
+      );
+    }
+  };
+  const onScanFile = () => {
+    //handleModal();
+    setScanResultFile("");
+    qrRef.current.openImageDialog();
+  };
+
   return (
-    <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
-      {props.modalPayementinfo === false && (
-        <>
-          <Row>
-            <Col xl="12" style={{ margin: "12px 0" }}>
-              <Label for="code">
-                Entrez un code de paiement ou un numéro de facture
-              </Label>
-              <Field name="code" type="text" />
-
-              {errors.code && touched.code && (
-                <div style={{ color: "red", marginTop: ".5rem" }}>
-                  {errors.code}
-                </div>
-              )}
-            </Col>
-          </Row>
-
-          <Row>
-            <Col xl="12" style={{ margin: "12px 0" }}>
-              {/*<Button color="primary" type="submit" disabled={isSubmitting}>
-                Payer
-              </Button>*/}
-              {isSubmitting || props.transactions.loading ? (
-                <SyncLoader color={"var(--primary)"} loading={true} />
-              ) : (
-                <Button
-                  color="primary"
-                  type="submit"
-                  disabled={isSubmitting || props.transactions.loading}
-                >
-                  Payer
-                </Button>
-              )}
-            </Col>
-          </Row>
-        </>
+    <>
+      {props.isSubmitting || props.transactionsLoading ? (
+        <SyncLoader color={"var(--info)"} loading={true} />
+      ) : (
+        <Button
+          color="info"
+          className="ml-0"
+          onClick={onScanFile}
+          disabled={props.isSubmitting || props.transactionsLoading}
+        >
+          QrCode
+        </Button>
       )}
-    </Form>
+      {/*<Modal
+        zIndex={2000}
+        centered
+        size="sm"
+        isOpen={modalQrCode}
+        toggle={handleModal}
+        contentClassName="border-0"
+      >*/}
+      <div className="d-none ">
+        <div className="p-1 d-flex justify-content-center">
+          <QrReader
+            ref={qrRef}
+            delay={300}
+            style={{ width: "25%" }}
+            onError={handleErrorFile}
+            onScan={handleScanFile}
+            legacyMode
+          />
+        </div>
+        <h6 className="text-center">Code: {scanResultFile}</h6>
+      </div>
+      <div>
+        <QrReader
+          delay={300}
+          style={{ width: "20%" }}
+          onError={handleErrorWebCam}
+          onScan={handleScanWebCam}
+        />
+        <h6 className="text-center">Code: {scanResultWebCam}</h6>
+      </div>
+      {/*</Modal>*/}
+    </>
+  );
+};
+const MyForm = (props) => {
+  const {
+    touched,
+    errors,
+    handleSubmit,
+    isSubmitting,
+    setFieldValue,
+    setSubmitting,
+  } = props;
+  return (
+    <>
+      <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
+        {props.modalPayementinfo === false && (
+          <>
+            <Row>
+              <Col xl="12" style={{ margin: "12px 0" }}>
+                <Label for="code">
+                  Entrez un code de paiement ou un numéro de facture
+                </Label>
+                <Field name="code" type="text" />
+
+                {errors.code && touched.code && (
+                  <div style={{ color: "red", marginTop: ".5rem" }}>
+                    {errors.code}
+                  </div>
+                )}
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xl="12" style={{ margin: "12px 0" }}>
+                {isSubmitting || props.transactions.loading ? (
+                  <SyncLoader color={"var(--primary)"} loading={true} />
+                ) : (
+                  <Button
+                    color="primary"
+                    type="submit"
+                    disabled={isSubmitting || props.transactions.loading}
+                  >
+                    Payer
+                  </Button>
+                )}
+              </Col>
+            </Row>
+            <ModalScanQrCode
+              isSubmitting={isSubmitting}
+              setFieldValue={setFieldValue}
+              handleItem={props.handleItem}
+              showDivInfo={props.showDivInfo}
+              transactionsLoading={props.transactions.loading}
+              setSubmitting={setSubmitting}
+            />
+          </>
+        )}
+      </Form>
+    </>
   );
 };
 

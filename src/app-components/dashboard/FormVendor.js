@@ -25,6 +25,9 @@ const formikEnhancer = withFormik({
     payload["id"] = props.user.id;
 
     randomCodePayement(payload, showAlert).then((res) => {
+      if (res) {
+        props.generateQrCode(res.code_confirmation);
+      }
       setSubmitting(false);
       resetForm();
     });
