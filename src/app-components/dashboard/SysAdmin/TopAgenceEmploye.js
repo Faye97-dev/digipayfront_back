@@ -197,9 +197,6 @@ function ChartData() {
       <Row>
         <Col xl="6">
           <Card className="card-box mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <CardHeader>
               <div className="card-header--title">
                 <h4 className="font-size-lg mb-0 py-2 font-weight-bold">
@@ -265,9 +262,9 @@ function ChartData() {
         </Col>
         <Col xl="6">
           <Card className="card-box mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
+            {/*<span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
               <small>Demo</small>
-            </span>
+            </span>*/}
             <CardHeader>
               <div className="card-header--title">
                 <h4 className="font-size-lg mb-0 py-2 font-weight-bold"></h4>
@@ -430,9 +427,6 @@ export default function TopAgenceEmploye() {
       <Row className="pt-5">
         <Col xl="6">
           <Card className="card-box mb-md-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <CardHeader className="pr-2">
               <div className="card-header--title py-2 font-size-lg font-weight-bold">
                 Top Paiements
@@ -728,9 +722,6 @@ export default function TopAgenceEmploye() {
         </Col>
         <Col xl="6">
           <Card className="card-box mb-xl-0 mb-5 ">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <CardHeader>
               <h4 className="font-size-lg mb-0 py-2 font-weight-bold">
                 Revenue{" "}

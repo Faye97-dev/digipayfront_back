@@ -14,9 +14,6 @@ export default function Progress() {
       <Row>
         <Col xl="6">
           <Card className="card-box p-3 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 value={81}
@@ -52,9 +49,6 @@ export default function Progress() {
         </Col>
         <Col xl="6">
           <Card className="card-box p-3 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 value={54}
@@ -89,9 +83,6 @@ export default function Progress() {
         </Col>
         <Col xl="6">
           <Card className="card-box bg-danger p-3 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 styles={buildStyles({
@@ -131,9 +122,6 @@ export default function Progress() {
         </Col>
         <Col xl="6">
           <Card className="card-box bg-plum-plate p-3 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
                 styles={buildStyles({
@@ -183,9 +171,6 @@ export function HeaderProgress() {
       <Row>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-first-sm p-4 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-first text-white text-center font-size-lg mr-3">
                 <FontAwesomeIcon icon={["fas", "money-bill"]} />
@@ -208,9 +193,6 @@ export function HeaderProgress() {
         </Col>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-success-sm p-4 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-success text-white text-center font-size-lg mr-3">
                 <FontAwesomeIcon icon={["fas", "money-bill"]} />
@@ -233,9 +215,6 @@ export function HeaderProgress() {
         </Col>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-danger-sm p-4 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-danger text-white text-center font-size-lg mr-3">
                 <FontAwesomeIcon icon={["far", "user"]} />
@@ -255,9 +234,6 @@ export function HeaderProgress() {
         </Col>
         <Col xl="3" md="6">
           <Card className="card-box border-0 shadow-primary-sm p-4 mb-5">
-            <span className="ribbon-angle ribbon-angle--top-right ribbon-warning">
-              <small>Demo</small>
-            </span>
             <div className="d-flex align-items-center">
               <div className="d-40 rounded-circle bg-primary text-white text-center font-size-lg mr-3">
                 <FontAwesomeIcon icon={["far", "user"]} />
