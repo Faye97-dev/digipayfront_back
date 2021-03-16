@@ -13,7 +13,7 @@ import {
   setSidebarToggleMobile,
 } from "../../reducers/ThemeOptions";
 
-import projectLogo from "../../assets/images/digi.ico";
+import projectLogo from "../../assets/images/digipay.png";
 
 const SidebarHeader = (props) => {
   const toggleSidebarMobile = () => {

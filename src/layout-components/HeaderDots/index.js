@@ -308,76 +308,84 @@ const HeaderDots = (props) => {
     <>
       <div className="bg-composed-wrapper bg-primary mx-3 mt-3 border-0 text-center rounded-sm">
         <div className="bg-composed-img-3 bg-composed-wrapper--image" />
-        <div className="bg-composed-wrapper--content text-white px-2 py-4">
+        <div className="bg-composed-wrapper--content text-white px-2 py-3">
           <h4 className="font-size-xl font-weight-bold mb-2">Notifications</h4>
-          <p className=" mb-0">
+          {/*<p className=" mb-0">
             Vous avez <b className="text-success">0</b> nouveaux notifications
-          </p>
+            </p>*/}
         </div>
       </div>
-      <div
-        className="tabs-animated tabs-animated-shadow tabs-bordered"
-        style={{ height: "80px" }}
-      >
-        <div className="scroll-area scroll-area-sm shadow-overflow">
-          <PerfectScrollbar
-            options={{
-              wheelPropagation: false,
-            }}
-          >
-            {fetchData.map((item) => {
-              return (
-                <Card className="card-box mb-3 mx-3" key={item.id}>
-                  <div className={`card-indicator bg-${item.style}`} />
-                  <CardBody className="px-4 py-2">
-                    <div className="d-none d-sm-block">
-                      <div className="pb-2 d-flex justify-content-between">
-                        <a
-                          href="#/"
-                          className="font-size-xl text-black"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          {item.from}
-                        </a>
-                        <div className="ml-auto font-size-sm text-primary px-2">
-                          <FontAwesomeIcon
-                            icon={["far", "clock"]}
-                            className="mr-1"
-                          />
-                          {item.date}
+      {props.notifications &&
+        props.notifications.payload &&
+        props.notifications.payload.length !== 0 && (
+          <div className="tabs-animated tabs-animated-shadow tabs-bordered pt-3">
+            <div className="scroll-area scroll-area-sm shadow-overflow">
+              <PerfectScrollbar
+                options={{
+                  wheelPropagation: false,
+                }}
+              >
+                {props.notifications.payload.slice(0, 3).map((item) => {
+                  return (
+                    <Card className="card-box mb-3 mx-3 " key={item.id}>
+                      <div className={`card-indicator bg-primary`} />
+                      <CardBody className="px-4 py-2">
+                        <div className="d-none d-sm-block">
+                          {/*<div className="pb-2 d-flex justify-content-between ">*/}
+                          <a
+                            href="#/"
+                            className="font-size-sm text-black pb-2"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            {item.status}
+                          </a>
+                          <div className="font-size-xs text-primary pb-2">
+                            <FontAwesomeIcon
+                              icon={["far", "clock"]}
+                              className="mr-1"
+                            />
+                            {item.date}
+                          </div>
+                          {/* </div>*/}
                         </div>
-                      </div>
-                    </div>
-                    <div className="d-sm-none d-block ">
-                      <a
-                        href="#/"
-                        className="font-size-xl text-black pb-2"
-                        onClick={(e) => e.preventDefault()}
-                      >
-                        {item.from}
-                      </a>
-                      <div className="font-size-sm text-primary pb-2">
-                        <FontAwesomeIcon
-                          icon={["far", "clock"]}
-                          className="mr-1"
-                        />
-                        {item.date}
-                      </div>
-                    </div>
+                        <div className="d-sm-none d-block ">
+                          <a
+                            href="#/"
+                            className="font-size-sm text-black pb-2"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            {item.status}
+                          </a>
+                          <div className="font-size-xs text-primary pb-2">
+                            <FontAwesomeIcon
+                              icon={["far", "clock"]}
+                              className="mr-1"
+                            />
+                            {item.date}
+                          </div>
+                        </div>
 
-                    <div className="d-flex align-items-center justify-content-start text-justify">
+                        {/*<div className="d-flex align-items-center justify-content-start text-justify">
                       <Badge color={item.style} className="px-3 mx-2">
                         {item.type}
-                      </Badge>
-                      {/*item.msg*/}
-                    </div>
-                  </CardBody>
-                </Card>
-              );
-            })}
-          </PerfectScrollbar>
-        </div>
-      </div>
+                      </Badge> 
+                    </div>*/}
+                      </CardBody>
+                    </Card>
+                  );
+                })}
+              </PerfectScrollbar>
+              )
+            </div>
+          </div>
+        )}
+      {props.notifications &&
+        props.notifications.payload &&
+        props.notifications.payload.length === 0 && (
+          <div className="d-flex align-items-center justify-content-center my-4">
+            <span className="text-black px-3">Pas de notifications !</span>
+          </div>
+        )}
       <div className="text-center py-3">
         <Button
           color="primary"
@@ -390,6 +398,12 @@ const HeaderDots = (props) => {
             <FontAwesomeIcon icon={["fas", "arrow-right"]} />
           </span>
         </Button>
+        {/*<NavLinkStrap href="/#" tag={NavLink} to="/Notification">
+          <span className="btn-wrapper--label text-primary">Voir plus</span>
+          <span className="pl-2 btn-wrapper--icon text-primary">
+            <FontAwesomeIcon icon={["fas", "arrow-right"]} />
+          </span>
+      </NavLinkStrap>*/}
       </div>
     </>
   );
@@ -454,6 +468,7 @@ const HeaderDots = (props) => {
 const mapStateToProps = (state) => ({
   role: state.auth.role.value,
   auth: state.auth,
+  notifications: state.notification.notifications,
 });
 
 export default connect(mapStateToProps, { updateStatusAgence })(HeaderDots);

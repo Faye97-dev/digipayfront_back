@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import clsx from "clsx";
 import { Row, Col, Card, TabContent, TabPane, Nav, NavItem } from "reactstrap";
@@ -8,12 +8,20 @@ import FormClientSend from "./FormClientSend";
 import FormClientWithdraw from "./FormClientWithdraw";
 import FormBanquaire from "../recharge/FormBanquaire";
 import RechargeCredit from "./RechargeCredit";
-export default function TabsClient(props) {
+import { connect } from "react-redux";
+import { getNotifications } from "../../actions/notification";
+import { showAlert } from "../../utils/alerts";
+
+function TabsClient(props) {
   /*const [activeTab, setActiveTab] = useState("2");
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };*/
+
+  useEffect(() => {
+    props.getNotifications(showAlert);
+  }, []);
 
   return (
     <>
@@ -205,3 +213,9 @@ function XlFormat(props) {
     </>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, { getNotifications })(TabsClient);

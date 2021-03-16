@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { Row, Col, Container } from "reactstrap";
 import illustration1 from "../../assets/images/illustrations/pack1/authentication.svg";
+import digiPay from "../../assets/images/digipay.ico";
 //import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { login } from "../../actions/auth";
@@ -44,6 +45,11 @@ function Login(props) {
                             <div className="divider-v d-none d-lg-block divider-v-md" />
                             <div className="w-100 pr-0 pr-lg-5">
                               <div className="text-black mt-3">
+                                {/*<img
+                                  alt="..."
+                                  className="w-20 mx-auto d-block img-fluid"
+                                  src={digiPay}
+                                />*/}
                                 <span className="text-center">
                                   <h1 className="display-4 mb-5 font-weight-bold">
                                     Se connecter

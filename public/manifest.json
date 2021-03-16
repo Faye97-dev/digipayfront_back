@@ -3,17 +3,17 @@
   "name": "DigiPay App",
   "icons": [
     {
-      "src": "digi.ico",
-      "sizes": "16x16",
+      "src": "digipay.ico",
+      "sizes": "32x32",
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "digipay192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "digipay512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

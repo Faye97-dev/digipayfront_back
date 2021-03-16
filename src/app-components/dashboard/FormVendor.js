@@ -4,7 +4,7 @@ import { withFormik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { Button, Row, Col, Label } from "reactstrap";
 import { connect } from "react-redux";
-import { randomCodePayement } from "../../actions/async";
+import { randomCodePayement, updateNotification } from "../../actions/async";
 import { showAlert } from "../../utils/alerts";
 import { SyncLoader } from "react-spinners";
 
@@ -26,7 +26,15 @@ const formikEnhancer = withFormik({
 
     randomCodePayement(payload, showAlert).then((res) => {
       if (res) {
-        props.generateQrCode(res.code_confirmation);
+        const { id, ...notifBody } = res.notification;
+        props.generateQrCode(res.code_confirmation).then((res) => {
+          if (res) {
+            //notifBody.qrcode = res;
+            //console.log(res);
+            const fileData = { content: res, name: `QrCode${Date.now()}.jpg` };
+            updateNotification(id, notifBody, fileData, showAlert);
+          }
+        });
       }
       setSubmitting(false);
       resetForm();

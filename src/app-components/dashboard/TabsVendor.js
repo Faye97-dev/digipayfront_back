@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import clsx from "clsx";
 import {
@@ -19,7 +19,12 @@ import FormVendorPayback from "./FormVendorPayback";
 import FormVendorPay from "./FormVendorPay";
 import QRCode from "qrcode";
 import { connect } from "react-redux";
+import { getNotifications } from "../../actions/notification";
+import { showAlert } from "../../utils/alerts";
 function TabsVendor(props) {
+  useEffect(() => {
+    props.getNotifications(showAlert);
+  }, []);
   return (
     <>
       <XlFormat {...props} />
@@ -48,13 +53,17 @@ function CodeGenerator(props) {
         //light: "#FFBF60FF",
       },
     };
+    let result;
     try {
       const response = await QRCode.toDataURL(text, opts);
       setImageUrl(response);
-      handleModal(true);
+      handleModal();
+      result = response;
     } catch (error) {
       console.log(error);
+      result = null;
     }
+    return result;
   };
 
   return (
@@ -84,8 +93,6 @@ function CodeGenerator(props) {
                   <FormVendor
                     submit="Générer"
                     generateQrCode={generateQrCode}
-                    handleModal={handleModal}
-                    setImageUrl={setImageUrl}
                   />
 
                   <Modal
@@ -96,12 +103,12 @@ function CodeGenerator(props) {
                     toggle={handleModal}
                     contentClassName="border-0"
                   >
-                    <div className="p-1">
+                    <div className="p-2">
                       {imageUrl ? (
-                        <a href={imageUrl} download={`QrCode${Date.now()}`}>
-                          <img src={imageUrl} alt="img" width="100%" />
-                        </a>
-                      ) : null}
+                        /*<a href={imageUrl} download={`QrCode${Date.now()}`}>*/
+                        <img src={imageUrl} alt="img" width="100%" />
+                      ) : /* </a>*/
+                      null}
                     </div>
                   </Modal>
                 </div>
@@ -217,7 +224,7 @@ function XlFormat(props) {
 
   return (
     <div className="d-none d-xl-block">
-      <CodeGenerator />
+      <CodeGenerator {...props} />
       <Row className="py-4">
         <Col lg="12">
           <Card className="shadow-xxl px-3">
@@ -286,4 +293,4 @@ const mapStateToProps = (state) => ({
   user: state.auth.user,
 });
 
-export default connect(mapStateToProps, {})(TabsVendor);
+export default connect(mapStateToProps, { getNotifications })(TabsVendor);

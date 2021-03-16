@@ -8,6 +8,9 @@ function DashboardAmount(props) {
   return (
     <>
       <div className="d-flex justify-content-center ">
+        {/*<Col xl="4">
+          <Temp {...props} />
+          </Col>*/}
         <XlFormat {...props} />
         <SmallFormat {...props} />
       </div>
@@ -179,6 +182,20 @@ function XlFormat(props) {
   );
 }
 
+function Temp(props) {
+  return (
+    <Card className="card-box border-0 shadow-success-sm p-4 mb-2">
+      <div className="display-3 text-center line-height-sm text-second text-center d-flex align-items-center pt-3 justify-content-center">
+        <FontAwesomeIcon
+          icon={["far", "dot-circle"]}
+          className="font-size-sm text-warning mr-2"
+        />
+        <div className="font-size-xl">1.500.296</div>
+      </div>
+      <div className="text-black-50 text-center pt-3">Votre solde en MRU</div>
+    </Card>
+  );
+}
 const mapStateToProps = (state) => ({
   user: state.auth.user,
 });

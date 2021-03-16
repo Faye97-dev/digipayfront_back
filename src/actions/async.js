@@ -2,6 +2,21 @@ import axios from "axios";
 import { HOST } from "./types";
 import { NOT_WITHDRAWED } from "../utils/choices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import FormData from "form-data";
+
+// helper function: generate a new file from base64 String
+const dataURLtoFile = (dataurl, filename) => {
+  const arr = dataurl.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n) {
+    u8arr[n - 1] = bstr.charCodeAt(n - 1);
+    n -= 1; // to make eslint happy
+  }
+  return new File([u8arr], filename, { type: mime });
+};
 
 export async function getNotWhitrated(tel, agence) {
   let data;
@@ -240,6 +255,50 @@ export const randomCodeRetrait = async (form, showAlert) => {
   return data;
 };
 
+export const updateNotification = async (id, body, fileData, showAlert) => {
+  let formData = new FormData();
+  formData.append(
+    "qrcode",
+    dataURLtoFile(fileData.content, fileData.name),
+    fileData.name
+  );
+  formData.append("message", body.message);
+  formData.append("status", body.status);
+  formData.append("date", body.date);
+  formData.append("user", body.user);
+  formData.append("transaction", body.transaction);
+
+  const config = {
+    headers: {
+      "Accept-Language": "en-US,en;q=0.8",
+      "Content-Type": `multipart/form-data`,
+      //"Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+    },
+  };
+
+  let data;
+  await axios
+    .put(HOST + `api/notification/update/${id}/`, formData, config)
+    .then((res) => {
+      data = res.data;
+      showAlert(
+        "info",
+        "Veuillez consulter vos notifications pour le code de payement ou scanner le QR-Code !",
+        <FontAwesomeIcon icon={["far", "question-circle"]} />
+      );
+    })
+    .catch((err) => {
+      data = null;
+      showAlert(
+        "danger",
+        "Généreration du QrCode non-complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      console.log(err.response.data);
+    });
+  return data;
+};
+
 export const randomCodePayement = async (form, showAlert) => {
   const config = {
     headers: {
@@ -252,11 +311,6 @@ export const randomCodePayement = async (form, showAlert) => {
     .post(HOST + `api/func/vendor/gen_codePayement/`, form, config)
     .then((res) => {
       data = res.data;
-      showAlert(
-        "info",
-        "Veuillez consulter vos notifications pour le code de payement ou scanner le QR-Code !",
-        <FontAwesomeIcon icon={["far", "question-circle"]} />
-      );
     })
     .catch((err) => {
       data = null;

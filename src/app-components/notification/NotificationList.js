@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Button, Modal } from "reactstrap";
 import RcPagination from "rc-pagination";
 import localeInfo from "rc-pagination/lib/locale/fr_FR";
 import { PaginateData } from "../../utils/dataTable";
@@ -50,11 +50,24 @@ class NotificationList extends Component {
       totalData: 0,
       page: 1,
       current: [],
+      modalQrCode: false,
+      currentQrCode: null,
     };
 
     this.handleChangePage = this.handleChangePage.bind(this);
     this.Paginate = this.Paginate.bind(this);
+    this.handleModal = this.handleModal.bind(this);
   }
+
+  handleModal = (qrcode) => {
+    this.setState({
+      ...this.state,
+      modalQrCode: !this.state.modalQrCode,
+      currentQrCode: qrcode,
+    });
+    //console.log(qrcode);
+  };
+
   componentDidMount() {
     this.props.getNotifications(showAlert);
     //this.Paginate([...fetchData], this.state.totalRowsPerPage);
@@ -124,7 +137,7 @@ class NotificationList extends Component {
                 <div className={`card-indicator bg-primary`} />
                 <CardBody className="px-4 py-3">
                   <div className="d-none d-sm-block">
-                    <div className=" pb-3 d-flex justify-content-between">
+                    <div className="pb-3 d-flex justify-content-between">
                       <a
                         href="#/"
                         className="font-size-xl text-black"
@@ -132,7 +145,7 @@ class NotificationList extends Component {
                       >
                         {item.status}
                       </a>
-                      <div className="ml-auto font-size-sm text-primary px-2">
+                      <div className="ml-auto font-size-sm text-primary">
                         <FontAwesomeIcon
                           icon={["far", "clock"]}
                           className="mr-1"
@@ -142,13 +155,30 @@ class NotificationList extends Component {
                     </div>
                   </div>
                   <div className="d-none d-sm-block">
-                    <div className="d-flex align-items-center justify-content-start text-justify font-size-lg">
+                    <div className="d-flex justify-content-between">
                       {/*<Badge color="first" className="px-3 mx-2">
                       On hold
                       </Badge>*/}
-                      {item.message}
+                      <div className="text-justify font-size-lg">
+                        {item.message}
+                      </div>
+
+                      {item.qrcode && (
+                        <div className="pl-3 ml-auto">
+                          <Button
+                            color="primary"
+                            className="py-1 px-3"
+                            onClick={() => this.handleModal(item.qrcode)}
+                          >
+                            <div className="font-size-sm text-white">
+                              <FontAwesomeIcon icon={["fas", "qrcode"]} />
+                            </div>
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   </div>
+
                   {/* mobile format */}
                   <div className="d-sm-none d-block ">
                     <a
@@ -158,7 +188,7 @@ class NotificationList extends Component {
                     >
                       {item.status}
                     </a>
-                    <div className="font-size-sm text-primary py-2">
+                    <div className="font-size-sm text-primary">
                       <FontAwesomeIcon
                         icon={["far", "clock"]}
                         className="mr-1"
@@ -167,9 +197,20 @@ class NotificationList extends Component {
                     </div>
                   </div>
                   <div className="d-sm-none d-block ">
-                    <div className="d-flex align-items-center justify-content-start text-justify">
-                      {item.message}
-                    </div>
+                    <div className="text-justify">{item.message}</div>
+                    {item.qrcode && (
+                      <div>
+                        <Button
+                          color="primary"
+                          className="py-1 px-3"
+                          onClick={() => this.handleModal(item.qrcode)}
+                        >
+                          <div className="font-size-sm text-white">
+                            <FontAwesomeIcon icon={["fas", "qrcode"]} />
+                          </div>
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </CardBody>
               </Card>
@@ -184,6 +225,18 @@ class NotificationList extends Component {
           <div className="px-3 py-4">
             <div className="rounded bg-white ">
               {notifications}
+              <Modal
+                zIndex={2000}
+                centered
+                size="sm"
+                isOpen={this.state.modalQrCode}
+                toggle={() => this.handleModal(null)}
+                contentClassName="border-0"
+              >
+                <div className="p-2">
+                  <img src={this.state.currentQrCode} alt="img" width="100%" />
+                </div>
+              </Modal>
               {!this.props.notifications.loading &&
                 this.state.current.length !== 0 && (
                   <div className="d-flex align-items-center justify-content-center mt-4 mb-4">

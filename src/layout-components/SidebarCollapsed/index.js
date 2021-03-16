@@ -11,7 +11,7 @@ import { setSidebarToggleMobile } from "../../reducers/ThemeOptions";
 
 import { NavLink } from "react-router-dom";
 
-import projectLogo from "../../assets/images/digi.ico";
+import projectLogo from "../../assets/images/digipay.png";
 import {
   Settings,
   CloudDrizzle,

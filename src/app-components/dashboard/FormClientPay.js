@@ -37,7 +37,7 @@ const formikEnhancer = withFormik({
     checkCodePayement(payload, showAlert).then((res) => {
       //console.log(res);
       setSubmitting(false);
-      //
+      // /
       const keys = Object.keys({ ...res });
       if (keys.includes("msg")) {
         showAlert(
@@ -68,8 +68,8 @@ const ModalScanQrCode = (props) => {
   const handleScanWebCam = (result) => {
     if (result) {
       setScanResultWebCam(result);
-      processBeforePayement(result);
       handleModal();
+      processBeforePayement(result);
     }
   };
 
@@ -105,6 +105,7 @@ const ModalScanQrCode = (props) => {
   const handleModal = () => {
     setModalQrCode(!modalQrCode);
     setScanResultWebCam(null);
+    console.log("handle modal called...");
   };
 
   const processBeforePayement = (result) => {
@@ -128,29 +129,46 @@ const ModalScanQrCode = (props) => {
 
   return (
     <>
-      {props.isSubmitting || props.transactionsLoading ? (
-        <SyncLoader color={"var(--info)"} loading={true} />
-      ) : (
-        <>
-          <Button
+      <div className="d-flex align-items-center pt-4">
+        <div className="mr-auto">
+          {props.isSubmitting || props.transactionsLoading ? (
+            <SyncLoader color={"var(--primary)"} loading={true} />
+          ) : (
+            <Button
+              color="primary"
+              type="submit"
+              disabled={props.isSubmitting || props.transactionsLoading}
+            >
+              Payer
+            </Button>
+          )}
+        </div>
+        <div className="ml-auto">
+          {props.isSubmitting || props.transactionsLoading ? (
+            <SyncLoader color={"var(--info)"} loading={true} />
+          ) : (
+            <div>
+              {/*<Button
             color="info"
             className="ml-0"
             onClick={onScanFile}
             disabled={props.isSubmitting || props.transactionsLoading}
           >
             Import QrCode
-          </Button>
-          <Button
-            color="warning"
-            className="ml-2"
-            onClick={handleModal}
-            disabled={props.isSubmitting || props.transactionsLoading}
-          >
-            Scan QrCode
-          </Button>
-        </>
-      )}
-      {/**/}
+          </Button>*/}
+              <Button
+                color="info"
+                className="ml-0"
+                onClick={handleModal}
+                disabled={props.isSubmitting || props.transactionsLoading}
+              >
+                Scan QrCode
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+      {/* import qr code*/}
       <div className="d-none ">
         <div className="p-1 d-flex justify-content-center">
           <QrReader
@@ -164,6 +182,7 @@ const ModalScanQrCode = (props) => {
         </div>
         <h6 className="text-center">Code: {scanResultFile}</h6>
       </div>
+      {/* scan qr code*/}
       <Modal
         zIndex={2000}
         centered
@@ -190,6 +209,7 @@ const ModalScanQrCode = (props) => {
     </>
   );
 };
+
 const MyForm = (props) => {
   const {
     touched,
@@ -219,7 +239,7 @@ const MyForm = (props) => {
               </Col>
             </Row>
 
-            <Row>
+            {/*<Row>
               <Col xl="12" style={{ margin: "12px 0" }}>
                 {isSubmitting || props.transactions.loading ? (
                   <SyncLoader color={"var(--primary)"} loading={true} />
@@ -233,7 +253,7 @@ const MyForm = (props) => {
                   </Button>
                 )}
               </Col>
-            </Row>
+            </Row>*/}
             <ModalScanQrCode
               isSubmitting={isSubmitting}
               //setFieldValue={setFieldValue}
