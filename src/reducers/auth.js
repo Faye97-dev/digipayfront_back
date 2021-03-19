@@ -14,10 +14,10 @@ import {
 } from "../actions/types.js";
 
 // add refresh token method , and check forbidden 301 error , secure api ,profil info , profil page , 404 page , routes changement warning
-// add new client modal  ,datatable niveau 3 , connect filter data with db ,
+// datatable niveau 3 , connect filter data with db ,
 // diconnect agence when logout , mouse cursor on ordering datatable , logout message de confirmation , check du solde avant retrait
-// refont code separe then between files , agence transfert change methods , agence retrait add confirmation code , check solde ....
-// FormClientsend : reset form
+// refont code client envoie  , agence retrait add confirmation code ....
+// FormClientsend and other Form : reset form
 // asyn file handle forbidden issue , agence transfert check destinataire !== expediteur , sync notifications with actions
 const initialState = {
   access: localStorage.getItem("access"),
