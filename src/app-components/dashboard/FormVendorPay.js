@@ -28,27 +28,28 @@ const formikEnhancer = withFormik({
   mapPropsToValues: (props) => ({
     code: "",
   }),
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting, resetForm }) => {
     const payload = {
       ...values,
     };
 
     payload["vendorId"] = props.user.id;
-    checkCodePayement_Vendor(payload, showAlert).then((res) => {
-      //console.log(res);
-      setSubmitting(false);
-      //
-      const keys = Object.keys({ ...res });
-      if (keys.includes("msg")) {
-        showAlert(
-          "warning",
-          res.msg,
-          <FontAwesomeIcon icon={["far", "question-circle"]} />
-        );
-      } else {
-        props.handleItem(res);
-        props.showDivInfo();
+    checkCodePayement_Vendor(payload, showAlert, props.access).then((res) => {
+      if (res) {
+        const keys = Object.keys({ ...res });
+        if (keys.includes("msg")) {
+          showAlert(
+            "warning",
+            res.msg,
+            <FontAwesomeIcon icon={["far", "question-circle"]} />
+          );
+        } else {
+          props.handleItem(res);
+          props.showDivInfo();
+        }
       }
+      setSubmitting(false);
+      resetForm();
     });
   },
   displayName: "MyForm",
@@ -110,24 +111,26 @@ const ModalScanQrCode = (props) => {
 
   const processBeforePayement = (result) => {
     props.setSubmitting(true);
-
     checkCodePayement_Vendor(
       { code: result, vendorId: props.userId },
-      showAlert
+      showAlert,
+      props.access
     ).then((res) => {
-      props.setSubmitting(false);
-      const keys = Object.keys({ ...res });
-      if (keys.includes("msg")) {
-        showAlert(
-          "warning",
-          res.msg,
-          <FontAwesomeIcon icon={["far", "question-circle"]} />
-        );
-      } else {
-        //handleModal();
-        props.handleItem(res);
-        props.showDivInfo();
+      if (res) {
+        const keys = Object.keys({ ...res });
+        if (keys.includes("msg")) {
+          showAlert(
+            "warning",
+            res.msg,
+            <FontAwesomeIcon icon={["far", "question-circle"]} />
+          );
+        } else {
+          //handleModal();
+          props.handleItem(res);
+          props.showDivInfo();
+        }
       }
+      props.setSubmitting(false);
     });
   };
 
@@ -248,6 +251,7 @@ const MyForm = (props) => {
             showDivInfo={props.showDivInfo}
             transactionsLoading={props.transactions.loading}
             setSubmitting={setSubmitting}
+            access={props.access}
           />
         </>
       )}
@@ -367,6 +371,7 @@ const FormVendorPay = (props) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  access: state.auth.access,
   transactions: state.transaction.transactions,
 });
 

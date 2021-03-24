@@ -39,7 +39,6 @@ export const login = (data, resetForm, setSubmitting, showAlert) => (
   const body = JSON.stringify(data);
   axios
     .post(HOST + "api/login/", body, config)
-    //.get(HOST + `api/user/responsable/get/3/`, config)
     .then((res) => {
       //setTimeout(() => {
       dispatch({
@@ -84,7 +83,7 @@ export const loadUser = () => (dispatch, getState) => {
     config.headers["Authorization"] = `JWT ${access}`;
     const tokenParts = JSON.parse(atob(access.split(".")[1]));
     //console.log(tokenParts);
-    url = `api/user/current_user/get/${tokenParts.userId}/`;
+    url = `api/user/auth-user/get/${tokenParts.userId}/`;
     //console.log(tokenParts); //const tokenParts = JSON.parse(atob(access.split(".")[1]));
     axios
       .get(HOST + url, config)
@@ -114,31 +113,6 @@ export const loadUser = () => (dispatch, getState) => {
     });
   }
 };
-
-/*export const login = (user_name, password) => (dispatch) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
-  const body = JSON.stringify({ user_name, password });
-  axios
-    .post(HOST + "api/token/", body, config)
-    .then((res) => {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: res.data,
-      });
-      //console.log(res.data);
-    })
-    .catch((err) => {
-      dispatch({
-        type: LOGIN_FAIL,
-      });
-      console.log(err.response.data);
-    });
-};*/
 
 export const logout = () => (dispatch, getState) => {
   dispatch({ type: AUTH_LOADING });

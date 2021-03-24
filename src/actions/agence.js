@@ -7,8 +7,11 @@ import {
   AGENCE_STATUS_LOADING,
   AGENCE_STATUS_ERROR,
   ERROR_AGENCE,
+  CLEAN_SESSION,
+  AUTH_ERROR,
 } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { expiredToken } from "../utils/alerts";
 export const getAgences = (showAlert) => (dispatch, getState) => {
   dispatch({
     type: DATA_LOADING,
@@ -20,10 +23,10 @@ export const getAgences = (showAlert) => (dispatch, getState) => {
       "Content-Type": "application/json",
     },
   };
-  //const access = getState().auth.access;
-  /*if (access) {
-      config.headers["Authorization"] = `JWT ${access}`;
-    }*/
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   axios
     .get(HOST + `api/agence/list/`, config)
     .then((res) => {
@@ -44,8 +47,9 @@ export const getAgences = (showAlert) => (dispatch, getState) => {
         "Erreur de chargement des agences !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
-      /* refresh token method when 401 status*/
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -61,6 +65,10 @@ export const updateStatusAgence = (status, showAlert) => (
       "Content-Type": "application/json",
     },
   };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   agence.online = status;
   axios
     .put(HOST + `api/agence/update/${agence.id}/`, agence, config)
@@ -82,6 +90,8 @@ export const updateStatusAgence = (status, showAlert) => (
         "Erreur de changement du status de l'agence !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };

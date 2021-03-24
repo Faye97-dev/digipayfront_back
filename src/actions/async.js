@@ -3,6 +3,7 @@ import { HOST } from "./types";
 import { NOT_WITHDRAWED } from "../utils/choices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FormData from "form-data";
+import { expiredTokenWarning } from "../utils/alerts";
 
 // helper function: generate a new file from base64 String
 const dataURLtoFile = (dataurl, filename) => {
@@ -18,25 +19,21 @@ const dataURLtoFile = (dataurl, filename) => {
   return new File([u8arr], filename, { type: mime });
 };
 
-export async function getNotWhitrated(tel, agence) {
+export async function getNotWhitrated(tel, agence, showAlert, access = null) {
   let data;
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  /*.get(HOST + `api/transfert/list/`, {
-      params: {
-        tel: tel,
-        status: NOT_WITHDRAWED,
-        agence_destination: agence,
-      },
-      config,
-    })*/
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   if (tel !== "") {
     const body = { agence_destination: agence, tel };
+    console.log(body);
     await axios
-      .post(HOST + `api/func/transaction/retrait_list/`, body, config)
+      .post(HOST + `api/func/transaction/retrait-list/`, body, config)
       .then((res) => {
         //setTimeout(() => {
         //console.log(" Not Whithrated ... ", res.data);
@@ -46,8 +43,15 @@ export async function getNotWhitrated(tel, agence) {
         //}, 15000);
       })
       .catch((err) => {
-        //console.log(err);
-        data = [];
+        data = null;
+        showAlert(
+          "danger",
+          "Récupération des retraits non-terminées !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+        if (err.response && err.response.status === 401) {
+          expiredTokenWarning();
+        }
       });
     return data;
   } else {
@@ -55,39 +59,51 @@ export async function getNotWhitrated(tel, agence) {
   }
 }
 
-export const checkExistTel_Client = async (form, showAlert) => {
+export const checkExistTel_Client = async (form, showAlert, access = null) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   let data;
   await axios
-    .post(HOST + `api/func/client/check_existant_tel/`, form, config)
+    .post(HOST + `api/func/client/valid-client-tel/`, form, config)
     .then((res) => {
       data = res.data;
       //console.log(data);
     })
     .catch((err) => {
-      data = {};
+      data = null;
       showAlert(
         "danger",
-        "Erreur Verifier votre connexion!",
+        "Validation du numéro de téléphone non-complète !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };
 
-export async function checkSecretKey(transaction, key, showAlert) {
+export async function checkSecretKey(
+  transaction,
+  key,
+  showAlert,
+  access = null
+) {
   let data;
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   const body = {
     id: transaction.id,
@@ -95,7 +111,7 @@ export async function checkSecretKey(transaction, key, showAlert) {
     secret_key: key,
   };
   await axios
-    .post(HOST + `api/func/transaction/secret_key_check/`, body, config)
+    .post(HOST + `api/func/transaction/valid-secret-key/`, body, config)
     .then((res) => {
       data = res.data;
       //console.log(res.data);
@@ -108,19 +124,24 @@ export async function checkSecretKey(transaction, key, showAlert) {
         "Erreur de confirmation du code de la transaction!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
 
   return data;
 }
 
-export const updateSolde = async (id) => {
+export const updateSolde = async (id, access = null) => {
   let data;
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   await axios
     .get(HOST + `api/agence/get/${id}/`, config)
     .then((res) => {
@@ -130,22 +151,30 @@ export const updateSolde = async (id) => {
     .catch((err) => {
       //console.log(err);
       data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
 
   return data;
 };
 
-export const updateSolde_clientDigipay = async (id, access) => {
-  /* same update function for vendor and client */
+export const updateSolde_clientDigipay = async (id, access = null) => {
+  /* same update solde function for vendor and client */
   let data;
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-  config.headers["Authorization"] = `JWT ${access}`;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  } else {
+    expiredTokenWarning();
+    return null;
+  }
   const tokenParts = JSON.parse(atob(access.split(".")[1]));
-  const url = `api/user/current_user/get/${tokenParts.userId}/`;
+  const url = `api/user/auth-user/get/${tokenParts.userId}/`;
   await axios
     .get(HOST + url, config)
     .then((res) => {
@@ -155,21 +184,24 @@ export const updateSolde_clientDigipay = async (id, access) => {
     .catch((err) => {
       //console.log(err);
       data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
 
   return data;
 };
 
-export const checkClientDigipay = async (form, showAlert) => {
+export const checkClientDigipay = async (form, showAlert, access = null) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
 
-  /*if (access) {
+  if (access) {
     config.headers["Authorization"] = `JWT ${access}`;
-  }*/
+  }
   let data;
   await axios
     .post(HOST + `api/func/client_digiPay/check/`, form, config)
@@ -177,52 +209,62 @@ export const checkClientDigipay = async (form, showAlert) => {
       data = res.data;
     })
     .catch((err) => {
-      data = {};
+      data = null;
       showAlert(
         "danger",
-        "Envoie Non-Complete!",
+        "Verification du numéro de téléphone non-complète !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };
 
-export const check_byRole_ClientVendor = async (form, showAlert) => {
+export const check_byRole_ClientVendor = async (
+  form,
+  showAlert,
+  access = null
+) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
 
-  /*if (access) {
+  if (access) {
     config.headers["Authorization"] = `JWT ${access}`;
-  }*/
+  }
   let data;
   await axios
-    .post(HOST + `api/func/client_digiPay_vendor/check/`, form, config)
+    .post(HOST + `api/func/clientdigiPay-and-vendor/check/`, form, config)
     .then((res) => {
       data = res.data;
     })
     .catch((err) => {
-      data = {};
+      data = null;
       showAlert(
         "danger",
-        "Recharge Non-Complete!",
+        "Verification du compte associé a ce numéro de téléphone non-complète!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };
 
-export const randomCodeRetrait = async (form, showAlert) => {
+export const randomCodeRetrait = async (form, showAlert, access = null) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
-
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   let data;
   await axios
     .post(HOST + `api/func/client_digiPay/retrait/`, form, config)
@@ -244,18 +286,26 @@ export const randomCodeRetrait = async (form, showAlert) => {
       }
     })
     .catch((err) => {
-      data = {};
+      data = null;
       showAlert(
         "danger",
-        "Retrait Non-Complete!",
+        "Code retrait Non-Complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };
 
-export const updateNotification = async (id, body, fileData, showAlert) => {
+export const updateNotification = async (
+  id,
+  body,
+  fileData,
+  showAlert,
+  access = null
+) => {
   let formData = new FormData();
   formData.append(
     "qrcode",
@@ -275,7 +325,9 @@ export const updateNotification = async (id, body, fileData, showAlert) => {
       //"Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
     },
   };
-
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   let data;
   await axios
     .put(HOST + `api/notification/update/${id}/`, formData, config)
@@ -291,24 +343,30 @@ export const updateNotification = async (id, body, fileData, showAlert) => {
       data = null;
       showAlert(
         "danger",
-        "Généreration du QrCode non-complete!",
+        "Historisation du QrCode dans les notifications non-complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
+      //console.log(err.response.data);
     });
   return data;
 };
 
-export const randomCodePayement = async (form, showAlert) => {
+export const randomCodePayement = async (form, showAlert, access = null) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   let data;
   await axios
-    .post(HOST + `api/func/vendor/gen_codePayement/`, form, config)
+    .post(HOST + `api/func/vendor/gen-code-payement/`, form, config)
     .then((res) => {
       data = res.data;
     })
@@ -319,85 +377,107 @@ export const randomCodePayement = async (form, showAlert) => {
         "Généreration d'un code de paiement non-complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };
 
-export const checkCodePayement = async (form, showAlert) => {
+export const checkCodePayement = async (form, showAlert, access = null) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   let data;
   await axios
-    .post(HOST + `api/func/client_digiPay/check_codePayement/`, form, config)
+    .post(HOST + `api/func/client_digiPay/valid-code-payement/`, form, config)
     .then((res) => {
       data = res.data;
       //console.log(data);
     })
     .catch((err) => {
-      data = {};
+      //data = { msg: "Validation du code non-complete" };
+      data = null;
       showAlert(
         "danger",
         "Validation du code non-complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };
 
-export const checkCodePayement_Vendor = async (form, showAlert) => {
+export const checkCodePayement_Vendor = async (
+  form,
+  showAlert,
+  access = null
+) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   let data;
   await axios
-    .post(HOST + `api/func/vendor/check_codePayement/`, form, config)
+    .post(HOST + `api/func/vendor/valid-code-payement/`, form, config)
     .then((res) => {
       data = res.data;
       //console.log(data);
     })
     .catch((err) => {
-      data = {};
+      data = null;
       showAlert(
         "danger",
         "Validation du code non-complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };
 
-export const checkCode_transaction = async (form, showAlert) => {
+export const checkCode_transaction = async (form, showAlert, access = null) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   let data;
   await axios
-    .post(HOST + `api/func/vendor/check_codeTransaction/`, form, config)
+    .post(HOST + `api/func/vendor/valid-code-transaction/`, form, config)
     .then((res) => {
       data = res.data;
       //console.log(data);
     })
     .catch((err) => {
-      data = {};
+      data = null;
       showAlert(
         "danger",
         "Validation du code de transaction non-complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
     });
   return data;
 };

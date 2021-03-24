@@ -20,30 +20,32 @@ const formikEnhancer = withFormik({
   mapPropsToValues: (props) => ({
     numero_transaction: "",
   }),
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting, resetForm }) => {
     const payload = {
       ...values,
     };
     payload["vendor"] = props.user.id;
-    checkCode_transaction(payload, showAlert).then((res) => {
-      setSubmitting(false);
-      const keys = Object.keys({ ...res });
-      if (keys.includes("msg")) {
-        showAlert(
-          "warning",
-          res.msg,
-          <FontAwesomeIcon icon={["far", "question-circle"]} />
-        );
-      } else {
-        //console.log(res);
-        if (res.transaction) {
-          const temp = res.transaction;
-          temp.transactionId = res.id;
-          props.handleItem(temp);
-          props.showDivInfo();
+    checkCode_transaction(payload, showAlert, props.access).then((res) => {
+      if (res) {
+        const keys = Object.keys({ ...res });
+        if (keys.includes("msg")) {
+          showAlert(
+            "warning",
+            res.msg,
+            <FontAwesomeIcon icon={["far", "question-circle"]} />
+          );
+        } else {
+          //console.log(res);
+          if (res.transaction) {
+            const temp = res.transaction;
+            temp.transactionId = res.id;
+            props.handleItem(temp);
+            props.showDivInfo();
+          }
         }
-        //
       }
+      setSubmitting(false);
+      resetForm();
     });
   },
   displayName: "MyForm",
@@ -233,6 +235,7 @@ const FormVendor = (props) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  access: state.auth.access,
   transactions: state.transaction.transactions,
 });
 

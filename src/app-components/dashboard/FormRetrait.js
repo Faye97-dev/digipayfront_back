@@ -34,6 +34,7 @@ function FormRetrait(props) {
           agence={props.agence}
           addRetrait={props.addRetrait}
           loading={props.transactions.loading}
+          access={props.access}
         />
       </div>
     </>
@@ -42,6 +43,7 @@ function FormRetrait(props) {
 
 const mapStateToProps = (state) => ({
   agence: state.auth.user.agence,
+  access: state.auth.access,
   transactions: state.transaction.transactions,
 });
 
@@ -54,17 +56,23 @@ function SearchBar(props) {
   const handleSumbit = (e) => {
     if (e.keyCode === 13) {
       //console.log(e.target.value);
-      getNotWhitrated(e.target.value, props.agence.id).then((res) => {
+      getNotWhitrated(
+        e.target.value,
+        props.agence.id,
+        showAlert,
+        props.access
+      ).then((res) => {
         // add a spinner here
-        setListRetraits([...res]);
-        if (res.length === 0)
-          showAlert(
-            "warning",
-            "Pas de retraits disponibles pour ce numéro de téléphone !",
-            <FontAwesomeIcon icon={["far", "question-circle"]} />
-          );
+        if (res) {
+          setListRetraits([...res]);
+          if (res.length === 0)
+            showAlert(
+              "warning",
+              "Pas de retraits disponibles pour ce numéro de téléphone !",
+              <FontAwesomeIcon icon={["far", "question-circle"]} />
+            );
+        }
       });
-      //getNotWhitrated(this.state.value).
     }
   };
   const removeRetrait = (id) => {

@@ -24,7 +24,7 @@ const formikEnhancer = withFormik({
 
     payload["id"] = props.user.id;
 
-    randomCodePayement(payload, showAlert).then((res) => {
+    randomCodePayement(payload, showAlert, props.access).then((res) => {
       if (res) {
         const { id, ...notifBody } = res.notification;
         props.generateQrCode(res.code_confirmation).then((res) => {
@@ -32,7 +32,13 @@ const formikEnhancer = withFormik({
             //notifBody.qrcode = res;
             //console.log(res);
             const fileData = { content: res, name: `QrCode${Date.now()}.jpg` };
-            updateNotification(id, notifBody, fileData, showAlert);
+            updateNotification(
+              id,
+              notifBody,
+              fileData,
+              showAlert,
+              props.access
+            );
           }
         });
       }
@@ -86,6 +92,7 @@ const FormVendor = (props) => <MyEnhancedForm {...props} />;
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  access: state.auth.access,
   transactions: state.transaction.transactions,
 });
 

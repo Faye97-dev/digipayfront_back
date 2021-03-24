@@ -17,8 +17,9 @@ import {
   ADD_PAYBACK,
 } from "./types";
 import { updateSolde, updateSolde_clientDigipay } from "./async";
-
+import { expiredToken } from "../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export const getTransactions = (all, showAlert) => (dispatch, getState) => {
   dispatch({
     type: DATA_LOADING,
@@ -63,15 +64,8 @@ export const getTransactions = (all, showAlert) => (dispatch, getState) => {
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
       if (err.response && err.response.status === 401) {
-        dispatch({
-          type: AUTH_ERROR,
-        });
-        dispatch({
-          type: CLEAN_SESSION,
-        });
+        expiredToken(dispatch);
       }
-      //console.log(getState(), err.response.status);
-      //console.log();
     });
 };
 
@@ -91,6 +85,11 @@ export const addRetrait = (transfert, removeRetrait, showAlert) => (
     },
   };
 
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
   axios
     .post(HOST + `api/func/retrait/add/`, transfert, config)
     .then((res) => {
@@ -109,7 +108,7 @@ export const addRetrait = (transfert, removeRetrait, showAlert) => (
           <FontAwesomeIcon icon={["fas", "check"]} />
         );
         //}, 5000);
-        updateSolde(agence.id).then((res) => {
+        updateSolde(agence.id, getState().auth.access).then((res) => {
           if (res) {
             dispatch({
               type: UPDATE_SOLDE,
@@ -137,7 +136,9 @@ export const addRetrait = (transfert, removeRetrait, showAlert) => (
         "Transaction Non-Complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -159,9 +160,10 @@ export const addTransfert = (
     },
   };
 
-  /*if (access) {
+  const access = getState().auth.access;
+  if (access) {
     config.headers["Authorization"] = `JWT ${access}`;
-  }*/
+  }
 
   axios
     .post(HOST + `api/func/transfert/add/`, transfert, config)
@@ -181,7 +183,7 @@ export const addTransfert = (
       );
       //}, 5000);
 
-      updateSolde(agence.id).then((res) => {
+      updateSolde(agence.id, getState().auth.access).then((res) => {
         if (res) {
           dispatch({
             type: UPDATE_SOLDE,
@@ -200,7 +202,9 @@ export const addTransfert = (
         "Transaction Non-Complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -221,6 +225,11 @@ export const addRecharge = (
       "Content-Type": "application/json",
     },
   };
+
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   axios
     .post(HOST + `api/func/recharge/add/`, transfert, config)
@@ -262,7 +271,9 @@ export const addRecharge = (
         "Transaction Non-Complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -285,9 +296,10 @@ export const addTransfert_clientDigipay = (
     },
   };
 
-  /*if (access) {
+  const access = getState().auth.access;
+  if (access) {
     config.headers["Authorization"] = `JWT ${access}`;
-  }*/
+  }
 
   axios
     .post(HOST + `api/func/client_digiPay/envoie/`, transfert, config)
@@ -358,7 +370,9 @@ export const addTransfert_clientDigipay = (
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
       //}, 10000);
-      //console.log(err.response);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -379,13 +393,19 @@ export const addRetraitBySms = (
       "Content-Type": "application/json",
     },
   };
+
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
   const body = {
     pre_transaction: obj.id,
     agence_destination: agence.id,
     nom_destinataire: obj.nom_destinataire,
   };
   axios
-    .post(HOST + `api/func/client/retrait_par_sms/`, body, config)
+    .post(HOST + `api/func/client/retrait-by-sms/`, body, config)
     .then((res) => {
       //setTimeout(() => {
       const keys = Object.keys({ ...res.data });
@@ -401,7 +421,7 @@ export const addRetraitBySms = (
           "Transaction Complete!",
           <FontAwesomeIcon icon={["fas", "check"]} />
         );
-        updateSolde(agence.id).then((res) => {
+        updateSolde(agence.id, getState().auth.access).then((res) => {
           if (res) {
             dispatch({
               type: UPDATE_SOLDE,
@@ -434,7 +454,9 @@ export const addRetraitBySms = (
         "Transaction Non-Complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -456,12 +478,16 @@ export const addRetraitByRandomCode = (
       "Content-Type": "application/json",
     },
   };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   const body = {
     pre_transaction: obj.id,
     agence: agence.id,
   };
   axios
-    .post(HOST + `api/func/client_digiPay_vendor/retrait/`, body, config)
+    .post(HOST + `api/func/clientdigiPay-and-vendor/retrait/`, body, config)
     .then((res) => {
       //setTimeout(() => {
       const keys = Object.keys({ ...res.data });
@@ -477,7 +503,7 @@ export const addRetraitByRandomCode = (
           "Transaction Complete!",
           <FontAwesomeIcon icon={["fas", "check"]} />
         );
-        updateSolde(agence.id).then((res) => {
+        updateSolde(agence.id, getState().auth.access).then((res) => {
           if (res) {
             dispatch({
               type: UPDATE_SOLDE,
@@ -510,7 +536,9 @@ export const addRetraitByRandomCode = (
         "Transaction Non-Complete!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -529,6 +557,10 @@ export const addPayement_clientDigipay = (transfert, showAlert) => (
       "Content-Type": "application/json",
     },
   };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   axios
     .post(HOST + `api/func/client_digiPay/payement/`, transfert, config)
@@ -582,7 +614,9 @@ export const addPayement_clientDigipay = (transfert, showAlert) => (
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
       //}, 10000);
-      //console.log(err.response);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -601,9 +635,13 @@ export const achatCredit_clientDigipay = (body, showAlert) => (
       "Content-Type": "application/json",
     },
   };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   axios
-    .post(HOST + `api/func/client_digiPay/achat_credit/`, body, config)
+    .post(HOST + `api/func/client_digiPay/achat-credit/`, body, config)
     .then((res) => {
       const keys = Object.keys({ ...res.data });
       if (!keys.includes("msg")) {
@@ -660,7 +698,9 @@ export const achatCredit_clientDigipay = (body, showAlert) => (
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
       //}, 10000);
-      //console.log(err.response);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -680,6 +720,10 @@ export const addPayement_Vendor = (transfert, showAlert) => (
       "Content-Type": "application/json",
     },
   };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   axios
     .post(HOST + `api/func/vendor/payement/`, transfert, config)
@@ -731,7 +775,9 @@ export const addPayement_Vendor = (transfert, showAlert) => (
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
       //}, 10000);
-      //console.log(err.response);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -747,6 +793,10 @@ export const addPayback = (transfert, showAlert) => (dispatch, getState) => {
       "Content-Type": "application/json",
     },
   };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
 
   axios
     .post(HOST + `api/func/vendor/payback/`, transfert, config)
@@ -798,6 +848,8 @@ export const addPayback = (transfert, showAlert) => (dispatch, getState) => {
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
       //}, 10000);
-      //console.log(err.response);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };

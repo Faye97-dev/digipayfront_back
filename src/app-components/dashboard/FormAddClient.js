@@ -35,7 +35,7 @@ const formikEnhancer = withFormik({
       ...values,
     };
 
-    checkExistTel_Client(payload, showAlert).then((res) => {
+    checkExistTel_Client(payload, showAlert, props.access).then((res) => {
       //console.log(res);
       if (res) {
         if (res.valid_tel === true) {
@@ -50,6 +50,7 @@ const formikEnhancer = withFormik({
         }
       }
       setSubmitting(false);
+      //resetForm();
     });
   },
   displayName: "MyForm",
@@ -154,6 +155,7 @@ const MyForm = (props) => {
 
 const mapStateToProps = (state) => ({
   clients: state.client.clients,
+  access: state.auth.access,
 });
 const MyEnhancedForm = connect(mapStateToProps, { addClient })(
   formikEnhancer(MyForm)

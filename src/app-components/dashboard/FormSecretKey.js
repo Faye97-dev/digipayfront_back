@@ -27,16 +27,11 @@ const formikEnhancer = withFormik({
     checkSecretKey(
       { id: props.transactionId, model_transaction: "PRE_TRANSACTION" },
       payload.secret_key,
-      showAlert
+      showAlert,
+      props.access
     ).then((res) => {
       if (res) {
         if (res.checked) {
-          //props.setConfirmedKey(true);
-          /*showAlert(
-            "success",
-            "Code de transaction confirmer avec succes !",
-            <FontAwesomeIcon icon={["fas", "check"]} />
-          );*/
           props.addRetraitBySms(
             {
               id: props.transactionId,
@@ -116,6 +111,7 @@ const FormSecretKey = (props) => <MyEnhancedForm {...props} />;
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  access: state.auth.access,
   transactions: state.transaction.transactions,
 });
 

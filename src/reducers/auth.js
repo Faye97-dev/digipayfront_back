@@ -19,6 +19,7 @@ import {
 // refont code client envoie  , agence retrait add confirmation code ....
 // FormClientsend and other Form : reset form
 // asyn file handle forbidden issue , agence transfert check destinataire !== expediteur , sync notifications with actions
+// sync status of transaction after payback vendor
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),

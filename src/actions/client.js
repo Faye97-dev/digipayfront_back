@@ -5,8 +5,11 @@ import {
   DATA_LOADING,
   ERROR_CLIENT,
   ADD_CLIENT,
+  CLEAN_SESSION,
+  AUTH_ERROR,
 } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { expiredToken } from "../utils/alerts";
 export const getClients = (showAlert) => (dispatch, getState) => {
   dispatch({
     type: DATA_LOADING,
@@ -18,7 +21,10 @@ export const getClients = (showAlert) => (dispatch, getState) => {
       "Content-Type": "application/json",
     },
   };
-
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   axios
     .get(HOST + `api/client/`, config)
     .then((res) => {
@@ -37,7 +43,9 @@ export const getClients = (showAlert) => (dispatch, getState) => {
         "Erreur de chargement des clients !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
 
@@ -57,7 +65,10 @@ export const addClient = (
       "Content-Type": "application/json",
     },
   };
-
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   axios
     .post(HOST + `api/client/`, body, config)
     .then((res) => {
@@ -89,6 +100,8 @@ export const addClient = (
         "Enregistrement Echec!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };

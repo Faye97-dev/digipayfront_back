@@ -46,29 +46,31 @@ const formikEnhancer = withFormik({
     //setTimeout(() => {
     //payload["sender"] = props.user.id;
     //console.log(payload);
-    check_byRole_ClientVendor(payload, showAlert).then((res) => {
-      setSubmitting(false);
-      const keys = Object.keys({ ...res });
-      if (keys.includes("msg")) {
-        showAlert(
-          "warning",
-          res.msg,
-          <FontAwesomeIcon icon={["far", "question-circle"]} />
-        );
-      } else {
-        props.handleItem(res);
-        props.showDivInfo();
-        /*if (res.soldeEnough === true) {
-          props.handleItem(res);
-          props.showDivInfo();
-        } else if (res.soldeEnough === false) {
+    check_byRole_ClientVendor(payload, showAlert, props.access).then((res) => {
+      if (res) {
+        const keys = Object.keys({ ...res });
+        if (keys.includes("msg")) {
           showAlert(
             "warning",
-            "Votre solde est insuffisant pour effectuer cette opération !",
+            res.msg,
             <FontAwesomeIcon icon={["far", "question-circle"]} />
           );
-        }*/
+        } else {
+          props.handleItem(res);
+          props.showDivInfo();
+          /*if (res.soldeEnough === true) {
+          props.handleItem(res);
+          props.showDivInfo();
+          } else if (res.soldeEnough === false) {
+            showAlert(
+              "warning",
+              "Votre solde est insuffisant pour effectuer cette opération !",
+              <FontAwesomeIcon icon={["far", "question-circle"]} />
+            );
+          }*/
+        }
       }
+      setSubmitting(false);
     });
     //}, 5000);
   },
@@ -263,6 +265,7 @@ const FormRecharge = (props) => {
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  access: state.auth.access,
   transactions: state.transaction.transactions,
 });
 

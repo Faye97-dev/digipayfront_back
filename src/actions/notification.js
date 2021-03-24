@@ -1,7 +1,14 @@
 import axios from "axios";
-import { HOST, DATA_LOADING, GET_NOTIFS, ERROR_NOTIF } from "./types";
+import {
+  HOST,
+  DATA_LOADING,
+  GET_NOTIFS,
+  ERROR_NOTIF,
+  CLEAN_SESSION,
+  AUTH_ERROR,
+} from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { expiredToken } from "../utils/alerts";
 export const getNotifications = (showAlert) => (dispatch, getState) => {
   dispatch({
     type: DATA_LOADING,
@@ -13,16 +20,18 @@ export const getNotifications = (showAlert) => (dispatch, getState) => {
       "Content-Type": "application/json",
     },
   };
+
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   const user = getState().auth.user;
-  /*if (access) {
-        config.headers["Authorization"] = `JWT ${access}`;
-      }*/
   axios
     .get(HOST + `api/notification/list/`, {
       params: {
         user: user.id,
       },
-      config,
+      headers: config.headers,
     })
     .then((res) => {
       //setTimeout(() => {
@@ -42,7 +51,8 @@ export const getNotifications = (showAlert) => (dispatch, getState) => {
         "Erreur de chargement des notifications !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err.response.data);
-      /* refresh token method when 401 status*/
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };

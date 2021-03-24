@@ -1,4 +1,6 @@
 import { toast } from "react-toastify";
+import { AUTH_ERROR, CLEAN_SESSION } from "../actions/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const showAlert = (type, text, icon) => {
   const msg = (title) => (
     <div className={`d-flex align-items-center align-content-start`}>
@@ -34,4 +36,32 @@ export const showAlert = (type, text, icon) => {
     });
   }
   //}
+};
+
+export const expiredToken = (dispatch) => {
+  setTimeout(() => {
+    showAlert(
+      "warning",
+      "le délai de votre token a expiré , vous allez être déconnecté dans quelque secondes ...",
+      <FontAwesomeIcon icon={["far", "question-circle"]} />
+    );
+    /*setTimeout(() => {
+    dispatch({
+      type: AUTH_ERROR,
+    });
+    dispatch({
+      type: CLEAN_SESSION,
+    });
+    }, 2500);*/
+  }, 2000);
+};
+
+export const expiredTokenWarning = () => {
+  setTimeout(() => {
+    showAlert(
+      "warning",
+      "le délai de votre token a expiré , veuillez vous reconnecté svp ... !",
+      <FontAwesomeIcon icon={["far", "question-circle"]} />
+    );
+  }, 2000);
 };

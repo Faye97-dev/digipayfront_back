@@ -25,7 +25,7 @@ const formikEnhancer = withFormik({
     payload["role"] = props.user.role;
     payload["id"] = props.user.id;
 
-    randomCodeRetrait(payload, showAlert).then((res) => {
+    randomCodeRetrait(payload, showAlert, props.access).then((res) => {
       setSubmitting(false);
       resetForm();
     });
@@ -80,7 +80,7 @@ const FormClientWithdraw = (props) => <MyEnhancedForm {...props} />;
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
-  transactions: state.transaction.transactions,
+  access: state.auth.access,
 });
 
 export default connect(mapStateToProps, {})(FormClientWithdraw);

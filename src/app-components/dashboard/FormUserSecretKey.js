@@ -9,12 +9,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ClipLoader } from "react-spinners";
 import { addRetraitByRandomCode } from "../../actions/transaction";
 import { connect } from "react-redux";
+
+// Form sercret key for a vendor and client digipay
 const formikEnhancer = withFormik({
-  /*validationSchema: Yup.object().shape({
-    secret_key: Yup.number()
-      .min(0, "Numero de transaction doit etre positif !")
-      .required("Numero de transaction est obligatoire !"),
-  }),*/
   mapPropsToValues: (props) => ({
     secret_key: "",
     //nom_destinataire: "",
@@ -23,11 +20,11 @@ const formikEnhancer = withFormik({
     const payload = {
       ...values,
     };
-    //if (props.confirmedKey === false) {
     checkSecretKey(
       { id: props.transactionId, model_transaction: "PRE_TRANSACTION" },
       payload.secret_key,
-      showAlert
+      showAlert,
+      props.access
     ).then((res) => {
       if (res) {
         if (res.checked) {
@@ -92,6 +89,7 @@ const FormUserSecretKey = (props) => <MyEnhancedForm {...props} />;
 
 const mapStateToProps = (state) => ({
   user: state.auth.user,
+  access: state.auth.access,
   transactions: state.transaction.transactions,
 });
 

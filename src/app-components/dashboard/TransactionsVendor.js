@@ -94,7 +94,7 @@ class TransactionsVendor extends Component {
   closeSearch = () => this.setState({ ...this.state, searchOpen: false });
 
   componentDidMount() {
-    this.props.getTransactions(showAlert);
+    this.props.getTransactions(true, showAlert);
     //this.Paginate([...fetchData], this.state.totalRowsPerPage);
   }
 

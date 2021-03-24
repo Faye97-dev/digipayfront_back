@@ -1,7 +1,14 @@
 import axios from "axios";
-import { HOST, GET_EMPLOYES, DATA_LOADING, ERROR_EMPLOYE } from "./types";
+import {
+  HOST,
+  GET_EMPLOYES,
+  DATA_LOADING,
+  ERROR_EMPLOYE,
+  AUTH_ERROR,
+  CLEAN_SESSION,
+} from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { expiredToken } from "../utils/alerts";
 export const getEmployes = (showAlert) => (dispatch, getState) => {
   dispatch({
     type: DATA_LOADING,
@@ -13,13 +20,16 @@ export const getEmployes = (showAlert) => (dispatch, getState) => {
       "Content-Type": "application/json",
     },
   };
-
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
   axios
     .get(HOST + `api/user/employe/list/`, {
       params: {
         agence: agence.id,
       },
-      config,
+      headers: config.headers,
     })
     .then((res) => {
       //setTimeout(() => {
@@ -40,6 +50,8 @@ export const getEmployes = (showAlert) => (dispatch, getState) => {
         "Erreur de chargement des employes !",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      //console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch);
+      }
     });
 };
