@@ -45,14 +45,14 @@ export const expiredToken = (dispatch) => {
       "le délai de votre token a expiré , vous allez être déconnecté dans quelque secondes ...",
       <FontAwesomeIcon icon={["far", "question-circle"]} />
     );
-    /*setTimeout(() => {
-    dispatch({
-      type: AUTH_ERROR,
-    });
-    dispatch({
-      type: CLEAN_SESSION,
-    });
-    }, 2500);*/
+    setTimeout(() => {
+      dispatch({
+        type: AUTH_ERROR,
+      });
+      dispatch({
+        type: CLEAN_SESSION,
+      });
+    }, 2500);
   }, 2000);
 };
 
