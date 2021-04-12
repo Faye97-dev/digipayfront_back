@@ -386,16 +386,24 @@ const optionsFilter = (role) => {
   let res = [];
   //console.log("role", role);
   if (
-    role === "SYSADMIN" ||
+    //role === "SYSADMIN" ||
     role === "RESPONSABLE_AGENCE" ||
-    role === "EMPLOYE_AGENCE" ||
-    role === "AGENT_COMPENSATION"
+    role === "EMPLOYE_AGENCE"
+    //role === "AGENT_COMPENSATION"
   ) {
     return (res = [
       { value: "SYSADMIN", label: "SYSADMIN" },
-      { value: "RESPONSABLE_AGENCE", label: "RESPONSABLE_AGENCE" },
+      { value: role, label: role },
+      //{ value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
+      //{ value: "AGENT_COMPENSATION", label: "AGENT_COMPENSATION" },
+    ]);
+  }
+
+  if (role === "SYSADMIN") {
+    return (res = [
       { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
-      { value: "AGENT_COMPENSATION", label: "AGENT_COMPENSATION" },
+      { value: "RESPONSABLE_AGENCE", label: "RESPONSABLE_AGENCE" },
+      //{ value: "AGENT_COMPENSATION", label: "AGENT_COMPENSATION" },
     ]);
   }
 

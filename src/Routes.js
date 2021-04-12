@@ -91,7 +91,7 @@ const Compensation = lazy(() =>
 /*const Statistique = lazy(() =>
   import("./app-components/statistiques/Statistique")
 );*/
-const Profil = lazy(() => import("./app-components/profil/ProfilResponsable"));
+const Profil = lazy(() => import("./app-components/profil/Profil"));
 const Notification = lazy(() =>
   import("./app-components/notification/Notification")
 );
@@ -179,7 +179,7 @@ const Routes = (props) => {
       link: "/Compensation",
       roles: [
         "SYSADMIN",
-        "EMPLOYE_AGENCE",
+        //"EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
       ],

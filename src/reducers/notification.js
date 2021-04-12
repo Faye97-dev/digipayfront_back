@@ -3,6 +3,7 @@ import {
   DATA_LOADING,
   ERROR_NOTIF,
   CLEAN_SESSION,
+  //SUCCESS_NOTIF,
 } from "../actions/types.js";
 
 const initialState = {
@@ -24,6 +25,7 @@ export default function (state = initialState, action) {
         return state;
       }
     case ERROR_NOTIF:
+      //case SUCCESS_NOTIF:
       return {
         ...state,
         notifications: {

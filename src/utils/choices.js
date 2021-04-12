@@ -19,6 +19,16 @@ export const WITHDRAWED = "WITHDRAWED";
 export const CANCELED = "CANCELED";
 export const COMFIRMED = "COMFIRMED";
 
+// notification status
+export const DEMANDE_PAIEMENT = "DEMANDE_PAIEMENT";
+export const DEMANDE_RETRAIT = "DEMANDE_RETRAIT";
+export const DEMANDE_COMPENSATION = "DEMANDE_COMPENSATION";
+export const COMPENSATION = "COMPENSATION";
+//export const RETRAIT = "RETRAIT";
+export const PAIEMENT = "PAIEMENT";
+export const ENVOI = "ENVOI";
+export const RECHARGE = "RECHARGE";
+
 export const mapColorStatus = {
   NOT_WITHDRAWED: "warning",
   WITHDRAWED: "success",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import clsx from "clsx";
 import { Row, Col, Card, TabContent, TabPane, Nav, NavItem } from "reactstrap";
@@ -6,12 +6,20 @@ import { NavLink as NavLinkStrap } from "reactstrap";
 import FormTransfert from "./FormTransfert";
 import FormRetrait from "./FormRetrait";
 import FormRecharge from "./FormRecharge";
-export default function Tabs(props) {
+import { connect } from "react-redux";
+import { getNotifications } from "../../actions/notification";
+import { showAlert } from "../../utils/alerts";
+
+function Tabs(props) {
   /*const [activeTab, setActiveTab] = useState("1");
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
   };*/
+
+  useEffect(() => {
+    props.getNotifications(showAlert);
+  }, []);
 
   return (
     <>
@@ -185,3 +193,9 @@ function XlFormat(props) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, { getNotifications })(Tabs);

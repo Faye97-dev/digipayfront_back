@@ -11,6 +11,12 @@ import {
   UPDATE_SOLDE,
   USER_LOADED,
   UPDATE_SOLDE_CLIENT_DIGIPAY,
+  UPDATE_PROFIL_FAIL,
+  UPDATE_VENDOR_SUCCESS,
+  UPDATE_CLIENT_DIGIPAY_SUCCESS,
+  UPDATE_EMPLOYE_SUCCESS,
+  UPDATE_RESPONSABLE_SUCCESS,
+  UPDATE_AGENT_SUCCESS,
 } from "../actions/types.js";
 
 // add refresh token method , and check forbidden 301 error , secure api ,profil info , profil page , 404 page , routes changement warning
@@ -20,6 +26,9 @@ import {
 // FormClientsend and other Form : reset form
 // asyn file handle forbidden issue , agence transfert check destinataire !== expediteur , sync notifications with actions
 // sync status of transaction after payback vendor
+// atomic transaction backend , remove clotures , restric serializer models , hash code payement , remove duplicates fetch ...
+// bugs qr code notif , retrait agence spinner , envoie cash client to vendor ? , move check_clientdigipay in service.py , sync  solde after recharge agence
+// statistiques actions  move it to redux ??
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
@@ -128,6 +137,23 @@ export default function (state = initialState, action) {
           solde: action.payload.solde,
         },
       };
+    case UPDATE_CLIENT_DIGIPAY_SUCCESS:
+    case UPDATE_VENDOR_SUCCESS:
+    case UPDATE_EMPLOYE_SUCCESS:
+    case UPDATE_RESPONSABLE_SUCCESS:
+    case UPDATE_AGENT_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          first_name: action.payload.first_name,
+          last_name: action.payload.last_name,
+          adresse: action.payload.adresse,
+          email: action.payload.email,
+        },
+      };
+    case UPDATE_PROFIL_FAIL:
+      return state;
     default:
       return state;
   }

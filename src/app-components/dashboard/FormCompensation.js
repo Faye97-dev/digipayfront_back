@@ -5,11 +5,14 @@ import * as Yup from "yup";
 import { Button, Row, Col, Label, Card } from "reactstrap";
 import Select from "react-select";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { connect } from "react-redux";
+import { SyncLoader } from "react-spinners";
+import { showAlert } from "../../utils/alerts";
+import { addCompensation } from "../../actions/compensation";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     montant: Yup.number()
-      .min(0, "Montant invalid  !")
+      .min(10, "Montant invalid  !")
       .required("Montant est obligatoire !"),
 
     /*transaction_type: Yup.string()
@@ -37,15 +40,21 @@ const formikEnhancer = withFormik({
     remarque: "",
     //note: "",
   }),
-  handleSubmit: (values, { setSubmitting }) => {
+  handleSubmit: (values, { props, resetForm, setSubmitting }) => {
     const payload = {
       ...values,
-      agence: { ...values.agence },
+      agence_destination: values.agence.value,
+      type_trans: values.transaction_type.value,
+      agent: props.user.id,
     };
-    setTimeout(() => {
+    //console.log(payload);
+    props.addCompensation(payload, resetForm, setSubmitting, showAlert);
+    //setSubmitting(false);
+    //resetForm();
+    /*setTimeout(() => {
       alert(JSON.stringify(payload, null, 2));
       setSubmitting(false);
-    }, 1000);
+    }, 1000);*/
   },
   displayName: "MyForm",
 });
@@ -59,6 +68,7 @@ const MyForm = (props) => {
     setFieldValue,
     setFieldTouched,
     isSubmitting,
+    agences,
   } = props;
   return (
     <>
@@ -84,7 +94,16 @@ const MyForm = (props) => {
             <MySelect
               label="Agence"
               name="agence"
-              option={options}
+              option={
+                agences.loading === false &&
+                agences.payload.map((item) => {
+                  return {
+                    value: item.id,
+                    label:
+                      item.nom + " | " + item.type_agence + " | " + item.tel,
+                  };
+                })
+              }
               value={values.agence}
               onChange={setFieldValue}
               onBlur={setFieldTouched}
@@ -130,24 +149,20 @@ const MyForm = (props) => {
             </Col>*/}
         </Row>
         <Row>
-          <Col xl="12" style={{ margin: "9px 0" }}>
-            <Button color="primary" type="submit" disabled={isSubmitting}>
-              Submit
-            </Button>
+          <Col xl="12" style={{ margin: "12px 0" }}>
+            {isSubmitting ? (
+              <SyncLoader color={"var(--primary)"} loading={true} />
+            ) : (
+              <Button color="primary" type="submit" disabled={isSubmitting}>
+                Enregistrer
+              </Button>
+            )}
           </Col>
         </Row>
       </Form>
     </>
   );
 };
-
-const options = [
-  { value: "agence 1", label: "Agence 1" },
-  { value: "agence 2", label: "Agence 2" },
-  { value: "agence 3", label: "Agence 3" },
-  { value: "agence 4", label: "Agence 4" },
-  { value: "agence 5", label: "Agence 5" },
-];
 
 class MySelect extends React.Component {
   handleChange = (item) => {
@@ -183,11 +198,19 @@ class MySelect extends React.Component {
 }
 const MyEnhancedForm = formikEnhancer(MyForm);
 
-const FormCompensation = () => (
+const FormCompensation = (props) => (
   <Card className="mb-5">
     <div className="m-4">
-      <MyEnhancedForm />
+      <MyEnhancedForm {...props} />
     </div>
   </Card>
 );
-export default FormCompensation;
+
+const mapStateToProps = (state) => ({
+  agences: state.agence.agences,
+  user: state.auth.user,
+});
+
+export default connect(mapStateToProps, {
+  addCompensation,
+})(FormCompensation);

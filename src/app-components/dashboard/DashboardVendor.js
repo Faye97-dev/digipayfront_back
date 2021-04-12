@@ -1,6 +1,6 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Row, Col, Card } from "reactstrap";
+import { Row, Col, Card, Button } from "reactstrap";
 import CountUp from "react-countup";
 import TabsVendor from "./TabsVendor";
 import TransactionsVendor from "./TransactionsVendor";
@@ -23,14 +23,23 @@ class DashboardVendor extends Component {
 }
 
 function DashboardAmount(props) {
+  const [showAmout, setShowAmout] = useState(false);
   useEffect(() => {
     props.updateSolde(props.user, props.access);
   }, []);
   return (
     <>
       <div className="d-flex justify-content-center">
-        <XlFormat {...props} />
-        <SmallFormat {...props} />
+        <XlFormat
+          {...props}
+          showAmout={showAmout}
+          setShowAmout={setShowAmout}
+        />
+        <SmallFormat
+          {...props}
+          showAmout={showAmout}
+          setShowAmout={setShowAmout}
+        />
       </div>
     </>
   );
@@ -38,9 +47,32 @@ function DashboardAmount(props) {
 
 function SmallFormat(props) {
   return (
-    <Col xs="12" sm="9" md="7" className="d-block d-xl-none">
+    <Col xs="11" sm="8" md="7" className="d-block d-xl-none">
       <Card className="card-box mb-4">
-        <div className="card-content-overlay text-center pb-2 pt-4">
+        <div className="my-3 mx-3">
+          <Button
+            color="secondary"
+            outline
+            className="d-flex align-items-center justify-content-center border-0 d-30 mr-2 px-4"
+            onClick={() => props.setShowAmout(!props.showAmout)}
+            title={
+              props.showAmout ? "Cacher votre solde" : "Afficher votre solde"
+            }
+          >
+            {props.showAmout ? (
+              <FontAwesomeIcon
+                icon={["fas", "eye-slash"]}
+                className="display-5 text-primary"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={["fas", "eye"]}
+                className="display-5 text-primary"
+              />
+            )}
+          </Button>
+        </div>
+        <div className="card-content-overlay text-center pb-5 pt-1">
           <div className="d-70 rounded-circle bg-primary text-white btn-icon mx-auto text-center shadow-primary">
             <FontAwesomeIcon
               icon={["fas", "money-bill"]}
@@ -48,17 +80,21 @@ function SmallFormat(props) {
             />
           </div>
           <div className="font-weight-bold font-size-xl text-black display-3 mt-4 mb-1">
-            <CountUp
-              start={0}
-              end={props.user && props.user.solde}
-              duration={2}
-              separator=""
-              suffix=" MRU"
-            />
+            {props.showAmout ? (
+              <CountUp
+                start={0}
+                end={props.user && props.user.solde}
+                duration={2}
+                separator=""
+                suffix=" MRU"
+              />
+            ) : (
+              "* * * * *"
+            )}
           </div>
           <div className="font-size-xl text-black ">Solde</div>
 
-          <div className="text-center">
+          {/*<div className="text-center">
             <div className="flex-grow-1 w-100 d-flex align-items-center flex-row">
               <div className="bg-composed-wrapper--content p-2">
                 <div className="align-self-center">
@@ -108,6 +144,7 @@ function SmallFormat(props) {
               </div>
             </div>
           </div>
+        */}
         </div>
       </Card>
     </Col>
@@ -116,9 +153,32 @@ function SmallFormat(props) {
 
 function XlFormat(props) {
   return (
-    <Col xl="7" className="d-none d-xl-block">
+    <Col xl="5" className="d-none d-xl-block">
       <Card className="card-box mb-4">
-        <div className="card-content-overlay text-center pb-2 pt-4">
+        <div className="my-3 mx-3">
+          <Button
+            color="secondary"
+            outline
+            className="d-flex align-items-center justify-content-center border-0 d-30 mr-2 px-4"
+            onClick={() => props.setShowAmout(!props.showAmout)}
+            title={
+              props.showAmout ? "Cacher votre solde" : "Afficher votre solde"
+            }
+          >
+            {props.showAmout ? (
+              <FontAwesomeIcon
+                icon={["fas", "eye-slash"]}
+                className="display-5 text-primary"
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={["fas", "eye"]}
+                className="display-5 text-primary"
+              />
+            )}
+          </Button>
+        </div>
+        <div className="card-content-overlay text-center pb-5 pt-1">
           <div className="d-70 rounded-circle bg-primary text-white btn-icon mx-auto text-center shadow-primary">
             <FontAwesomeIcon
               icon={["fas", "money-bill"]}
@@ -126,17 +186,21 @@ function XlFormat(props) {
             />
           </div>
           <div className="font-weight-bold font-size-xxl text-black display-3 mt-4 mb-1">
-            <CountUp
-              start={0}
-              end={props.user && props.user.solde}
-              duration={2}
-              separator=""
-              suffix=" MRU"
-            />
+            {props.showAmout ? (
+              <CountUp
+                start={0}
+                end={props.user && props.user.solde}
+                duration={2}
+                separator=""
+                suffix=" MRU"
+              />
+            ) : (
+              "* * * * *"
+            )}
           </div>
           <div className="font-size-xxl text-black ">Solde</div>
 
-          <div className="text-center">
+          {/*<div className="text-center">
             <div className="flex-grow-1 w-100 d-flex align-items-center flex-row">
               <div className="bg-composed-wrapper--content p-2">
                 <div className="align-self-center">
@@ -186,6 +250,7 @@ function XlFormat(props) {
               </div>
             </div>
           </div>
+        */}
         </div>
       </Card>
     </Col>

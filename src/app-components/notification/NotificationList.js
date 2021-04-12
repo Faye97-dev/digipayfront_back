@@ -1,14 +1,21 @@
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card, CardBody, Button, Modal } from "reactstrap";
+import { Card, CardBody, Button, Modal, Badge } from "reactstrap";
 import RcPagination from "rc-pagination";
 import localeInfo from "rc-pagination/lib/locale/fr_FR";
 import { PaginateData } from "../../utils/dataTable";
 import { getNotifications } from "../../actions/notification";
+import { validCompensation } from "../../actions/async";
 import empty from "../../assets/images/empty.png";
 import { showAlert } from "../../utils/alerts";
 import { connect } from "react-redux";
 import { SkeletonCard } from "../../utils/SkeletonLoader";
+import {
+  TO_VALIDATE,
+  DEMANDE_COMPENSATION,
+  CANCELED,
+} from "../../utils/choices";
+import { AlertModal } from "../../utils/AlertModal";
 const fetchData = [
   {
     id: 1,
@@ -51,12 +58,21 @@ class NotificationList extends Component {
       page: 1,
       current: [],
       modalQrCode: false,
+      modalAlertModal: false,
       currentQrCode: null,
+      isSubmiting: false,
+      currentNotif: null,
+      confirmCompensation: null,
     };
 
     this.handleChangePage = this.handleChangePage.bind(this);
     this.Paginate = this.Paginate.bind(this);
     this.handleModal = this.handleModal.bind(this);
+    this.handleConfirmCompensation = this.handleConfirmCompensation.bind(this);
+    this.handleCancelCompensation = this.handleCancelCompensation.bind(this);
+    // alert modal
+    this.showModalAlertModal = this.showModalAlertModal.bind(this);
+    this.toggleModalAlertModal = this.toggleModalAlertModal.bind(this);
   }
 
   handleModal = (qrcode) => {
@@ -66,6 +82,22 @@ class NotificationList extends Component {
       currentQrCode: qrcode,
     });
     //console.log(qrcode);
+  };
+  showModalAlertModal = (item, confirmCompensation) => {
+    this.setState({
+      ...this.state,
+      modalAlertModal: true,
+      currentNotif: { ...item },
+      confirmCompensation,
+    });
+  };
+  toggleModalAlertModal = () => {
+    this.setState({
+      ...this.state,
+      modalAlertModal: !this.state.modalAlertModal,
+      currentNotif: null,
+      confirmCompensation: null,
+    });
   };
 
   componentDidMount() {
@@ -84,6 +116,17 @@ class NotificationList extends Component {
         [...nextProps.notifications.payload],
         this.state.totalRowsPerPage
       );
+    }
+
+    if (
+      nextProps.notifications.loading === true &&
+      this.props.notifications.loading === false
+    ) {
+      console.log("reset init bolean ant sync props to state ....");
+      this.setState({
+        ...this.state,
+        init: true,
+      });
     }
 
     /*if (
@@ -114,6 +157,64 @@ class NotificationList extends Component {
       ...this.state,
       page,
       current: [...this.state.data].filter((item) => item.page === page),
+    });
+  }
+
+  handleConfirmCompensation(item) {
+    this.setState({
+      ...this.state,
+      isSubmiting: true,
+      modalAlertModal: false,
+      currentNotif: null,
+      confirmCompensation: null,
+    });
+
+    validCompensation(
+      {
+        confirm: true,
+        agence: item.transaction.agence.id,
+        transaction: item.transaction.id,
+        notif: item.id,
+      },
+      showAlert,
+      this.props.access
+    ).then((res) => {
+      if (res) {
+        this.props.getNotifications(showAlert);
+      }
+      this.setState({
+        ...this.state,
+        isSubmiting: false,
+      });
+    });
+  }
+
+  handleCancelCompensation(item) {
+    this.setState({
+      ...this.state,
+      isSubmiting: true,
+      modalAlertModal: false,
+      currentNotif: null,
+      confirmCompensation: null,
+    });
+
+    validCompensation(
+      {
+        confirm: false,
+        agence: item.transaction.agence.id,
+        transaction: item.transaction.id,
+        notif: item.id,
+      },
+      showAlert,
+      this.props.access
+    ).then((res) => {
+      if (res) {
+        this.props.getNotifications(showAlert);
+      }
+      this.setState({
+        ...this.state,
+        isSubmiting: false,
+      });
     });
   }
   render() {
@@ -156,9 +257,6 @@ class NotificationList extends Component {
                   </div>
                   <div className="d-none d-sm-block">
                     <div className="d-flex justify-content-between">
-                      {/*<Badge color="first" className="px-3 mx-2">
-                      On hold
-                      </Badge>*/}
                       <div className="text-justify font-size-lg">
                         {item.message}
                       </div>
@@ -212,6 +310,58 @@ class NotificationList extends Component {
                       </div>
                     )}
                   </div>
+
+                  {/* comfirm and reject compensation */}
+                  {item.transaction &&
+                    item.transaction?.status &&
+                    item.transaction.status === TO_VALIDATE &&
+                    item.status === DEMANDE_COMPENSATION && (
+                      <div className="d-flex justify-content-between pt-3">
+                        <div className="mr-auto">
+                          <Button
+                            color="danger"
+                            className="py-1 px-3"
+                            disabled={this.state.isSubmiting}
+                            onClick={() =>
+                              this.showModalAlertModal(item, false)
+                            }
+                          >
+                            <div className="font-size-sm text-white">
+                              {this.state.isSubmiting
+                                ? " En cours ... "
+                                : "Rejeter"}
+                            </div>
+                          </Button>
+                        </div>
+                        <div className="ml-auto">
+                          <Button
+                            color="success"
+                            className="py-1 px-3"
+                            disabled={this.state.isSubmiting}
+                            onClick={() => this.showModalAlertModal(item, true)}
+                          >
+                            <div className="font-size-sm text-white">
+                              {this.state.isSubmiting
+                                ? " En cours ... "
+                                : "Confirmer"}
+                            </div>
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                  {/*
+                  {item.transaction &&
+                    item.transaction?.status &&
+                    item.transaction.status === CANCELED &&
+                    item.status === DEMANDE_COMPENSATION && (
+                      <div className="d-flex justify-content-between">
+                        <Badge color="danger" className="px-3 ml-auto">
+                          Transaction Annulée
+                        </Badge>
+                      </div>
+                    )}
+                  */}
                 </CardBody>
               </Card>
             );
@@ -237,6 +387,17 @@ class NotificationList extends Component {
                   <img src={this.state.currentQrCode} alt="img" width="100%" />
                 </div>
               </Modal>
+              <AlertModal
+                toggleAlertModal={this.toggleModalAlertModal}
+                alertModal={this.state.modalAlertModal}
+                item={this.state.currentNotif}
+                title={"Vous êtes sûr de cette action ?"}
+                confirm={"Confimer"}
+                cancel={"Annuler"}
+                actionConfirm={this.handleConfirmCompensation}
+                actionCancel={this.handleCancelCompensation}
+                confirmOrCancel={this.state.confirmCompensation}
+              />
               {!this.props.notifications.loading &&
                 this.state.current.length !== 0 && (
                   <div className="d-flex align-items-center justify-content-center mt-4 mb-4">
@@ -260,6 +421,7 @@ class NotificationList extends Component {
 const mapStateToProps = (state) => ({
   notifications: state.notification.notifications,
   user: state.auth.user,
+  access: state.auth.access,
 });
 
 export default connect(mapStateToProps, {

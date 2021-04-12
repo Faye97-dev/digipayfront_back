@@ -1,6 +1,6 @@
 import axios from "axios";
 import { HOST } from "./types";
-import { NOT_WITHDRAWED } from "../utils/choices";
+//import { NOT_WITHDRAWED } from "../utils/choices";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FormData from "form-data";
 import { expiredTokenWarning } from "../utils/alerts";
@@ -31,7 +31,7 @@ export async function getNotWhitrated(tel, agence, showAlert, access = null) {
   }
   if (tel !== "") {
     const body = { agence_destination: agence, tel };
-    console.log(body);
+    //console.log(body);
     await axios
       .post(HOST + `api/func/transaction/retrait-list/`, body, config)
       .then((res) => {
@@ -478,6 +478,51 @@ export const checkCode_transaction = async (form, showAlert, access = null) => {
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
       }
+    });
+  return data;
+};
+
+export const validCompensation = async (body, showAlert, access = null) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+  let data = null;
+  await axios
+    .post(HOST + `api/func/transaction/valid-compensation/`, body, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      //console.log(res.data);
+      if (keys.includes("result")) {
+        showAlert(
+          "success",
+          res.data.result,
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        data = true;
+      } else if (keys.includes("msg")) {
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+        data = false;
+      }
+    })
+    .catch((err) => {
+      showAlert(
+        "danger",
+        "Validation de la compensation non-complete!",
+        <FontAwesomeIcon icon={["fas", "times"]} />
+      );
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      }
+      data = false;
     });
   return data;
 };

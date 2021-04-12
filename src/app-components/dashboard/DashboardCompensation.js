@@ -7,13 +7,14 @@ import Charts from "./Chart";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Row, Col, Card, Button } from "reactstrap";
 import CountUp from "react-countup";
+import AgenceStatusList from "../agence/AgenceStatusList";
 class DashboardCompensation extends Component {
   render() {
     return (
       <>
-        <DashboardAmount labelPrimary="Total de versements" />
+        {/*<DashboardAmount labelPrimary="Total de versements" />*/}
         <FormCompensation></FormCompensation>
-        <Clotures />
+        <AgenceStatusList />
         <br /> <br />
         <TransactionsCompensation />
         <Charts labelPrimary="Versements"></Charts>

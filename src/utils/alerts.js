@@ -42,7 +42,7 @@ export const expiredToken = (dispatch) => {
   setTimeout(() => {
     showAlert(
       "warning",
-      "le délai de votre token a expiré , vous allez être déconnecté dans quelque secondes ...",
+      "le délai de votre session a expiré , vous allez être déconnecté dans quelque secondes ...",
       <FontAwesomeIcon icon={["far", "question-circle"]} />
     );
     setTimeout(() => {
@@ -60,7 +60,7 @@ export const expiredTokenWarning = () => {
   setTimeout(() => {
     showAlert(
       "warning",
-      "le délai de votre token a expiré , veuillez vous reconnecté svp ... !",
+      "le délai de votre session a expiré , veuillez vous reconnecté svp ... !",
       <FontAwesomeIcon icon={["far", "question-circle"]} />
     );
   }, 2000);

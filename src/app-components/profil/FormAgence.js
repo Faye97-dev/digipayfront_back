@@ -10,6 +10,7 @@ import { getClients } from "../../actions/client";
 import { addTransfert } from "../../actions/transaction";
 import { showAlert } from "../../utils/alerts";
 import { SyncLoader } from "react-spinners";
+import { RESPONSABLE_AGENCE, EMPLOYE_AGENCE } from "../../utils/choices";
 const objectAttributeExist = (item, value) => {
   if (!item) {
     return false;
@@ -56,19 +57,24 @@ const formikEnhancer = withFormik({
       .required("Frais_destination est obligatoire!"),
   }),*/
   mapPropsToValues: (props) => ({
-    nom: "Agence 1",
-    code_agence: "AG235697810",
-    type_agence: { value: "AGENCE_INTERN", label: "AGENCE_INTERN" },
-    adresse: "Tvz illot 3",
-    commune: { value: "TVZ", label: "TVZ" },
-    tel: "+222 20301597",
-    email: "agence1@gamil.com",
-    solde: 2056300,
-    frais: 52036,
-    dette: 0,
+    nom: props?.user?.agence.nom || "",
+    code_agence: props?.user?.agence.code_agence || "",
+    type_agence: {
+      value: props?.user?.agence.type_agence || "",
+      label: props?.user?.agence.type_agence || "",
+    },
+    adresse: props?.user?.agence.adresse || "",
+    /*commune: {
+      value: props?.user?.agence.commune.commune || "",
+      label: props?.user?.agence.commune.commune || "",
+    },*/
+    tel: props?.user?.agence.tel || "",
+    email: props?.user?.agence.email || "",
+    solde: props?.user?.agence?.solde || 0,
+    frais: props?.user?.agence?.frais || 0,
+    //dette: props?.user?.agence.dette || ,
   }),
   handleSubmit: (values, { props, resetForm, setSubmitting }) => {
-    //{ setSubmitting, resetForm, addTransfert }
     /*const payload = {
       ...values,
       agence_origine: props.user.agence.id,
@@ -93,16 +99,25 @@ const MyForm = (props) => {
     setFieldValue,
     setFieldTouched,
     isSubmitting,
-    agences,
-    clients,
     user,
-    //resetForm,
-    //setSubmitting,
   } = props;
 
   return (
     <Form onSubmit={handleSubmit} className="px-5 py-4">
-      <Row>
+      <Badge
+        className={
+          "px-3 py-1 h-auto text-" +
+          "primary" +
+          " border-1 border-" +
+          "primary my-2"
+        }
+        color={"neutral-" + "primary"}
+      >
+        <span className="text-primary font-size-sm ">
+          Informations de l' agence
+        </span>
+      </Badge>
+      {/*<Row>
         <Col sm="6" style={{ margin: "12px 0" }}>
           <Badge
             className={
@@ -136,12 +151,12 @@ const MyForm = (props) => {
             </Badge>
           </div>
         </Col>
-      </Row>
+      </Row>*/}
       <Row>
         {/* first part */}
         <Col xl="4" style={{ margin: "12px 0" }}>
           <Label for="nom">Nom</Label>
-          <Field name="nom" type="text" />
+          <Field name="nom" type="text" disabled />
 
           {errors.nom && touched.nom && (
             <div style={{ color: "red", marginTop: ".5rem" }}>{errors.nom}</div>
@@ -149,7 +164,7 @@ const MyForm = (props) => {
         </Col>
         <Col xl="4" style={{ margin: "12px 0" }}>
           <Label for="code_agence">Code agence</Label>
-          <Field name="code_agence" type="text" />
+          <Field name="code_agence" type="text" disabled />
 
           {errors.code_agence && touched.code_agence && (
             <div style={{ color: "red", marginTop: ".5rem" }}>
@@ -161,11 +176,13 @@ const MyForm = (props) => {
           <MySelect
             label="Type de agence"
             name="type_agence"
-            option={[
-              { value: "AGENCE_INTERN", label: "AGENCE_INTERN" },
+            option={
+              [
+                /*{ value: "AGENCE_INTERN", label: "AGENCE_INTERN" },
               { value: "PARTNER_SILVER", label: "PARTNER_SILVER" },
-              { value: "PARTNER_GOLD", label: "PARTNER_GOLD" },
-            ]}
+              { value: "PARTNER_GOLD", label: "PARTNER_GOLD" },*/
+              ]
+            }
             value={values.type_agence}
             onChange={setFieldValue}
             onBlur={setFieldTouched}
@@ -177,7 +194,7 @@ const MyForm = (props) => {
         {/* second part */}
         <Col xl="6" style={{ margin: "12px 0" }}>
           <Label for="adresse">Adresse</Label>
-          <Field name="adresse" type="text" />
+          <Field name="adresse" type="text" disabled />
 
           {errors.adresse && touched.adresse && (
             <div style={{ color: "red", marginTop: ".5rem" }}>
@@ -185,14 +202,16 @@ const MyForm = (props) => {
             </div>
           )}
         </Col>
-        <Col xl="6" style={{ margin: "12px 0" }}>
+        {/*<Col xl="6" style={{ margin: "12px 0" }}>
           <MySelect
             label="Commune"
             name="commune"
-            option={[
+            option={
+              [
               { value: "TVZ", label: "TVZ" },
               { value: "KSAR", label: "KSAR" },
-            ]}
+              ]
+            }
             value={values.commune}
             onChange={setFieldValue}
             onBlur={setFieldTouched}
@@ -200,11 +219,11 @@ const MyForm = (props) => {
             touched={touched.commune}
             placeholder="Selectionner la commune ..."
           />
-        </Col>
+        </Col>*/}
         {/* third part */}
         <Col xl="6" style={{ margin: "12px 0" }}>
           <Label for="tel">Telephone</Label>
-          <Field name="tel" type="text" />
+          <Field name="tel" type="text" disabled />
 
           {errors.tel && touched.tel && (
             <div style={{ color: "red", marginTop: ".5rem" }}>{errors.tel}</div>
@@ -212,7 +231,7 @@ const MyForm = (props) => {
         </Col>
         <Col xl="6" style={{ margin: "12px 0" }}>
           <Label for="email">Email</Label>
-          <Field name="email" type="email" />
+          <Field name="email" type="email" disabled />
 
           {errors.email && touched.email && (
             <div style={{ color: "red", marginTop: ".5rem" }}>
@@ -221,41 +240,45 @@ const MyForm = (props) => {
           )}
         </Col>
         {/* four part */}
-        <Col xl="4" style={{ margin: "12px 0" }}>
-          <Label for="solde">Solde</Label>
-          <Field name="solde" type="number" />
+        {props.user?.role === RESPONSABLE_AGENCE && (
+          <>
+            <Col xl="6" style={{ margin: "12px 0" }}>
+              <Label for="solde">Solde</Label>
+              <Field name="solde" type="number" disabled />
 
-          {errors.solde && touched.solde && (
-            <div style={{ color: "red", marginTop: ".5rem" }}>
-              {errors.solde}
-            </div>
-          )}
-        </Col>
-        <Col xl="4" style={{ margin: "12px 0" }}>
-          <Label for="frais">Frais</Label>
-          <Field name="frais" type="number" />
+              {errors.solde && touched.solde && (
+                <div style={{ color: "red", marginTop: ".5rem" }}>
+                  {errors.solde}
+                </div>
+              )}
+            </Col>
+            <Col xl="6" style={{ margin: "12px 0" }}>
+              <Label for="frais">Frais</Label>
+              <Field name="frais" type="number" disabled />
 
-          {errors.frais && touched.frais && (
-            <div style={{ color: "red", marginTop: ".5rem" }}>
-              {errors.frais}
-            </div>
-          )}
-        </Col>
-        <Col xl="4" style={{ margin: "12px 0" }}>
+              {errors.frais && touched.frais && (
+                <div style={{ color: "red", marginTop: ".5rem" }}>
+                  {errors.frais}
+                </div>
+              )}
+            </Col>
+          </>
+        )}
+        {/*<Col xl="4" style={{ margin: "12px 0" }}>
           <Label for="dette">Dette</Label>
-          <Field name="dette" type="number" />
+          <Field name="dette" type="number" disabled />
 
           {errors.dette && touched.dette && (
             <div style={{ color: "red", marginTop: ".5rem" }}>
               {errors.dette}
             </div>
           )}
-        </Col>
+          </Col>*/}
         {/* five part */}
       </Row>
 
       <>
-        <Row>
+        {/*<Row>
           <Col xl="12" style={{ margin: "12px 0" }}>
             {isSubmitting ? (
               <SyncLoader color={"var(--primary)"} loading={true} />
@@ -265,7 +288,7 @@ const MyForm = (props) => {
               </Button>
             )}
           </Col>
-        </Row>
+        </Row>*/}
       </>
     </Form>
   );
@@ -294,6 +317,7 @@ class MySelect extends React.Component {
           onBlur={this.handleBlur}
           value={this.props.value}
           placeholder={this.props.placeholder}
+          disabled={true}
         />
         {!!this.props.error && this.props.touched && (
           <div style={{ color: "red", marginTop: ".5rem" }}>
@@ -306,16 +330,9 @@ class MySelect extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  agences: state.agence.agences,
-  clients: state.client.clients,
   user: state.auth.user,
-  transactions: state.transaction.transactions,
 });
-const MyEnhancedForm = connect(mapStateToProps, {
-  getAgences,
-  getClients,
-  addTransfert,
-})(formikEnhancer(MyForm));
+const MyEnhancedForm = connect(mapStateToProps, {})(formikEnhancer(MyForm));
 
 const FormAgence = () => <MyEnhancedForm />;
 

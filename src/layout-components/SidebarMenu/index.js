@@ -1428,7 +1428,7 @@ const SidebarMenu = (props) => {
       icon: <DollarSign />,
       roles: [
         "SYSADMIN",
-        "EMPLOYE_AGENCE",
+        //"EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
       ],
