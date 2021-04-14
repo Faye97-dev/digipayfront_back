@@ -48,14 +48,15 @@ export const updateVendorProfil = (id, body, setSubmitting, showAlert) => (
       dispatch({
         type: UPDATE_PROFIL_FAIL,
       });
-      showAlert(
-        "danger",
-        "Erreur de modifcation du profil !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
       setSubmitting(false);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de modifcation du profil !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -91,14 +92,16 @@ export const updateClientProfil = (id, body, setSubmitting, showAlert) => (
       dispatch({
         type: UPDATE_PROFIL_FAIL,
       });
-      showAlert(
-        "danger",
-        "Erreur de modifcation du profil !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       setSubmitting(false);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de modifcation du profil !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -136,14 +139,16 @@ export const updateEmployeProfil = (id, body, setSubmitting, showAlert) => (
       dispatch({
         type: UPDATE_PROFIL_FAIL,
       });
-      showAlert(
-        "danger",
-        "Erreur de modifcation du profil !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       setSubmitting(false);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de modifcation du profil !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -181,14 +186,16 @@ export const updateResponsableProfil = (id, body, setSubmitting, showAlert) => (
       dispatch({
         type: UPDATE_PROFIL_FAIL,
       });
-      showAlert(
-        "danger",
-        "Erreur de modifcation du profil !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       setSubmitting(false);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de modifcation du profil !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -226,14 +233,16 @@ export const updateAgentProfil = (id, body, setSubmitting, showAlert) => (
       dispatch({
         type: UPDATE_PROFIL_FAIL,
       });
-      showAlert(
-        "danger",
-        "Erreur de modifcation du profil !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       setSubmitting(false);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de modifcation du profil !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };

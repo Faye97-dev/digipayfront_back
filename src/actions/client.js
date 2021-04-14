@@ -38,13 +38,15 @@ export const getClients = (showAlert) => (dispatch, getState) => {
       dispatch({
         type: ERROR_CLIENT,
       });
-      showAlert(
-        "danger",
-        "Erreur de chargement des clients !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de chargement des clients !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -95,13 +97,15 @@ export const addClient = (
       });
       //setSubmitting(false);
       closeModal();
-      showAlert(
-        "danger",
-        "Enregistrement Echec!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Enregistrement nouveau client echec!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };

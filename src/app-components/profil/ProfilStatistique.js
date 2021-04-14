@@ -6,8 +6,10 @@ import { connect } from "react-redux";
 import { SkeletonProfilStatistique } from "../../utils/SkeletonLoader";
 const statistiqueMapper = {
   payements_recus: { title: "Paiements reçus", color: "primary" },
+  payements: { title: "Paiements", color: "primary" },
   payements_faits: { title: "Paiements faits", color: "warning" },
   remboursements_recus: { title: "Remboursements reçus", color: "info" },
+  remboursements: { title: "Remboursements", color: "info" },
   remboursements_faits: { title: "Remboursements faits", color: "danger" },
   recharges: { title: "Recharges", color: "success" },
   retraits: { title: "Retraits", color: "warning" },

@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { AUTH_ERROR, CLEAN_SESSION } from "../actions/types";
+import { AUTH_ERROR, CLEAN_SESSION, TOKEN_EXPIRED } from "../actions/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const showAlert = (type, text, icon) => {
   const msg = (title) => (
@@ -38,25 +38,33 @@ export const showAlert = (type, text, icon) => {
   //}
 };
 
-export const expiredToken = (dispatch) => {
-  setTimeout(() => {
-    showAlert(
-      "warning",
-      "le délai de votre session a expiré , vous allez être déconnecté dans quelque secondes ...",
-      <FontAwesomeIcon icon={["far", "question-circle"]} />
-    );
+export const expiredToken = (dispatch, tokenInvalid = false) => {
+  if (tokenInvalid === false) {
+    dispatch({
+      type: TOKEN_EXPIRED,
+    });
     setTimeout(() => {
-      dispatch({
-        type: AUTH_ERROR,
-      });
-      dispatch({
-        type: CLEAN_SESSION,
-      });
-    }, 2500);
-  }, 2000);
+      showAlert(
+        "warning",
+        "le délai de votre session a expiré , vous allez être déconnecté dans quelque secondes ...",
+        <FontAwesomeIcon icon={["far", "question-circle"]} />
+      );
+      setTimeout(() => {
+        dispatch({
+          type: AUTH_ERROR,
+        });
+        dispatch({
+          type: CLEAN_SESSION,
+        });
+      }, 2500);
+    }, 2000);
+  } else if (tokenInvalid === true) {
+    console.log(" Votre token a deja expirer !");
+  }
 };
 
-export const expiredTokenWarning = () => {
+export const expiredTokenWarning = (tokenInvalid = false) => {
+  //if (tokenInvalid === false) {
   setTimeout(() => {
     showAlert(
       "warning",
@@ -64,4 +72,7 @@ export const expiredTokenWarning = () => {
       <FontAwesomeIcon icon={["far", "question-circle"]} />
     );
   }, 2000);
+  /*} else if (tokenInvalid === true) {
+    console.log(" Votre token a deja expirer !");
+  }*/
 };

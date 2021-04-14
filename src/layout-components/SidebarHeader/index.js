@@ -39,7 +39,7 @@ const SidebarHeader = (props) => {
               <img alt="DigiPay" src={projectLogo} />
             </div>
             <div className="app-sidebar-logo--text text-white pt-2">
-              <h5>digiPay</h5>
+              <h5>DigiPay</h5>
               <b></b>
             </div>
           </NavLink>

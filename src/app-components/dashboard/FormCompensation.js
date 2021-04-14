@@ -12,8 +12,9 @@ import { addCompensation } from "../../actions/compensation";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     montant: Yup.number()
-      .min(10, "Montant invalid  !")
-      .required("Montant est obligatoire !"),
+      .min(10, " Montant doit etre plus 10 MRU !")
+      //.max(30000, " Montant ne peut depasser 30000 MRU !")
+      .required(" Montant est obligatoire !"),
 
     /*transaction_type: Yup.string()
       .required("Type de transaction est obligatoire !")

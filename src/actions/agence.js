@@ -42,13 +42,14 @@ export const getAgences = (showAlert) => (dispatch, getState) => {
       dispatch({
         type: ERROR_AGENCE,
       });
-      showAlert(
-        "danger",
-        "Erreur de chargement des agences !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de chargement des agences !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -85,13 +86,15 @@ export const updateStatusAgence = (status, showAlert) => (
       dispatch({
         type: AGENCE_STATUS_ERROR,
       });
-      showAlert(
-        "danger",
-        "Erreur de changement du status de l'agence !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de changement du status de l'agence !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };

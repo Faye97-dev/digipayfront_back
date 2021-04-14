@@ -100,6 +100,7 @@ const Contact = lazy(() => import("./app-components/contact/Contact"));
 
 const PageLoginBasic = lazy(() => import("./example-pages/PageLoginBasic"));
 
+const Page404 = lazy(() => import("./app-components/pageError/Page404"));
 //const PageProfile = lazy(() => import("./example-pages/PageProfile"));
 
 const Routes = (props) => {
@@ -341,7 +342,7 @@ const Routes = (props) => {
               </Switch>
             </CollapsedSidebar>
           </Route>
-          <Route path={["/PageLoginBasic", "/PageError505"]}>
+          <Route path={["/PageLoginBasic"]}>
             <MinimalLayout>
               <Switch location={location} key={location.pathname}>
                 <motion.div
@@ -355,15 +356,12 @@ const Routes = (props) => {
                     path="/PageLoginBasic"
                     component={PageLoginBasic}
                   />
-                  {/*path="/PageError505"
-                    <Route component={PageError505} />*/}
                 </motion.div>
               </Switch>
             </MinimalLayout>
           </Route>
 
-          {/*<Route component={PageError505} />*/}
-          {/*<Route path="*" exact={true} component={PageError505} />*/}
+          <Route component={Page404} />
         </Switch>
       </Suspense>
     </AnimatePresence>

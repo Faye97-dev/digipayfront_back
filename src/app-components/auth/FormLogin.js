@@ -10,7 +10,7 @@ import { showAlert } from "../../utils/alerts";
 import { SyncLoader } from "react-spinners";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
-    username: Yup.string().required("Nom d'utilisateur est obligatoire !"),
+    username: Yup.string().required("Numéro de téléphone est obligatoire !"),
     password: Yup.string().required("Mot de passe est obligatoire !"),
     /*.test(
         "len",
@@ -47,7 +47,7 @@ const MyForm = (props) => {
           <Field
             name="username"
             type="text"
-            placeholder="Nom de l'utilisateur"
+            placeholder="Numéro de téléphone"
           />
 
           {errors.username && touched.username && (

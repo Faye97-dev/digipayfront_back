@@ -44,6 +44,7 @@ import FormProfilEmploye from "./FormProfilEmploye";
 import FormAgence from "./FormAgence";
 import FormProfilResponsable from "./FormProfilResponsable";
 import FormProfilAgent from "./FormProfilAgent";
+import UpdatePassword from "./UpdatePassword";
 function Profil(props) {
   //const [inputBg, setInputBg] = useState(false);
   //const toggleInputBg = () => setInputBg(!inputBg);
@@ -305,6 +306,10 @@ function Profil(props) {
                   {props.role?.value === AGENT_COMPENSATION && (
                     <FormProfilAgent />
                   )}
+                </Card>
+
+                <Card className="my-4 bg-white">
+                  <UpdatePassword />
                 </Card>
 
                 <Card className="my-4 bg-white">

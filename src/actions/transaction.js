@@ -56,13 +56,15 @@ export const getTransactions = (all, showAlert) => (dispatch, getState) => {
       dispatch({
         type: ERROR_TRANS,
       });
-      showAlert(
-        "danger",
-        "Erreur de l'historique des transactions !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de l'historique des transactions !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -129,13 +131,15 @@ export const addRetrait = (transfert, removeRetrait, showAlert) => (
       dispatch({
         type: ERROR_TRANS,
       });
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -166,42 +170,54 @@ export const addTransfert = (
   axios
     .post(HOST + `api/func/transfert/add/`, transfert, config)
     .then((res) => {
-      //setTimeout(() => {
-      dispatch({
-        type: ADD_TRANSFERT,
-        payload: res.data,
-      });
-      //console.log(res.data);
-      setSubmitting(false);
-      resetForm();
-      showAlert(
-        "success",
-        "Transaction Complete!",
-        <FontAwesomeIcon icon={["fas", "check"]} />
-      );
-      //}, 5000);
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        dispatch({
+          type: ADD_TRANSFERT,
+          payload: res.data,
+        });
+        //console.log(res.data);
+        showAlert(
+          "success",
+          "Transaction Complete!",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
 
-      updateSolde(agence.id, getState().auth.access).then((res) => {
-        if (res) {
-          dispatch({
-            type: UPDATE_SOLDE,
-            payload: res,
-          });
-        }
-      });
+        updateSolde(agence.id, getState().auth.access).then((res) => {
+          if (res) {
+            dispatch({
+              type: UPDATE_SOLDE,
+              payload: res,
+            });
+          }
+        });
+        resetForm();
+      } else {
+        dispatch({
+          type: ERROR_TRANS,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
+      setSubmitting(false);
     })
     .catch((err) => {
       dispatch({
         type: ERROR_TRANS,
       });
       setSubmitting(false);
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -217,7 +233,7 @@ export const addRecharge = (
     payload: ADD_RECHARGE,
   });
 
-  //const agence = getState().auth.user.agence;
+  const agence = getState().auth.user.agence;
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -247,6 +263,14 @@ export const addRecharge = (
           "Transaction Complete!",
           <FontAwesomeIcon icon={["fas", "check"]} />
         );
+        updateSolde(agence.id, access).then((res) => {
+          if (res) {
+            dispatch({
+              type: UPDATE_SOLDE,
+              payload: res,
+            });
+          }
+        });
         //}, 5000);
       } else {
         dispatch({
@@ -264,13 +288,15 @@ export const addRecharge = (
         type: ERROR_TRANS,
       });
       //setSubmitting(false);
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -362,14 +388,16 @@ export const addTransfert_clientDigipay = (
         type: ERROR_TRANS,
       });
       //setSubmitting(false);
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       //}, 10000);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -447,13 +475,15 @@ export const addRetraitBySms = (
       });
       setSubmitting(false);
       closeModal();
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -529,13 +559,15 @@ export const addRetraitByRandomCode = (
       });
       setSubmitting(false);
       closeModal();
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -606,14 +638,16 @@ export const addPayement_clientDigipay = (transfert, showAlert) => (
         type: ERROR_TRANS,
       });
       //setSubmitting(false);
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       //}, 10000);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -690,14 +724,16 @@ export const achatCredit_clientDigipay = (body, showAlert) => (
         type: ERROR_TRANS,
       });
       //setSubmitting(false);
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       //}, 10000);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -767,14 +803,15 @@ export const addPayement_Vendor = (transfert, showAlert) => (
         type: ERROR_TRANS,
       });
 
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
       //}, 10000);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -840,14 +877,15 @@ export const addPayback = (transfert, showAlert) => (dispatch, getState) => {
         type: ERROR_TRANS,
       });
 
-      showAlert(
-        "danger",
-        "Transaction Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
       //}, 10000);
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };

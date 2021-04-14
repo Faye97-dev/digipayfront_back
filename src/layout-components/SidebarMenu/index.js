@@ -1609,7 +1609,7 @@ const SidebarMenu = (props) => {
                 src={svgImage1}
               />
             </Col>*/}
-            <Col xl="7">
+            <Col xl="12">
               <div className="bg-white rounded br-xl-left-0">
                 <div className="p-5">
                   <p className="font-size-lg text-black text-center">

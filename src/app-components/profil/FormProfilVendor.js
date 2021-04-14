@@ -102,7 +102,7 @@ const MyForm = (props) => {
         </Col>
         <Col xl="4" style={{ margin: "12px 0" }}>
           <Label for="first_name">Prenom</Label>
-          <Field name="first_name" type="text" />
+          <Field name="first_name" type="text" disabled />
 
           {errors.first_name && touched.first_name && (
             <div style={{ color: "red", marginTop: ".5rem" }}>
@@ -112,7 +112,7 @@ const MyForm = (props) => {
         </Col>
         <Col xl="4" style={{ margin: "12px 0" }}>
           <Label for="last_name">Nom</Label>
-          <Field name="last_name" type="text" />
+          <Field name="last_name" type="text" disabled />
 
           {errors.last_name && touched.last_name && (
             <div style={{ color: "red", marginTop: ".5rem" }}>

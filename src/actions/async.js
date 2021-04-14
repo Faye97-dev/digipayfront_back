@@ -44,13 +44,15 @@ export async function getNotWhitrated(tel, agence, showAlert, access = null) {
       })
       .catch((err) => {
         data = null;
-        showAlert(
-          "danger",
-          "Récupération des retraits non-terminées !",
-          <FontAwesomeIcon icon={["fas", "times"]} />
-        );
+
         if (err.response && err.response.status === 401) {
           expiredTokenWarning();
+        } else {
+          showAlert(
+            "danger",
+            "Récupération des retraits non-terminées !",
+            <FontAwesomeIcon icon={["fas", "times"]} />
+          );
         }
       });
     return data;
@@ -77,13 +79,15 @@ export const checkExistTel_Client = async (form, showAlert, access = null) => {
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Validation du numéro de téléphone non-complète !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du numéro de téléphone non-complète !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -119,13 +123,15 @@ export async function checkSecretKey(
     .catch((err) => {
       //console.log(err);
       data = null;
-      showAlert(
-        "danger",
-        "Erreur de confirmation du code de la transaction!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de confirmation du code de la transaction!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 
@@ -210,13 +216,15 @@ export const checkClientDigipay = async (form, showAlert, access = null) => {
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Verification du numéro de téléphone non-complète !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Verification du numéro de téléphone non-complète !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -244,13 +252,15 @@ export const check_byRole_ClientVendor = async (
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Verification du compte associé a ce numéro de téléphone non-complète!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Verification du compte associé a ce numéro de téléphone non-complète!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -287,13 +297,15 @@ export const randomCodeRetrait = async (form, showAlert, access = null) => {
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Code retrait Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Code retrait Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -341,13 +353,15 @@ export const updateNotification = async (
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Historisation du QrCode dans les notifications non-complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Historisation du QrCode dans les notifications non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
       //console.log(err.response.data);
     });
@@ -372,13 +386,15 @@ export const randomCodePayement = async (form, showAlert, access = null) => {
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Généreration d'un code de paiement non-complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Généreration d'un code de paiement non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -404,13 +420,15 @@ export const checkCodePayement = async (form, showAlert, access = null) => {
     .catch((err) => {
       //data = { msg: "Validation du code non-complete" };
       data = null;
-      showAlert(
-        "danger",
-        "Validation du code non-complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du code non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -439,13 +457,15 @@ export const checkCodePayement_Vendor = async (
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Validation du code non-complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du code non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -470,13 +490,15 @@ export const checkCode_transaction = async (form, showAlert, access = null) => {
     })
     .catch((err) => {
       data = null;
-      showAlert(
-        "danger",
-        "Validation du code de transaction non-complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du code de transaction non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
   return data;
@@ -514,15 +536,48 @@ export const validCompensation = async (body, showAlert, access = null) => {
       }
     })
     .catch((err) => {
-      showAlert(
-        "danger",
-        "Validation de la compensation non-complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
       if (err.response && err.response.status === 401) {
         expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation de la compensation non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
       data = false;
+    });
+  return data;
+};
+
+export const check_clienAnonyme = async (form, showAlert, access = null) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  let data;
+  await axios
+    .post(HOST + `api/func/client/check/`, form, config)
+    .then((res) => {
+      data = res.data;
+      //console.log(data);
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du numero de telephone non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
     });
   return data;
 };

@@ -25,6 +25,7 @@ import {
   mapColorStatus,
   mapTypeNames,
   mapColorTypes,
+  mapStatusNames,
 } from "../../utils/choices";
 import {
   filterDataProcess,
@@ -251,7 +252,7 @@ class TransactionsCompensation extends Component {
   render() {
     const compensations = this.props.compensations.loading ? (
       <tr>
-        <td colSpan="9">
+        <td colSpan="7">
           <SkeletonLoader />
         </td>
       </tr>
@@ -341,7 +342,7 @@ class TransactionsCompensation extends Component {
                     }
                     color={"neutral-" + mapColorStatus[item.transaction.status]}
                   >
-                    {item.transaction.status}
+                    {mapStatusNames[item.transaction.status]}
                   </Badge>
                 </td>
                 {/*<td className="text-center">

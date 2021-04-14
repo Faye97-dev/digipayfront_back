@@ -51,11 +51,13 @@ export default connect(mapStateToProps, { addRetrait })(FormRetrait);
 
 function SearchBar(props) {
   const [searchStatus5, setSearchStatus5] = useState(false);
+  const [isSubmiting, setSubmiting] = useState(false);
   const [listRetraits, setListRetraits] = useState([]);
   const toggleSearch5 = () => setSearchStatus5(!searchStatus5);
   const handleSumbit = (e) => {
     if (e.keyCode === 13) {
       //console.log(e.target.value);
+      setSubmiting(true);
       getNotWhitrated(
         e.target.value,
         props.agence.id,
@@ -72,6 +74,7 @@ function SearchBar(props) {
               <FontAwesomeIcon icon={["far", "question-circle"]} />
             );
         }
+        setSubmiting(false);
       });
     }
   };
@@ -81,23 +84,32 @@ function SearchBar(props) {
   };
   return (
     <>
-      <div
-        className={clsx("search-wrapper  mb-4", {
-          "is-active": searchStatus5,
-        })}
-      >
-        <span className="icon-wrapper text-black">
-          <FontAwesomeIcon icon={["fas", "search"]} />
-        </span>
-        <Input
-          type="search"
-          onFocus={toggleSearch5}
-          onBlur={toggleSearch5}
-          onKeyDown={handleSumbit}
-          //defaultValue="2035699"
-          placeholder="Rechercher par numero de telephone ..."
-        />
+      <div className="d-flex justify-content-between">
+        <div
+          className={clsx("search-wrapper mb-4", {
+            "is-active": searchStatus5,
+          })}
+          style={{ width: "92%" }}
+        >
+          <span className="icon-wrapper text-black">
+            <FontAwesomeIcon icon={["fas", "search"]} />
+          </span>
+          <Input
+            type="search"
+            onFocus={toggleSearch5}
+            onBlur={toggleSearch5}
+            onKeyDown={handleSumbit}
+            //defaultValue="2035699"
+            placeholder="Rechercher par numero de telephone ..."
+          />
+        </div>
+        {isSubmiting && (
+          <div className="pl-2">
+            <ClipLoader color={"var(--primary)"} loading={true} />
+          </div>
+        )}
       </div>
+
       <ListRetraits
         data={listRetraits}
         removeRetrait={removeRetrait}

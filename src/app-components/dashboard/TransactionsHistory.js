@@ -25,6 +25,7 @@ import {
   mapColorStatus,
   mapTypeNames,
   mapColorTypes,
+  mapStatusNames,
 } from "../../utils/choices";
 import {
   filterDataProcess,
@@ -251,7 +252,7 @@ class TransactionsHistory extends Component {
   render() {
     const transactions = this.props.transactions.loading ? (
       <tr>
-        <td colSpan="9">
+        <td colSpan="10">
           <SkeletonLoader />
         </td>
       </tr>
@@ -339,6 +340,10 @@ class TransactionsHistory extends Component {
                   </span>
                   <small className="px-2">MRU</small>
                 </td>
+                <td className="font-size-lg font-weight-bold text-center">
+                  <span>0</span>
+                  <small className="px-2">MRU</small>
+                </td>
                 <td className="text-center">
                   <Badge
                     className={
@@ -362,7 +367,7 @@ class TransactionsHistory extends Component {
                     }
                     color={"neutral-" + mapColorStatus[item.transaction.status]}
                   >
-                    {item.transaction.status}
+                    {mapStatusNames[item.transaction.status]}
                   </Badge>
                 </td>
                 <td className="text-center">
@@ -475,6 +480,17 @@ class TransactionsHistory extends Component {
               <div className="d-flex align-items-center justify-content-between flex-wrap">
                 <div>
                   <span className="font-size-sm text-uppercase text-black-30">
+                    Frais
+                  </span>
+                </div>
+                <div className="font-weight-bold text-black font-size-sm">
+                  0<small className="px-2 font-weight-normal">MRU</small>
+                </div>
+              </div>
+              <div className="divider my-3" />
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                  <span className="font-size-sm text-uppercase text-black-30">
                     Status
                   </span>
                 </div>
@@ -488,7 +504,7 @@ class TransactionsHistory extends Component {
                     }
                     color={"neutral-" + mapColorStatus[item.transaction.status]}
                   >
-                    {item.transaction.status}
+                    {mapStatusNames[item.transaction.status]}
                   </Badge>
                 </div>
               </div>
@@ -626,6 +642,12 @@ class TransactionsHistory extends Component {
                         scope="col"
                       >
                         Montant
+                      </th>
+                      <th
+                        className="text-center text-center text-center font-size-lg font-weight-normal   text-dark"
+                        scope="col"
+                      >
+                        Frais
                       </th>
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"

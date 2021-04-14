@@ -19,6 +19,22 @@ export const WITHDRAWED = "WITHDRAWED";
 export const CANCELED = "CANCELED";
 export const COMFIRMED = "COMFIRMED";
 
+export const mapStatusNames = {
+  NOT_WITHDRAWED: "NON RETIRÉ",
+  TO_VALIDATE: "EN ATTENTE",
+  WITHDRAWED: "RETIRÉ",
+  CANCELED: "ANNULÉ",
+  COMFIRMED: "CONFIRMÉ",
+};
+
+export const mapColorStatus = {
+  NOT_WITHDRAWED: "warning",
+  WITHDRAWED: "success",
+  CANCELED: "danger",
+  TO_VALIDATE: "info",
+  COMFIRMED: "success",
+};
+
 // notification status
 export const DEMANDE_PAIEMENT = "DEMANDE_PAIEMENT";
 export const DEMANDE_RETRAIT = "DEMANDE_RETRAIT";
@@ -29,14 +45,6 @@ export const PAIEMENT = "PAIEMENT";
 export const ENVOI = "ENVOI";
 export const RECHARGE = "RECHARGE";
 
-export const mapColorStatus = {
-  NOT_WITHDRAWED: "warning",
-  WITHDRAWED: "success",
-  CANCELED: "danger",
-  TO_VALIDATE: "info",
-  COMFIRMED: "success",
-};
-
 export const mapColorAgence = {
   AGENCE_INTERN: "info",
   PARTNER_SILVER: "warning",
@@ -44,21 +52,29 @@ export const mapColorAgence = {
 };
 
 export const mapColorTypes = {
-  "01": "success",
+  /*"01": "success",
   "02": "warning",
   "03": "success",
   "04": "warning",
   "05": "info",
   "06": "warning",
   "07": "success",
-  "08": "danger",
+  "08": "danger",*/
+  "01": "primary",
+  "02": "danger",
+  "03": "success",
+  "04": "danger",
+  "05": "success",
+  "06": "warning",
+  "07": "info",
+  "08": "success",
 };
 
 export const mapTypeNames = {
   "01": "TRANSFERT",
   "02": "RETRAIT",
-  "03": "COMP_VERSEMENT",
-  "04": "COMP_RETRAIT",
+  "03": "COMPENSATION VERSEMENT",
+  "04": "COMPENSATION RETRAIT",
   "05": "RECHARGE",
   "06": "PAIEMENT",
   "07": "ENVOI",

@@ -31,7 +31,8 @@ const formikEnhancer = withFormik({
         (tel) => tel.toString().length === 5
       ),*/
     montant: Yup.number()
-      .min(1, " Montant doit etre superieur a zero !")
+      .min(10, " Montant doit etre plus 10 MRU !")
+      .max(30000, " Montant ne peut depasser 30000 MRU !")
       .required(" Montant est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({
@@ -54,7 +55,10 @@ const formikEnhancer = withFormik({
             <FontAwesomeIcon icon={["far", "question-circle"]} />
           );
         } else {
-          if (res.soldeEnough === true) {
+          props.handleItem(res);
+          props.showDivInfo();
+
+          /*  if (res.soldeEnough === true) {
             props.handleItem(res);
             props.showDivInfo();
           } else if (res.soldeEnough === false) {
@@ -63,7 +67,7 @@ const formikEnhancer = withFormik({
               "Votre solde est insuffisant pour effectuer cette opération !",
               <FontAwesomeIcon icon={["far", "question-circle"]} />
             );
-          }
+          }*/
         }
       }
       setSubmitting(false);

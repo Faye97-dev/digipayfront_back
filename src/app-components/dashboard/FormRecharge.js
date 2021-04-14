@@ -32,7 +32,8 @@ const formikEnhancer = withFormik({
         (tel) => tel.toString().length === 5
       ),*/
     montant: Yup.number()
-      .min(1, " Montant doit etre superieur a zero !")
+      .min(10, " Montant doit etre plus 10 MRU !")
+      //.max(30000, " Montant ne peut depasser 30000 MRU !")
       .required(" Montant est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({

@@ -38,13 +38,15 @@ export const getCompensations = (showAlert) => (dispatch, getState) => {
       dispatch({
         type: ERROR_COMP,
       });
-      showAlert(
-        "danger",
-        "Erreur de l'historique des compensations !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de l'historique des compensations !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };
@@ -104,16 +106,16 @@ export const addCompensation = (body, resetForm, setSubmitting, showAlert) => (
       dispatch({
         type: ERROR_COMP,
       });
-
-      showAlert(
-        "danger",
-        "Compensation Non-Complete!",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
       setSubmitting(false);
 
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Compensation Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };

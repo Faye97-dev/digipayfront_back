@@ -10,7 +10,7 @@ import { ClipLoader } from "react-spinners";
 import { addRetraitByRandomCode } from "../../actions/transaction";
 import { connect } from "react-redux";
 
-// Form sercret key for a vendor and client digipay
+// Form sercret key for a vendor and client digipay retrait
 const formikEnhancer = withFormik({
   mapPropsToValues: (props) => ({
     secret_key: "",

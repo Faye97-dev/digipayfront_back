@@ -46,13 +46,14 @@ export const getNotifications = (showAlert) => (dispatch, getState) => {
       dispatch({
         type: ERROR_NOTIF,
       });
-      showAlert(
-        "danger",
-        "Erreur de chargement des notifications !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de chargement des notifications !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };

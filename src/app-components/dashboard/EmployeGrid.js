@@ -64,6 +64,8 @@ function EmployeGrid(props) {
                 <SkeletonUser />
               </div>
             </>
+          ) : props.employes.payload.length === 0 ? (
+            "Pas d'employes dans cette agence !"
           ) : (
             props.employes.payload.map((item) => {
               return (

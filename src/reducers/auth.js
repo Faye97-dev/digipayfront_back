@@ -17,6 +17,7 @@ import {
   UPDATE_EMPLOYE_SUCCESS,
   UPDATE_RESPONSABLE_SUCCESS,
   UPDATE_AGENT_SUCCESS,
+  TOKEN_EXPIRED,
 } from "../actions/types.js";
 
 // add refresh token method , and check forbidden 301 error , secure api ,profil info , profil page , 404 page , routes changement warning
@@ -28,10 +29,12 @@ import {
 // sync status of transaction after payback vendor
 // atomic transaction backend , remove clotures , restric serializer models , hash code payement , remove duplicates fetch ...
 // bugs qr code notif , retrait agence spinner , envoie cash client to vendor ? , move check_clientdigipay in service.py , sync  solde after recharge agence
-// statistiques actions  move it to redux ??
+// statistiques actions  move it to redux ?? , check refresh token before logout , register username = tel and can't update , devtools redux remove to prod
+// validate password format backend and frontend
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
+  tokenExpired: false,
   isAuthenticated: false,
   isLoading: false,
   agenceStatus_isLoading: false,
@@ -46,6 +49,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         role: action.payload,
+      };
+    case TOKEN_EXPIRED:
+      return {
+        ...state,
+        tokenExpired: true,
       };
     case AUTH_LOADING:
       return {
@@ -85,6 +93,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         isAuthenticated: false,
         agenceStatus_isLoading: false,
+        tokenExpired: false,
         role: { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
       };
     case LOGOUT:
@@ -98,6 +107,7 @@ export default function (state = initialState, action) {
         isLoading: false,
         isAuthenticated: false,
         agenceStatus_isLoading: false,
+        tokenExpired: false,
         role: { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
       };
     case AGENCE_STATUS_LOADING:
@@ -129,7 +139,6 @@ export default function (state = initialState, action) {
         },
       };
     case UPDATE_SOLDE_CLIENT_DIGIPAY:
-      //const { solde } = { ...action.payload };
       return {
         ...state,
         user: {

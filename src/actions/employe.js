@@ -45,13 +45,15 @@ export const getEmployes = (showAlert) => (dispatch, getState) => {
       dispatch({
         type: ERROR_EMPLOYE,
       });
-      showAlert(
-        "danger",
-        "Erreur de chargement des employes !",
-        <FontAwesomeIcon icon={["fas", "times"]} />
-      );
+
       if (err.response && err.response.status === 401) {
-        expiredToken(dispatch);
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de chargement des employes !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
       }
     });
 };

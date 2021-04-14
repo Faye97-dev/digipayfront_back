@@ -10,7 +10,7 @@ import {
   LOGOUT,
   CLEAN_SESSION,
 } from "./types";
-
+import { expiredToken } from "../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 /*export const changeRole = (role) => (dispatch) => {
   dispatch({
@@ -143,5 +143,69 @@ export const logout = () => (dispatch, getState) => {
         type: CLEAN_SESSION,
       });
       //console.log(err);
+    });
+};
+
+export const updatePassword = (id, body, setSubmitting, showAlert) => (
+  dispatch,
+  getState
+) => {
+  //dispatch({ type: AUTH_LOADING });
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+  axios
+    .put(HOST + `api/user/password/update/${id}/`, body, config)
+    .then((res) => {
+      console.log(res);
+      if (res) {
+        showAlert(
+          "success",
+          res.data.msg,
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        setTimeout(() => {
+          showAlert(
+            "warning",
+            "Vous allez être déconnecté dans quelque secondes ...",
+            <FontAwesomeIcon icon={["far", "question-circle"]} />
+          );
+          setTimeout(() => {
+            dispatch({
+              type: LOGOUT,
+            });
+            dispatch({
+              type: CLEAN_SESSION,
+            });
+          }, 2500);
+        }, 2000);
+      }
+      setSubmitting(false);
+    })
+    .catch((err) => {
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else if (err.response && err.response.status === 400) {
+        showAlert(
+          "warning",
+          err.response.data?.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de modification du mot de passe utilisateur !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+      setSubmitting(false);
     });
 };
