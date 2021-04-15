@@ -30,6 +30,7 @@ export default function configureStore() {
   return createStore(
     rootReducer,
     initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
+    //composeWithDevTools(applyMiddleware(...middleware))
+    applyMiddleware(...middleware)
   );
 }

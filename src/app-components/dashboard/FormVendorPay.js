@@ -83,7 +83,7 @@ const ModalScanQrCode = (props) => {
   };
 
   const handleScanFile = (result) => {
-    console.log("scaned qr code ...", result);
+    //console.log("scaned qr code ...", result);
     if (result) {
       setScanResultFile(result);
       processBeforePayement(result);
@@ -106,7 +106,7 @@ const ModalScanQrCode = (props) => {
   const handleModal = () => {
     setModalQrCode(!modalQrCode);
     setScanResultWebCam(null);
-    console.log("handle modal called...");
+    //console.log("handle modal called...");
   };
 
   const processBeforePayement = (result) => {

@@ -165,7 +165,7 @@ export const updatePassword = (id, body, setSubmitting, showAlert) => (
   axios
     .put(HOST + `api/user/password/update/${id}/`, body, config)
     .then((res) => {
-      console.log(res);
+      //console.log(res);
       if (res) {
         showAlert(
           "success",
