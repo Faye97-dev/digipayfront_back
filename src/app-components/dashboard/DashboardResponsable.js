@@ -13,9 +13,9 @@ class DashboardResponsable extends Component {
         <DashboardAmount></DashboardAmount>
         <Tabs></Tabs>
         <TransactionsHistory></TransactionsHistory>
-        <br />
-        <br />
-        <TransactionsCompensation />
+        {/*<br />
+          <br />
+          <TransactionsCompensation />*/}
         <EmployeGrid></EmployeGrid>
         <Charts></Charts>
       </>

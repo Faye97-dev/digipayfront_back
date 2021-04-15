@@ -26,6 +26,9 @@ import {
   mapTypeNames,
   mapColorTypes,
   mapStatusNames,
+  RESPONSABLE_AGENCE,
+  AGENT_COMPENSATION,
+  SYSADMIN,
 } from "../../utils/choices";
 import {
   filterDataProcess,
@@ -43,7 +46,7 @@ import empty from "../../assets/images/empty.png";
 import { showAlert } from "../../utils/alerts";
 import SkeletonLoader from "../../utils/SkeletonLoader";
 import ModalTransDetails from "../transaction/ModalTransDetails";
-import { RESPONSABLE_AGENCE, AGENT_COMPENSATION } from "../../utils/choices";
+
 const filtersOptions = {
   status: {
     label: "Status",
@@ -252,7 +255,7 @@ class TransactionsCompensation extends Component {
   render() {
     const compensations = this.props.compensations.loading ? (
       <tr>
-        <td colSpan="7">
+        <td colSpan={this.props.role.value === SYSADMIN ? "8" : "7"}>
           <SkeletonLoader />
         </td>
       </tr>
@@ -286,30 +289,68 @@ class TransactionsCompensation extends Component {
                     {getHighlightedText(item.date, this.state.search)}
                   </span>
                 </td>
-                <td className="text-center">
-                  <div>
-                    <a
-                      href="#/"
-                      onClick={(e) => e.preventDefault()}
-                      className="font-weight-bold text-black-30"
-                      title="..."
-                    >
-                      {this.props.role.value === RESPONSABLE_AGENCE &&
-                        item.transaction.agent.first_name +
-                          " " +
-                          item.transaction.agent.last_name}
-                      {this.props.role.value === AGENT_COMPENSATION &&
-                        item.transaction.agence.nom}
-                    </a>
-                    <span className="text-black-50 d-block">
-                      {this.props.role.value === RESPONSABLE_AGENCE &&
-                        item.transaction.agent.tel}
-                      {this.props.role.value === AGENT_COMPENSATION &&
-                        item.transaction.agence.type_agence}
-                    </span>
-                  </div>
-                </td>
-
+                {(this.props.role.value === RESPONSABLE_AGENCE ||
+                  this.props.role.value === AGENT_COMPENSATION) && (
+                  <td className="text-center">
+                    <div>
+                      <a
+                        href="#/"
+                        onClick={(e) => e.preventDefault()}
+                        className="font-weight-bold text-black-30"
+                        title="..."
+                      >
+                        {this.props.role.value === RESPONSABLE_AGENCE &&
+                          item.transaction.agent.first_name +
+                            " " +
+                            item.transaction.agent.last_name}
+                        {this.props.role.value === AGENT_COMPENSATION &&
+                          item.transaction.agence.nom}
+                      </a>
+                      <span className="text-black-50 d-block">
+                        {this.props.role.value === RESPONSABLE_AGENCE &&
+                          item.transaction.agent.tel}
+                        {this.props.role.value === AGENT_COMPENSATION &&
+                          item.transaction.agence.type_agence}
+                      </span>
+                    </div>
+                  </td>
+                )}
+                {this.props.role.value === SYSADMIN && (
+                  <>
+                    <td className="text-center">
+                      <div>
+                        <a
+                          href="#/"
+                          onClick={(e) => e.preventDefault()}
+                          className="font-weight-bold text-black-30"
+                          title="..."
+                        >
+                          {item.transaction.agence.nom}
+                        </a>
+                        <span className="text-black-50 d-block">
+                          {item.transaction.agence.type_agence}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="text-center">
+                      <div>
+                        <a
+                          href="#/"
+                          onClick={(e) => e.preventDefault()}
+                          className="font-weight-bold text-black-30"
+                          title="..."
+                        >
+                          {item.transaction.agent.first_name +
+                            " " +
+                            item.transaction.agent.last_name}
+                        </a>
+                        <span className="text-black-50 d-block">
+                          {item.transaction.agent.tel}
+                        </span>
+                      </div>
+                    </td>
+                  </>
+                )}
                 <td className="font-size-lg font-weight-bold text-center">
                   <span>
                     {getHighlightedText(
@@ -463,15 +504,36 @@ class TransactionsCompensation extends Component {
                       >
                         Date
                       </th>
-                      <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                      >
-                        {this.props.role.value === RESPONSABLE_AGENCE &&
-                          "Agent"}
-                        {this.props.role.value === AGENT_COMPENSATION &&
-                          "Agence"}
-                      </th>
+
+                      {(this.props.role.value === RESPONSABLE_AGENCE ||
+                        this.props.role.value === AGENT_COMPENSATION) && (
+                        <th
+                          className="text-center font-size-lg font-weight-normal   text-dark"
+                          scope="col"
+                        >
+                          {this.props.role.value === RESPONSABLE_AGENCE &&
+                            "Agent"}
+                          {this.props.role.value === AGENT_COMPENSATION &&
+                            "Agence"}
+                        </th>
+                      )}
+
+                      {this.props.role.value === SYSADMIN && (
+                        <>
+                          <th
+                            className="text-center font-size-lg font-weight-normal text-dark"
+                            scope="col"
+                          >
+                            Agence
+                          </th>
+                          <th
+                            className="text-center font-size-lg font-weight-normal text-dark"
+                            scope="col"
+                          >
+                            Agent
+                          </th>
+                        </>
+                      )}
 
                       <th
                         className="text-center text-center text-center font-size-lg font-weight-normal   text-dark"

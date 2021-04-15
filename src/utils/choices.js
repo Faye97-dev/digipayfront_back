@@ -12,6 +12,7 @@ export const RESPONSABLE_AGENCE = "RESPONSABLE_AGENCE";
 export const AGENT_COMPENSATION = "AGENT_COMPENSATION";
 export const CLIENT = "CLIENT";
 export const VENDOR = "VENDOR";
+export const SYSADMIN = "SYSADMIN";
 
 export const NOT_WITHDRAWED = "NOT_WITHDRAWED";
 export const TO_VALIDATE = "TO_VALIDATE";

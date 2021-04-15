@@ -98,7 +98,7 @@ class AgenceStatusList extends Component {
       init: true,
       search: "",
       //totalPage: 1,
-      totalRowsPerPage: 10,
+      totalRowsPerPage: 5,
       totalData: 0,
       page: 1,
       current: [],

@@ -84,7 +84,7 @@ const HeaderDrawer = (props) => {
 
   return (
     <>
-      {props.role === "SYSADMIN" && (
+      {false && props.role === "SYSADMIN" && (
         <>
           <div className="app-drawer-wrapper">
             <button
