@@ -10,6 +10,7 @@ import {
   Nav,
   NavItem,
   Modal,
+  Badge,
 } from "reactstrap";
 import { NavLink as NavLinkStrap } from "reactstrap";
 
@@ -39,9 +40,11 @@ function CodeGenerator(props) {
     if (activeTab !== tab) setActiveTab(tab);
   };
   const [modalQrCode, setModalQrCode] = useState(false);
+  const [showCodePaiement, setShowCodePaiement] = useState(null);
   const handleModal = () => setModalQrCode(!modalQrCode);
 
   const [imageUrl, setImageUrl] = useState("");
+
   const generateQrCode = async (text) => {
     var opts = {
       //errorCorrectionLevel: 'H',
@@ -93,6 +96,7 @@ function CodeGenerator(props) {
                   <FormVendor
                     submit="Générer"
                     generateQrCode={generateQrCode}
+                    setShowCodePaiement={setShowCodePaiement}
                   />
 
                   <Modal
@@ -106,7 +110,17 @@ function CodeGenerator(props) {
                     <div className="p-2">
                       {imageUrl ? (
                         /*<a href={imageUrl} download={`QrCode${Date.now()}`}>*/
-                        <img src={imageUrl} alt="img" width="100%" />
+                        <>
+                          <img src={imageUrl} alt="img" width="100%" />
+                          <p className="text-black p-1 m-0 text-center font-size-xl font-weight-normal">
+                            Code de paiement :
+                            <Badge color="primary" className=" mx-2 px-2 ">
+                              <span className="text-white font-size-xl ">
+                                {showCodePaiement}
+                              </span>
+                            </Badge>
+                          </p>
+                        </>
                       ) : /* </a>*/
                       null}
                     </div>

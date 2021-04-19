@@ -221,7 +221,11 @@ const Routes = (props) => {
       ],
     },
   ];
-
+  const PathSidebar = RoutesSidebar.filter((item) =>
+    item.roles.includes(props.role)
+  ).map((item) => {
+    return item.link; //
+  });
   const RoutesCollapsed = [
     {
       component: { Mesenger },
@@ -273,7 +277,8 @@ const Routes = (props) => {
             </PresentationLayout>
           </Route>
           <Route
-            path={[
+            path={
+              /*[
               "/Dashboard",
               "/Transaction",
               "/Agence",
@@ -283,8 +288,9 @@ const Routes = (props) => {
               "/Statistique",
               "/Notification",
               "/Contact",
-              "/DashboardMonitoring",
-            ]}
+            ]*/
+              PathSidebar
+            }
           >
             <LeftSidebar>
               <Switch location={location} key={location.pathname}>
@@ -306,16 +312,11 @@ const Routes = (props) => {
                       />
                     );
                   })}
-
-                  {/*<Route
-                    path="/DashboardMonitoring"
-                    component={DashboardMonitoring}
-                  />*/}
                 </motion.div>
               </Switch>
             </LeftSidebar>
           </Route>
-          <Route path={["/Chat", "/Profil"]}>
+          <Route path={["/Profil"]}>
             <CollapsedSidebar>
               <Switch location={location} key={location.pathname}>
                 <motion.div
@@ -342,7 +343,7 @@ const Routes = (props) => {
               </Switch>
             </CollapsedSidebar>
           </Route>
-          <Route path={["/PageLoginBasic"]}>
+          <Route path={[]}>
             <MinimalLayout>
               <Switch location={location} key={location.pathname}>
                 <motion.div

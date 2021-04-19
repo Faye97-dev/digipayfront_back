@@ -16,36 +16,8 @@ import {
   CANCELED,
 } from "../../utils/choices";
 import { AlertModal } from "../../utils/AlertModal";
-const fetchData = [
-  {
-    id: 1,
-    from: "42158976",
-    date: "13-11-2020 16:59",
-    style: "warning",
-    msg: "Vous avez envoye 500.0 pour le client dont le numero est : 42158976",
-  },
-  {
-    id: 2,
-    from: "2015786",
-    date: "12-11-2020 12:59",
-    style: "primary",
-    msg: "Vous avez retire 6200.0 pour le client dont le numero est : 2015786",
-  },
-  {
-    id: 3,
-    from: "20171400",
-    date: "28-10-2020 10:21",
-    style: "warning",
-    msg: "Vous avez envoye 250.0 pour le client dont le numero est : 20171400",
-  },
-  {
-    id: 4,
-    from: "20101410",
-    date: "25-10-2020 20:12",
-    style: "primary",
-    msg: "Vous avez retire 500.0 pour le client dont le numero est : 20101410",
-  },
-];
+import { HOST } from "../../actions/types";
+
 class NotificationList extends Component {
   constructor(props) {
     super(props);
@@ -383,9 +355,16 @@ class NotificationList extends Component {
                 toggle={() => this.handleModal(null)}
                 contentClassName="border-0"
               >
-                <div className="p-2">
-                  <img src={this.state.currentQrCode} alt="img" width="100%" />
-                </div>
+                {this.state.currentQrCode && (
+                  <div className="p-2">
+                    {/*console.log(HOST, this.state.currentQrCode.substring(1))*/}
+                    <img
+                      src={HOST + this.state.currentQrCode.substring(1)}
+                      alt="img"
+                      width="100%"
+                    />
+                  </div>
+                )}
               </Modal>
               <AlertModal
                 toggleAlertModal={this.toggleModalAlertModal}
