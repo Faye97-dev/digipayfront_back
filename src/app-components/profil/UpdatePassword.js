@@ -89,7 +89,7 @@ const formikEnhancer = withFormik({
     const payload = {
       ...values,
     };
-    console.log(payload);
+    //console.log(payload);
     props.updatePassword(props.user.id, payload, setSubmitting, showAlert);
   },
   displayName: "MyForm",

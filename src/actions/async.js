@@ -347,7 +347,7 @@ export const updateNotification = async (
       data = res.data;
       showAlert(
         "info",
-        "Veuillez consulter vos notifications pour le code de payement ou scanner le QR-Code !",
+        "Veuillez consulter vos notifications pour le code de payement ou QR-Code !",
         <FontAwesomeIcon icon={["far", "question-circle"]} />
       );
     })
@@ -575,6 +575,37 @@ export const check_clienAnonyme = async (form, showAlert, access = null) => {
         showAlert(
           "danger",
           "Validation du numero de telephone non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+};
+
+export const client_check_VendorId = async (form, showAlert, access = null) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  let data;
+  await axios
+    .post(HOST + `api/func/client_digiPay/valid-vendor-id/`, form, config)
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du numéro commerçant non-complete!",
           <FontAwesomeIcon icon={["fas", "times"]} />
         );
       }

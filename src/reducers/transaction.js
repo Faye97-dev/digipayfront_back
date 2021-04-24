@@ -10,6 +10,7 @@ import {
   ADD_RECHARGE,
   ADD_PAIEMENT,
   ADD_PAYBACK,
+  UPDATE_TRANSACTION,
 } from "../actions/types.js";
 
 const initialState = {
@@ -26,7 +27,8 @@ export default function (state = initialState, action) {
         action.payload === ADD_RETRAIT ||
         action.payload === ADD_RECHARGE ||
         action.payload === ADD_PAIEMENT ||
-        action.payload === ADD_PAYBACK
+        action.payload === ADD_PAYBACK ||
+        action.payload === UPDATE_TRANSACTION
       ) {
         return {
           ...state,
@@ -65,7 +67,6 @@ export default function (state = initialState, action) {
           loading: false,
         },
       };
-    case ADD_PAYBACK:
     case ADD_PAIEMENT:
     case ADD_RECHARGE:
     case ADD_TRANSFERT:
@@ -75,6 +76,33 @@ export default function (state = initialState, action) {
         transactions: {
           ...state.transactions,
           payload: [action.payload, ...state.transactions.payload],
+          loading: false,
+        },
+      };
+    case UPDATE_TRANSACTION:
+      return {
+        ...state,
+        transactions: {
+          ...state.transactions,
+          payload: [
+            ...updateItemInList(action.payload, state.transactions.payload),
+          ],
+          loading: false,
+        },
+      };
+
+    case ADD_PAYBACK:
+      return {
+        ...state,
+        transactions: {
+          ...state.transactions,
+          payload: [
+            action.payload,
+            ...updateItemInList(
+              action.reducerStuff,
+              state.transactions.payload
+            ),
+          ],
           loading: false,
         },
       };
@@ -91,3 +119,14 @@ export default function (state = initialState, action) {
       return state;
   }
 }
+
+const updateItemInList = (item, listItems) => {
+  const result = [...listItems].map((value) => {
+    if (value.id === item.id) {
+      return { ...item };
+    } else {
+      return value;
+    }
+  });
+  return result;
+};

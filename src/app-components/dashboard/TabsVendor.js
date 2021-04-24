@@ -41,8 +41,9 @@ function CodeGenerator(props) {
   };
   const [modalQrCode, setModalQrCode] = useState(false);
   const [showCodePaiement, setShowCodePaiement] = useState(null);
-  const handleModal = () => setModalQrCode(!modalQrCode);
-
+  const handleModal = () => {
+    setModalQrCode(!modalQrCode);
+  };
   const [imageUrl, setImageUrl] = useState("");
 
   const generateQrCode = async (text) => {
@@ -97,6 +98,7 @@ function CodeGenerator(props) {
                     submit="Générer"
                     generateQrCode={generateQrCode}
                     setShowCodePaiement={setShowCodePaiement}
+                    handleModal={handleModal}
                   />
 
                   <Modal
@@ -121,8 +123,16 @@ function CodeGenerator(props) {
                             </Badge>
                           </p>
                         </>
-                      ) : /* </a>*/
-                      null}
+                      ) : (
+                        <p className="text-black p-1 m-0 text-center font-size-xl font-weight-normal">
+                          Code de paiement :
+                          <Badge color="primary" className=" mx-2 px-2 ">
+                            <span className="text-white font-size-xl ">
+                              {showCodePaiement}
+                            </span>
+                          </Badge>
+                        </p>
+                      )}
                     </div>
                   </Modal>
                 </div>

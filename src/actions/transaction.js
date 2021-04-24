@@ -13,6 +13,7 @@ import {
   ADD_RECHARGE,
   ADD_PAIEMENT,
   ADD_PAYBACK,
+  UPDATE_TRANSACTION,
 } from "./types";
 import { updateSolde, updateSolde_clientDigipay } from "./async";
 import { expiredToken } from "../utils/alerts";
@@ -610,6 +611,17 @@ export const addPayement_clientDigipay = (transfert, showAlert) => (
           "Transaction Complete!",
           <FontAwesomeIcon icon={["fas", "check"]} />
         );
+
+        if (transfert.livraison) {
+          setTimeout(() => {
+            showAlert(
+              "info",
+              "Merci de fournir le code livraison au commerçant dans vos notifications !",
+              <FontAwesomeIcon icon={["far", "question-circle"]} />
+            );
+          }, 2500);
+        }
+
         updateSolde_clientDigipay(user.id, getState().auth.access).then(
           (res) => {
             if (res) {
@@ -649,6 +661,86 @@ export const addPayement_clientDigipay = (transfert, showAlert) => (
           <FontAwesomeIcon icon={["fas", "times"]} />
         );
       }
+    });
+};
+
+export const addFastPayement_clientDigipay = (
+  transfert,
+  showAlert,
+  setSubmitting,
+  closeModal
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: ADD_PAIEMENT,
+  });
+
+  const user = getState().auth.user;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .post(HOST + `api/func/client_digiPay/fast-payement/`, transfert, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        dispatch({
+          type: ADD_PAIEMENT,
+          payload: res.data,
+        });
+        showAlert(
+          "success",
+          "Transaction Complete!",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+
+        updateSolde_clientDigipay(user.id, getState().auth.access).then(
+          (res) => {
+            if (res) {
+              dispatch({
+                type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+                payload: res,
+              });
+            }
+          }
+        );
+        setSubmitting(false);
+        closeModal();
+      } else if (keys.includes("msg")) {
+        dispatch({
+          type: ERROR_TRANS,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+        setSubmitting(false);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_TRANS,
+      });
+
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+      setSubmitting(false);
+      closeModal();
     });
 };
 
@@ -841,7 +933,8 @@ export const addPayback = (transfert, showAlert) => (dispatch, getState) => {
         //setTimeout(() => {
         dispatch({
           type: ADD_PAYBACK,
-          payload: res.data,
+          payload: res.data[0],
+          reducerStuff: res.data[1],
         });
 
         showAlert(
@@ -884,6 +977,73 @@ export const addPayback = (transfert, showAlert) => (dispatch, getState) => {
         showAlert(
           "danger",
           "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
+
+export const clientDigipay_Livraison = (body, showAlert) => (
+  dispatch,
+  getState
+) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: UPDATE_TRANSACTION,
+  });
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const access = getState().auth.access;
+  const user = getState().auth.user;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .post(HOST + `api/func/vendor/livraison-client/`, body, config)
+    .then((res) => {
+      dispatch({
+        type: UPDATE_TRANSACTION,
+        payload: res.data,
+      });
+
+      if (body.confirm) {
+        showAlert(
+          "success",
+          "Livraison Complete !",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        updateSolde_clientDigipay(user.id, access).then((res) => {
+          if (res) {
+            dispatch({
+              type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+              payload: res,
+            });
+          }
+        });
+      } else if (body.confirm === false) {
+        showAlert(
+          "warning",
+          "Livraison Annulée !",
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_TRANS,
+      });
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Livraison Non-Complete!",
           <FontAwesomeIcon icon={["fas", "times"]} />
         );
       }

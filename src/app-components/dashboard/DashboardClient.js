@@ -83,13 +83,25 @@ function SmallFormat(props) {
           </div>
           <div className="font-weight-bold font-size-xl text-black display-3 mt-4 mb-1">
             {props.showAmout ? (
-              <CountUp
-                start={0}
-                end={props.user && props.user.solde}
-                duration={2}
-                separator=""
-                suffix=" MRU"
-              />
+              <div className="d-flex align-items-center justify-content-center">
+                <CountUp
+                  start={0}
+                  end={props.user && props.user.solde}
+                  duration={2}
+                  separator=""
+                  suffix=" MRU"
+                />
+                {/*<div className="font-weight-normal font-size-md text-danger pl-2">
+                  <CountUp
+                    start={0}
+                    end={props.user && props.user.on_hold}
+                    duration={2}
+                    separator=""
+                    prefix="(- "
+                    suffix=" MRU)"
+                  />
+                  </div>*/}
+              </div>
             ) : (
               "* * * * *"
             )}

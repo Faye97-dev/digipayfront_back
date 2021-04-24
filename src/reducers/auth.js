@@ -144,6 +144,7 @@ export default function (state = initialState, action) {
         user: {
           ...state.user,
           solde: action.payload.solde,
+          on_hold: action.payload.on_hold,
         },
       };
     case UPDATE_CLIENT_DIGIPAY_SUCCESS:

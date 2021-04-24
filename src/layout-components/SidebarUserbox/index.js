@@ -1,92 +1,47 @@
-import React from "react";
-
+import React, { useState } from "react";
+import QRCode from "qrcode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Badge,
-  UncontrolledTooltip,
-  Button,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-} from "reactstrap";
+import { Badge, Button, Modal } from "reactstrap";
 
 import av1 from "../../assets/images/avatars/av1.png";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
+import { VENDOR } from "../../utils/choices";
 const SidebarUserbox = (props) => {
+  const [modalQrCode, setModalQrCode] = useState(false);
+  const handleModal = (text = null) => {
+    generateQrCode(text).then((res) => {
+      setModalQrCode(!modalQrCode);
+    });
+  };
+  const [imageUrl, setImageUrl] = useState("");
+
+  const generateQrCode = async (text) => {
+    var opts = {
+      //errorCorrectionLevel: 'H',
+      type: "image/jpeg",
+      quality: 1,
+      margin: 0.5,
+      color: {
+        dark: "#3c44b1",
+        //light: "#FFBF60FF",
+      },
+    };
+    let result = null;
+    if (typeof text === "string") {
+      try {
+        const response = await QRCode.toDataURL(text, opts);
+        setImageUrl(response);
+        result = response;
+      } catch (error) {
+        console.log(error);
+        result = null;
+      }
+    }
+    return result;
+  };
   const profil = (
     <div className="app-sidebar--userbox">
-      {/*<UncontrolledDropdown className="card-tr-actions">
-        <DropdownToggle
-          color="link"
-          className="p-0 border-0 d-30 text-white-50"
-        >
-          <FontAwesomeIcon
-            icon={["fas", "ellipsis-h"]}
-            className="font-size-lg"
-          />
-        </DropdownToggle>
-        <DropdownMenu
-          right
-          className="text-nowrap dropdown-menu-lg overflow-hidden p-0"
-        >
-          <div className="align-box-row align-items-center p-3">
-            <div className="avatar-icon-wrapper avatar-icon-md">
-              <div className="avatar-icon rounded-circle">
-                <img alt="..." src={av1} />
-              </div>
-            </div>
-            <div className="pl-2">
-              <span className="font-weight-bold d-block">Emma Taylor</span>
-              <Badge color="success">Active</Badge>
-            </div>
-          </div>
-          <div className="divider" />
-          <div className="d-flex py-3 justify-content-center">
-            <div className="d-flex align-items-center">
-              <div>
-                <FontAwesomeIcon
-                  icon={["far", "user"]}
-                  className="font-size-xxl text-success"
-                />
-              </div>
-              <div className="pl-3 line-height-sm">
-                <b className="font-size-lg">14,596</b>
-                <span className="text-black-50 d-block">reports</span>
-              </div>
-            </div>
-          </div>
-          <div className="divider" />
-          <div className="d-block rounded-bottom py-3 text-center">
-            <Button
-              size="sm"
-              color="facebook"
-              className="d-40 p-0 mx-2"
-              id="FacebookTooltip3525342"
-            >
-              <span className="btn-wrapper--icon">
-                <FontAwesomeIcon icon={["fab", "facebook"]} />
-              </span>
-            </Button>
-            <UncontrolledTooltip target="FacebookTooltip3525342">
-              Facebook
-            </UncontrolledTooltip>
-            <Button
-              size="sm"
-              color="twitter"
-              className="d-40 p-0 mx-2"
-              id="btnTwitterTooltip254346346"
-            >
-              <span className="btn-wrapper--icon">
-                <FontAwesomeIcon icon={["fab", "twitter"]} />
-              </span>
-            </Button>
-            <UncontrolledTooltip target="btnTwitterTooltip254346346">
-              Twitter
-            </UncontrolledTooltip>
-          </div>
-        </DropdownMenu>
-  </UncontrolledDropdown>*/}
       <div className="avatar-icon-wrapper avatar-icon-md">
         <Badge color="success" className="badge-circle">
           Online
@@ -104,12 +59,50 @@ const SidebarUserbox = (props) => {
           {props.user && props.user.tel}
         </small>
       </div>
-      {/* <Button size="sm" tag={NavLink} to="/Profil" color="userbox">
-        Mon profil
-      </Button> */}
+      {props.role?.value === VENDOR && (
+        <Button
+          className="m-1 p-1"
+          size="sm"
+          color="first"
+          onClick={() => handleModal(props.user?.myId)}
+        >
+          QrCode
+        </Button>
+      )}
     </div>
   );
-  return <>{profil}</>;
+  return (
+    <>
+      {profil}
+      <Modal
+        zIndex={2000}
+        centered
+        size="sm"
+        isOpen={modalQrCode}
+        toggle={handleModal}
+        contentClassName="border-0"
+      >
+        <div className="p-2">
+          {imageUrl && (
+            /*<a href={imageUrl} download={`QrCode${Date.now()}`}>*/
+            <>
+              <a href={imageUrl} download={`QrCode${Date.now()}`}>
+                <img src={imageUrl} alt="img" width="100%" />
+              </a>
+              <p className="text-black p-1 m-0 text-center font-size-xl font-weight-normal">
+                Code commerçant :
+                <Badge color="primary" className=" mx-2 px-2 ">
+                  <span className="text-white font-size-xl ">
+                    {props.user?.myId}
+                  </span>
+                </Badge>
+              </p>
+            </>
+          )}
+        </div>
+      </Modal>
+    </>
+  );
 };
 
 const mapStateToProps = (state) => ({

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
 import clsx from "clsx";
 
@@ -8,7 +8,6 @@ import {
   Table,
   Col,
   Card,
-  CustomInput,
   Input,
   Badge,
   Nav,
@@ -18,6 +17,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Modal,
 } from "reactstrap";
 import { NavLink as NavLinkStrap } from "reactstrap";
 import Select from "react-select";
@@ -45,11 +45,13 @@ import {
   mapTypeNames,
   mapColorTypes,
   mapStatusNames,
+  VENDOR,
+  TO_VALIDATE,
 } from "../../utils/choices";
 import FormFilter from "../transaction/FormFilter";
 import CollapseModel from "./CollapseModel";
 import { PaginateData } from "../../utils/dataTable";
-
+import FormSecretKeyLivraison from "./FormSecretKeyLivraison";
 const filtersOptions = {
   status: {
     label: "Status",
@@ -85,11 +87,22 @@ class TransactionsVendor extends Component {
       page: 1,
       current: [],
       searchOpen: false,
+      modalLivraison: false,
+      currentTransaction: null,
     };
 
     this.handleChangePage = this.handleChangePage.bind(this);
     this.Paginate = this.Paginate.bind(this);
+    this.handleModalLivraison = this.handleModalLivraison.bind(this);
   }
+
+  handleModalLivraison = (transaction = null) => {
+    this.setState({
+      ...this.state,
+      modalLivraison: !this.state.modalLivraison,
+      currentTransaction: transaction,
+    });
+  };
 
   openSearch = () => this.setState({ ...this.state, searchOpen: true });
   closeSearch = () => this.setState({ ...this.state, searchOpen: false });
@@ -262,15 +275,58 @@ class TransactionsVendor extends Component {
                   </Badge>
                 </td>
                 <td className="text-center">
-                  <Button
-                    color="primary"
-                    className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
-                  >
-                    <FontAwesomeIcon
-                      icon={["fas", "eye"]}
-                      className="font-size-sm"
-                    />
-                  </Button>
+                  <UncontrolledDropdown>
+                    <DropdownToggle
+                      size="sm"
+                      color="link"
+                      className="btn-link-primary p-0 text-primary "
+                    >
+                      <FontAwesomeIcon
+                        icon={["fas", "ellipsis-h"]}
+                        className="font-size-lg"
+                      />
+                    </DropdownToggle>
+                    <DropdownMenu
+                      right
+                      className="dropdown-menu-md overflow-hidden p-0"
+                    >
+                      <Nav pills className=" flex-column p-2">
+                        <NavItem>
+                          <NavLinkStrap
+                            href="#/"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <FontAwesomeIcon
+                              icon={["fas", "eye"]}
+                              className="font-size-md mr-3"
+                            />
+                            <span>Details</span>
+                          </NavLinkStrap>
+                        </NavItem>
+                        {this.props.role?.value === VENDOR &&
+                          item.transaction.status === TO_VALIDATE && (
+                            <NavItem>
+                              <NavLinkStrap
+                                href="#/"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  this.handleModalLivraison({
+                                    transfertID: item.transaction.id,
+                                    transactionID: item.id,
+                                  });
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={["fas", "truck"]}
+                                  className="font-size-md mr-3"
+                                />
+                                <span>Livraison</span>
+                              </NavLinkStrap>
+                            </NavItem>
+                          )}
+                      </Nav>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
                 </td>
               </tr>
             );
@@ -408,6 +464,11 @@ class TransactionsVendor extends Component {
     );
     return (
       <>
+        <ModalLivraison
+          handleModalLivraison={this.handleModalLivraison}
+          modalLivraison={this.state.modalLivraison}
+          transaction={this.state.currentTransaction}
+        />
         <Card className="card-box shadow-none d-none d-md-block">
           <div className="px-4 pt-4 text-primary">
             <h5 className="font-weight-bold text-dark">
@@ -563,8 +624,29 @@ class TransactionsVendor extends Component {
 
 const mapStateToProps = (state) => ({
   transactions: state.transaction.transactions,
+  role: state.auth.role,
 });
 
 export default connect(mapStateToProps, {
   getTransactions,
 })(TransactionsVendor);
+
+function ModalLivraison(props) {
+  return (
+    <Modal
+      zIndex={2000}
+      centered
+      size="md"
+      isOpen={props.modalLivraison}
+      toggle={props.handleModalLivraison}
+      contentClassName="border-0"
+    >
+      <div className="my-4">
+        <FormSecretKeyLivraison
+          handleModalLivraison={props.handleModalLivraison}
+          transaction={props.transaction}
+        />
+      </div>
+    </Modal>
+  );
+}

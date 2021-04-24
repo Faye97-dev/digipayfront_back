@@ -13,6 +13,7 @@ import { SkeletonCard } from "../../utils/SkeletonLoader";
 import {
   TO_VALIDATE,
   DEMANDE_COMPENSATION,
+  DEMANDE_PAIEMENT,
   CANCELED,
 } from "../../utils/choices";
 import { AlertModal } from "../../utils/AlertModal";
@@ -218,6 +219,15 @@ class NotificationList extends Component {
                       >
                         {item.status}
                       </a>
+                      {item.status === DEMANDE_PAIEMENT &&
+                        item.transaction &&
+                        item.transaction?.livraison && (
+                          <div className="px-2">
+                            <Badge color="success" className="px-2">
+                              Livraison
+                            </Badge>
+                          </div>
+                        )}
                       <div className="ml-auto font-size-sm text-primary">
                         <FontAwesomeIcon
                           icon={["far", "clock"]}
@@ -258,6 +268,7 @@ class NotificationList extends Component {
                     >
                       {item.status}
                     </a>
+
                     <div className="font-size-sm text-primary">
                       <FontAwesomeIcon
                         icon={["far", "clock"]}
@@ -265,6 +276,15 @@ class NotificationList extends Component {
                       />
                       {item.date}
                     </div>
+                    {item.status === DEMANDE_PAIEMENT &&
+                      item.transaction &&
+                      item.transaction?.livraison && (
+                        <div className="pb-1">
+                          <Badge color="success" className="px-2">
+                            Livraison
+                          </Badge>
+                        </div>
+                      )}
                   </div>
                   <div className="d-sm-none d-block ">
                     <div className="text-justify">{item.message}</div>
