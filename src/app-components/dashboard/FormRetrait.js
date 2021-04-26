@@ -208,7 +208,7 @@ class ListRetraits extends Component {
         <Modal
           zIndex={2000}
           centered
-          size="lg"
+          size="md"
           isOpen={this.state.modalSecretKey}
           toggle={this.handleModal}
           contentClassName="border-0"
@@ -219,7 +219,7 @@ class ListRetraits extends Component {
                 <div className="px-4 pt-4 pb-2">
                   <h1 className="pb-2 display-4 font-weight-bold font-size-lg text-primary text-center">
                     <span>
-                      Veuillez entrer le code de confirmation de la transaction
+                      Veuillez entrer le code de confirmation de retrait
                     </span>
                   </h1>
                   <div className="rounded">
@@ -247,7 +247,7 @@ class ListRetraits extends Component {
         <Modal
           zIndex={2000}
           centered
-          size="lg"
+          size="md"
           isOpen={this.state.modalSecretKeyUser}
           toggle={this.handleModalUser}
           contentClassName="border-0"
@@ -258,7 +258,7 @@ class ListRetraits extends Component {
                 <div className="px-4 pt-4 pb-2">
                   <h1 className="pb-2 display-4 font-weight-bold font-size-lg text-primary text-center">
                     <span>
-                      Veuillez entrer le code de confirmation de la transaction
+                      Veuillez entrer le code de confirmation de retrait
                     </span>
                   </h1>
                   <div className="rounded">

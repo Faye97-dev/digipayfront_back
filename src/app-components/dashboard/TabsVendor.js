@@ -41,7 +41,8 @@ function CodeGenerator(props) {
   };
   const [modalQrCode, setModalQrCode] = useState(false);
   const [showCodePaiement, setShowCodePaiement] = useState(null);
-  const handleModal = () => {
+  const handleModal = (res = null) => {
+    setImageUrl(res);
     setModalQrCode(!modalQrCode);
   };
   const [imageUrl, setImageUrl] = useState("");
@@ -60,8 +61,7 @@ function CodeGenerator(props) {
     let result;
     try {
       const response = await QRCode.toDataURL(text, opts);
-      setImageUrl(response);
-      handleModal();
+      handleModal(response);
       result = response;
     } catch (error) {
       console.log(error);

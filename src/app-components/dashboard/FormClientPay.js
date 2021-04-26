@@ -281,7 +281,7 @@ const ModalFastPayement = (props) => {
                 <div className="bg-white rounded pt-4 pb-0">
                   <div className="px-1 px-sm-1 pt-1 pb-1">
                     <h1 className="display-4 font-weight-bold font-size-lg text-center">
-                      <span>Voulez-vous payer le commercant ci- dessous ?</span>
+                      <span>Voulez-vous payer le commerçant ci- dessous ?</span>
                     </h1>
                   </div>
                   <div className="d-flex align-items-center justify-content-between flex-wrap px-4 py-1">
@@ -455,7 +455,7 @@ const FormClientPay = (props) => {
                         >
                           {item.montant + " MRU"}
                         </Badge>
-                        <span>au commercant ci- dessous ?</span>
+                        <span>au commerçant ci- dessous ?</span>
                       </>
                     ) : (
                       <>
@@ -466,7 +466,7 @@ const FormClientPay = (props) => {
                         >
                           {item.montant + " MRU"}
                         </Badge>
-                        <span>au commercant ci- dessous pour delai de</span>
+                        <span>au commerçant ci- dessous pour un délai de</span>
                         <Badge
                           className="px-2 mx-1  font-size-lg"
                           color="primary"
@@ -503,12 +503,12 @@ const FormClientPay = (props) => {
                           </div>
                           <div className="divider my-2"></div>
                           <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
-                            <div className=" font-size-md">Telephone</div>
+                            <div className=" font-size-md">Téléphone</div>
                             <div className=" font-size-lg text-primary">
                               {item.expediteur.tel}
                             </div>
                           </div>
-                          <div className="divider my-2"></div>
+                          {/*<div className="divider my-2"></div>
                           <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                             <div className=" font-size-md">Email</div>
                             <div className=" font-size-lg text-primary">
@@ -525,7 +525,7 @@ const FormClientPay = (props) => {
                                 ? item.expediteur.adresse
                                 : " --- "}
                             </div>
-                          </div>
+                          </div>*/}
                         </CardBody>
                       </Card>
                     </div>

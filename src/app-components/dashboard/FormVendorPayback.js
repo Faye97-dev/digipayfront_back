@@ -149,7 +149,7 @@ const FormVendor = (props) => {
                         >
                           {item.montant + " MRU"}
                         </Badge>
-                        <span>au commercant ci- dessous ?</span>
+                        <span>au commerçant ci- dessous ?</span>
                       </>
                     ) : (
                       ""
@@ -172,12 +172,12 @@ const FormVendor = (props) => {
                             </div>
                             <div className="divider my-2"></div>
                             <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
-                              <div className=" font-size-md">Telephone</div>
+                              <div className=" font-size-md">Téléphone</div>
                               <div className=" font-size-lg text-primary">
                                 {item && item.expediteur && item.expediteur.tel}
                               </div>
                             </div>
-                            <div className="divider my-2"></div>
+                            {/*<div className="divider my-2"></div>
                             <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                               <div className=" font-size-md">Email</div>
                               <div className=" font-size-lg text-primary">
@@ -198,7 +198,7 @@ const FormVendor = (props) => {
                                   ? item.expediteur.adresse
                                   : " --- "}
                               </div>
-                            </div>
+                            </div>*/}
                           </CardBody>
                         </Card>
                       </div>

@@ -233,12 +233,12 @@ const FormClientSend = (props) => {
                             </div>
                             <div className="divider my-2"></div>
                             <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
-                              <div className=" font-size-md">Telephone</div>
+                              <div className=" font-size-md">Téléphone</div>
                               <div className=" font-size-lg text-primary">
                                 {item.client.tel}
                               </div>
                             </div>
-                            <div className="divider my-2"></div>
+                            {/*<div className="divider my-2"></div>
                             <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                               <div className=" font-size-md">Email</div>
                               <div className=" font-size-lg text-primary">
@@ -255,7 +255,7 @@ const FormClientSend = (props) => {
                                   ? item.client.adresse
                                   : " --- "}
                               </div>
-                            </div>
+                            </div>*/}
                           </CardBody>
                         </Card>
                       </div>

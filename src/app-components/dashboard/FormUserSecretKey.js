@@ -58,7 +58,7 @@ const MyForm = (props) => {
   const { touched, errors, handleSubmit, isSubmitting } = props;
   return (
     <>
-      <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
+      <Form onSubmit={handleSubmit} className="px-sm-1 px-1">
         <Row>
           <Col xl="12" style={{ margin: "12px 0" }}>
             <Label for="secret_key">Code de confirmation</Label>
