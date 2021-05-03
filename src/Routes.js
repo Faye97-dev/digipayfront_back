@@ -96,6 +96,7 @@ const Notification = lazy(() =>
   import("./app-components/notification/Notification")
 );
 const Contact = lazy(() => import("./app-components/contact/Contact"));
+const Cagnote = lazy(() => import("./app-components/cagnote/Cagnote"));
 /**/
 
 const PageLoginBasic = lazy(() => import("./example-pages/PageLoginBasic"));
@@ -165,7 +166,7 @@ const Routes = (props) => {
         "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
+        //"AGENT_COMPENSATION",
         "CLIENT",
         "VENDOR",
       ],
@@ -219,6 +220,11 @@ const Routes = (props) => {
         "CLIENT",
         "VENDOR",
       ],
+    },
+    {
+      component: Cagnote,
+      link: "/Cagnote",
+      roles: ["CLIENT"],
     },
   ];
   const PathSidebar = RoutesSidebar.filter((item) =>

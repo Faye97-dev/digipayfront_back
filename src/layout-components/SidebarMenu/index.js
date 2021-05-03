@@ -1402,10 +1402,17 @@ const SidebarMenu = (props) => {
         "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
+        //"AGENT_COMPENSATION",
         "CLIENT",
         "VENDOR",
       ],
+    },
+    {
+      id: 11,
+      label: "Cagnotes",
+      link: "/Cagnote",
+      icon: <DollarSign />,
+      roles: ["CLIENT"],
     },
     /*{
       id: 6,

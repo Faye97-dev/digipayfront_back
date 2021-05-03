@@ -14,11 +14,15 @@ import {
 } from "reactstrap";
 import { showAlert } from "../../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { checkCodePayement_Vendor } from "../../actions/async";
+import {
+  checkCodePayement_Vendor,
+  vendor_check_VendorId,
+} from "../../actions/async";
 import { connect } from "react-redux";
 import { SyncLoader } from "react-spinners";
 import { addPayement_Vendor } from "../../actions/transaction";
 import QrReader from "react-qr-reader";
+import FormVendorFastPay from "./FormVendorFastPay";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     code: Yup.string().required(
@@ -32,48 +36,48 @@ const formikEnhancer = withFormik({
     const payload = {
       ...values,
     };
-
     payload["vendorId"] = props.user.id;
-    checkCodePayement_Vendor(payload, showAlert, props.access).then((res) => {
-      if (res) {
-        const keys = Object.keys({ ...res });
-        if (keys.includes("msg")) {
-          showAlert(
-            "warning",
-            res.msg,
-            <FontAwesomeIcon icon={["far", "question-circle"]} />
-          );
-        } else {
-          props.handleItem(res);
-          props.showDivInfo();
+    if (payload.code !== "" && payload.code[0] === "0") {
+      vendor_check_VendorId(payload, showAlert, props.access).then((res) => {
+        if (res) {
+          const keys = Object.keys({ ...res });
+          if (keys.includes("msg")) {
+            showAlert(
+              "warning",
+              res.msg,
+              <FontAwesomeIcon icon={["far", "question-circle"]} />
+            );
+          } else {
+            props.handleModalFastPayement(res);
+          }
         }
-      }
-      setSubmitting(false);
-      resetForm();
-    });
+        setSubmitting(false);
+        resetForm();
+      });
+    } else {
+      checkCodePayement_Vendor(payload, showAlert, props.access).then((res) => {
+        if (res) {
+          const keys = Object.keys({ ...res });
+          if (keys.includes("msg")) {
+            showAlert(
+              "warning",
+              res.msg,
+              <FontAwesomeIcon icon={["far", "question-circle"]} />
+            );
+          } else {
+            props.handleItem(res);
+            props.showDivInfo();
+          }
+        }
+        setSubmitting(false);
+        resetForm();
+      });
+    }
   },
   displayName: "MyForm",
 });
 
 const ModalScanQrCode = (props) => {
-  // Qr scan file ...
-  const [scanResultWebCam, setScanResultWebCam] = useState(null);
-  const handleErrorWebCam = (error) => {
-    console.log(error);
-    showAlert(
-      "warning",
-      "Pas de camera détecter !",
-      <FontAwesomeIcon icon={["far", "question-circle"]} />
-    );
-  };
-  const handleScanWebCam = (result) => {
-    if (result) {
-      setScanResultWebCam(result);
-      handleModal();
-      processBeforePayement(result);
-    }
-  };
-
   // Qr reader file ...
   const [scanResultFile, setScanResultFile] = useState(null);
   const qrRef = useRef(null);
@@ -109,29 +113,71 @@ const ModalScanQrCode = (props) => {
     //console.log("handle modal called...");
   };
 
+  // Qr scan file ...
+  const [scanResultWebCam, setScanResultWebCam] = useState(null);
+  const handleErrorWebCam = (error) => {
+    console.log(error);
+    showAlert(
+      "warning",
+      "Pas de camera détecter !",
+      <FontAwesomeIcon icon={["far", "question-circle"]} />
+    );
+  };
+
+  const handleScanWebCam = (result) => {
+    if (result) {
+      setScanResultWebCam(result);
+      handleModal();
+      processBeforePayement(result);
+    }
+  };
+
   const processBeforePayement = (result) => {
     props.setSubmitting(true);
-    checkCodePayement_Vendor(
-      { code: result, vendorId: props.userId },
-      showAlert,
-      props.access
-    ).then((res) => {
-      if (res) {
-        const keys = Object.keys({ ...res });
-        if (keys.includes("msg")) {
-          showAlert(
-            "warning",
-            res.msg,
-            <FontAwesomeIcon icon={["far", "question-circle"]} />
-          );
-        } else {
-          //handleModal();
-          props.handleItem(res);
-          props.showDivInfo();
+    if (result !== "" && result[0] === "0") {
+      vendor_check_VendorId(
+        { code: result, vendorId: props.userId },
+        showAlert,
+        props.access
+      ).then((res) => {
+        if (res) {
+          const keys = Object.keys({ ...res });
+          if (keys.includes("msg")) {
+            showAlert(
+              "warning",
+              res.msg,
+              <FontAwesomeIcon icon={["far", "question-circle"]} />
+            );
+          } else {
+            props.handleModalFastPayement(res);
+          }
         }
-      }
-      props.setSubmitting(false);
-    });
+        props.setSubmitting(false);
+        props.resetForm();
+      });
+    } else {
+      checkCodePayement_Vendor(
+        { code: result, vendorId: props.userId },
+        showAlert,
+        props.access
+      ).then((res) => {
+        if (res) {
+          const keys = Object.keys({ ...res });
+          if (keys.includes("msg")) {
+            showAlert(
+              "warning",
+              res.msg,
+              <FontAwesomeIcon icon={["far", "question-circle"]} />
+            );
+          } else {
+            //handleModal();
+            props.handleItem(res);
+            props.showDivInfo();
+          }
+        }
+        props.setSubmitting(false);
+      });
+    }
   };
 
   return (
@@ -207,8 +253,69 @@ const ModalScanQrCode = (props) => {
   );
 };
 
+const ModalFastPayement = (props) => {
+  const beforeSubmit = (data) => {
+    let payload = { ...data };
+    payload["client"] = props.user.id;
+    payload["vendor"] = props.vendorInfo.id;
+    return payload;
+  };
+
+  return (
+    <>
+      <Modal
+        zIndex={2000}
+        centered
+        size="md"
+        isOpen={props.modalFastPay}
+        toggle={props.handleModalFastPayement}
+        contentClassName="border-0"
+      >
+        <div className="px-2 py-3">
+          <Card className="mx-sm-1 mx-1 mt-0 mb-0 px-1 py-1">
+            <Row className="no-gutters">
+              <Col xl="12">
+                <div className="bg-white rounded pt-4 pb-0">
+                  <div className="px-1 px-sm-1 pt-1 pb-1">
+                    <h1 className="display-4 font-weight-bold font-size-lg text-center">
+                      <span>Voulez-vous payer le commerçant ci- dessous ?</span>
+                    </h1>
+                  </div>
+                  <div className="d-flex align-items-center justify-content-between flex-wrap px-4 py-1">
+                    <div className=" font-size-md">Nom</div>
+                    <div className=" font-size-lg text-primary">
+                      {`${props.vendorInfo?.first_name} ${props.vendorInfo?.last_name}`}
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center justify-content-between flex-wrap px-4 py-1">
+                    <div className=" font-size-md">Telephone</div>
+                    <div className=" font-size-lg text-primary">{`${props.vendorInfo?.tel}`}</div>
+                  </div>
+                </div>
+              </Col>
+              <Col xl="12">
+                <FormVendorFastPay
+                  beforeSubmit={beforeSubmit}
+                  closeModal={props.handleModalFastPayement}
+                />
+              </Col>
+            </Row>
+          </Card>
+        </div>
+      </Modal>
+    </>
+  );
+};
+
 const MyForm = (props) => {
-  const { touched, errors, handleSubmit, isSubmitting, setSubmitting } = props;
+  const {
+    touched,
+    errors,
+    handleSubmit,
+    isSubmitting,
+    setSubmitting,
+    resetForm,
+  } = props;
   return (
     <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
       {props.modalPayementinfo === false && (
@@ -227,23 +334,6 @@ const MyForm = (props) => {
               )}
             </Col>
           </Row>
-
-          {/*<Row>
-            <Col xl="12" style={{ margin: "12px 0" }}>
-              
-              {isSubmitting || props.transactions.loading ? (
-                <SyncLoader color={"var(--primary)"} loading={true} />
-              ) : (
-                <Button
-                  color="primary"
-                  type="submit"
-                  disabled={isSubmitting || props.transactions.loading}
-                >
-                  Payer
-                </Button>
-              )}
-            </Col>
-              </Row>*/}
           <ModalScanQrCode
             isSubmitting={isSubmitting}
             userId={props.user.id}
@@ -252,6 +342,14 @@ const MyForm = (props) => {
             transactionsLoading={props.transactions.loading}
             setSubmitting={setSubmitting}
             access={props.access}
+            handleModalFastPayement={props.handleModalFastPayement}
+            resetForm={resetForm}
+          />
+          <ModalFastPayement
+            modalFastPay={props.modalFastPay}
+            handleModalFastPayement={props.handleModalFastPayement}
+            vendorInfo={props.vendorInfo}
+            user={props.user}
           />
         </>
       )}
@@ -268,11 +366,19 @@ const FormVendorPay = (props) => {
   const [item, setItem] = useState(null);
   const handleItem = (obj) => setItem(obj);
 
+  const [vendorInfo, setVendorInfo] = useState(null); // for fast-payement
+  const [modalFastPay, setModalFastPay] = useState(false);
+  const handleModalFastPayement = (obj = null) => {
+    setVendorInfo(obj);
+    setModalFastPay(!modalFastPay);
+  };
+
   const handleSubmit = () => {
     let payload = {};
 
     payload["vendor"] = props.user.id;
     payload["pre_transaction"] = item.id;
+    payload["livraison"] = item.livraison;
 
     //console.log(payload);
     props.addPayement_Vendor(payload, showAlert);
@@ -285,6 +391,9 @@ const FormVendorPay = (props) => {
         showDivInfo={showDivInfo}
         modalPayementinfo={modalPayementinfo}
         handleItem={handleItem}
+        modalFastPay={modalFastPay}
+        handleModalFastPayement={handleModalFastPayement}
+        vendorInfo={vendorInfo}
         {...props}
       />
       {modalPayementinfo && (
@@ -294,11 +403,47 @@ const FormVendorPay = (props) => {
               <div className="bg-white rounded ">
                 <div className="px-2 px-sm-5 pt-4 pb-2">
                   <h1 className="display-4 font-weight-normal font-size-xl text-center">
-                    <span>Voulez-vous payer le montant de</span>
-                    <Badge className="px-2 mx-1  font-size-lg" color="primary">
-                      {item.montant + " MRU"}
-                    </Badge>
-                    <span>au commerçant ci- dessous ?</span>
+                    {!item.livraison ? (
+                      <>
+                        <span>Voulez-vous payer le montant de</span>
+                        <Badge
+                          className="px-2 mx-1  font-size-lg"
+                          color="primary"
+                        >
+                          {item.montant + " MRU"}
+                        </Badge>
+                        <span>au commerçant ci- dessous ?</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Voulez-vous payer le montant de</span>
+                        <Badge
+                          className="px-2 mx-1  font-size-lg"
+                          color="primary"
+                        >
+                          {item.montant + " MRU"}
+                        </Badge>
+                        <span>au commerçant ci- dessous pour un délai de</span>
+                        <Badge
+                          className="px-2 mx-1  font-size-lg"
+                          color="primary"
+                        >
+                          {item.delai_livraison}
+                        </Badge>
+                        <span>
+                          {item.delai_livraison > 1 ? "jours ?" : "jour ?"}
+                        </span>
+                      </>
+                    )}
+                    <br />
+                    {item.livraison && (
+                      <Badge
+                        className="px-2 mx-1 my-2 font-size-sm"
+                        color="success"
+                      >
+                        Livraison à domicile
+                      </Badge>
+                    )}
                   </h1>
                 </div>
                 <div className="px-sm-4 px-2 py-2">
@@ -319,6 +464,17 @@ const FormVendorPay = (props) => {
                               {item.expediteur.tel}
                             </div>
                           </div>
+                          {item?.libele && item.libele !== "" && (
+                            <>
+                              <div className="divider my-2"></div>
+                              <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
+                                <div className=" font-size-md">Libellé</div>
+                                <div className=" font-size-lg text-primary">
+                                  {item.libele}
+                                </div>
+                              </div>
+                            </>
+                          )}
                           {/*<div className="divider my-2"></div>
                           <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                             <div className=" font-size-md">Email</div>

@@ -23,8 +23,6 @@ import {
   Progress,
 } from "reactstrap";
 
-import stock1 from "../../assets/images/stock-photos/stock-1.jpg";
-import svgImage1 from "../../assets/images/illustrations/pack1/wireframe.svg";
 import {
   mapColorStatus,
   mapTypeNames,

@@ -13,7 +13,7 @@ const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     montant: Yup.number()
       .min(10, " Montant doit etre plus 10 MRU !")
-      .max(1000000, " Montant ne peut depasser 1000000 MRU !")
+      .max(1000000, " Montant ne peut dépassé 1000000 MRU !")
       .required(" Montant est obligatoire !"),
     livraison: Yup.boolean(),
 
@@ -25,6 +25,7 @@ const formikEnhancer = withFormik({
         .required(" Le delai est obligatoire !"),
       //otherwise: Yup.string()
     }),
+    label: Yup.string().max(20, "Nombre de caractères limite dépassé !"),
     //.required(" Montant est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({

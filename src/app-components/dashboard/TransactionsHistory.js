@@ -260,7 +260,7 @@ class TransactionsHistory extends Component {
       <>
         {this.state.current.length === 0 ? (
           <tr>
-            <td colSpan="9">
+            <td colSpan="10">
               <div className="d-flex align-items-center justify-content-center pt-3">
                 <img style={{ width: "17%" }} src={empty} />
               </div>

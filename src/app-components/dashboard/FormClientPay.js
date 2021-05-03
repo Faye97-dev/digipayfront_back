@@ -310,36 +310,7 @@ const ModalFastPayement = (props) => {
                 <FormClientFastPay
                   beforeSubmit={beforeSubmit}
                   closeModal={props.handleModalFastPayement}
-                >
-                  <div className="d-flex align-items-center pt-3">
-                    <div className="mr-auto">
-                      <Button
-                        color="danger"
-                        disabled={props.isSubmitting}
-                        onClick={props.handleModalFastPayement}
-                        size="md"
-                      >
-                        Annuler
-                      </Button>
-                    </div>
-                    <div className="ml-auto">
-                      {props.isSubmitting ? (
-                        <SyncLoader color={"var(--info)"} loading={true} />
-                      ) : (
-                        <div>
-                          <Button
-                            color="primary"
-                            className="ml-0"
-                            type="submit"
-                            disabled={props.isSubmitting}
-                          >
-                            Payer
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </FormClientFastPay>
+                />
               </Col>
             </Row>
           </Card>
@@ -508,6 +479,18 @@ const FormClientPay = (props) => {
                               {item.expediteur.tel}
                             </div>
                           </div>
+                          {item?.libele && item.libele !== "" && (
+                            <>
+                              <div className="divider my-2"></div>
+                              <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
+                                <div className=" font-size-md">Libellé</div>
+                                <div className=" font-size-lg text-primary">
+                                  {item.libele}
+                                </div>
+                              </div>
+                            </>
+                          )}
+
                           {/*<div className="divider my-2"></div>
                           <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                             <div className=" font-size-md">Email</div>

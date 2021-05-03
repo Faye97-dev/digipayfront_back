@@ -31,6 +31,10 @@ import {
 // bugs qr code notif , retrait agence spinner , envoie cash client to vendor ? , move check_clientdigipay in service.py , sync  solde after recharge agence
 // statistiques actions  move it to redux ?? , check refresh token before logout , register username = tel and can't update , devtools redux remove to prod
 // validate password format backend and frontend
+// clean models file , refactor pre-transction action in models , remove serializer , remove clotures
+// post request body sercure id of user
+// profile statistique move get a to post request
+// reset all form, handle item , show info value to null ,change submiting to the second step
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),

@@ -45,10 +45,13 @@ import {
   mapTypeNames,
   mapColorTypes,
   mapStatusNames,
+  DONATION,
+  RECOLTE,
 } from "../../utils/choices";
 import FormFilter from "../transaction/FormFilter";
 import CollapseModel from "./CollapseModel";
 import { PaginateData } from "../../utils/dataTable";
+import ModalClientTransDetails from "../transaction/ModalClientTransDetails";
 
 const filtersOptions = {
   status: {
@@ -159,7 +162,7 @@ class TransactionsClient extends Component {
       <>
         {this.state.current.length === 0 ? (
           <tr>
-            <td colSpan="8">
+            <td colSpan="9">
               <div className="d-flex align-items-center justify-content-center pt-3">
                 <img style={{ width: "17%" }} src={empty} />
               </div>
@@ -189,25 +192,49 @@ class TransactionsClient extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {!keys.includes("agence_origine") &&
-                        `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
-                      {keys.includes("agence_origine") &&
-                        item.transaction.expediteur &&
-                        item.transaction.expediteur.nom}
-                      {keys.includes("agence_origine") &&
-                        !item.transaction.expediteur &&
-                        item.transaction.agence_origine.nom}
+                      {item.type_transaction !== DONATION &&
+                      item.type_transaction !== RECOLTE ? (
+                        <>
+                          {!keys.includes("agence_origine") &&
+                            `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
+                          {keys.includes("agence_origine") &&
+                            item.transaction.expediteur &&
+                            item.transaction.expediteur.nom}
+                          {keys.includes("agence_origine") &&
+                            !item.transaction.expediteur &&
+                            item.transaction.agence_origine.nom}
+                        </>
+                      ) : (
+                        <>
+                          {item.type_transaction == DONATION &&
+                            `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
+                          {item.type_transaction == RECOLTE &&
+                            `${item.transaction.expediteur.nom}`}
+                        </>
+                      )}
                     </a>
                     <span className="text-black-50 d-block">
-                      {!keys.includes("agence_origine") &&
-                        item.transaction.expediteur &&
-                        item.transaction.expediteur.tel}
-                      {keys.includes("agence_origine") &&
-                        item.transaction.expediteur &&
-                        item.transaction.expediteur.tel}
-                      {keys.includes("agence_origine") &&
-                        !item.transaction.expediteur &&
-                        item.transaction.agence_origine.type_agence}
+                      {item.type_transaction !== DONATION &&
+                      item.type_transaction !== RECOLTE ? (
+                        <>
+                          {!keys.includes("agence_origine") &&
+                            item.transaction.expediteur &&
+                            item.transaction.expediteur.tel}
+                          {keys.includes("agence_origine") &&
+                            item.transaction.expediteur &&
+                            item.transaction.expediteur.tel}
+                          {keys.includes("agence_origine") &&
+                            !item.transaction.expediteur &&
+                            item.transaction.agence_origine.type_agence}
+                        </>
+                      ) : (
+                        <>
+                          {item.type_transaction == DONATION &&
+                            item.transaction.expediteur.tel}
+                          {item.type_transaction == RECOLTE &&
+                            `${item.transaction.expediteur.responsable.first_name} ${item.transaction.expediteur.responsable.last_name}`}
+                        </>
+                      )}
                     </span>
                   </div>
                 </td>
@@ -219,12 +246,34 @@ class TransactionsClient extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {keys.includes("agence_origine")
-                        ? item.transaction.destinataire.nom
-                        : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                      {item.type_transaction !== DONATION &&
+                      item.type_transaction !== RECOLTE ? (
+                        <>
+                          {keys.includes("agence_origine")
+                            ? item.transaction.destinataire.nom
+                            : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                        </>
+                      ) : (
+                        <>
+                          {item.type_transaction == RECOLTE &&
+                            `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                          {item.type_transaction == DONATION &&
+                            `${item.transaction.destinataire.nom}`}
+                        </>
+                      )}
                     </a>
                     <span className="text-black-50 d-block">
-                      {item.transaction.destinataire.tel}
+                      {item.type_transaction !== DONATION &&
+                      item.type_transaction !== RECOLTE ? (
+                        <>{item.transaction.destinataire.tel}</>
+                      ) : (
+                        <>
+                          {item.type_transaction == RECOLTE &&
+                            item.transaction.destinataire.tel}
+                          {item.type_transaction == DONATION &&
+                            `${item.transaction.destinataire.responsable.first_name} ${item.transaction.destinataire.responsable.last_name}`}
+                        </>
+                      )}
                     </span>
                   </div>
                 </td>
@@ -263,7 +312,7 @@ class TransactionsClient extends Component {
                   </Badge>
                 </td>
                 <td className="text-center">
-                  <Button
+                  {/*<Button
                     color="primary"
                     className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
                   >
@@ -271,7 +320,39 @@ class TransactionsClient extends Component {
                       icon={["fas", "eye"]}
                       className="font-size-sm"
                     />
-                  </Button>
+                  </Button>*/}
+                  <UncontrolledDropdown>
+                    <DropdownToggle
+                      size="sm"
+                      color="link"
+                      className="btn-link-primary p-0 text-primary "
+                    >
+                      <FontAwesomeIcon
+                        icon={["fas", "ellipsis-h"]}
+                        className="font-size-lg"
+                      />
+                    </DropdownToggle>
+                    <DropdownMenu
+                      right
+                      className="dropdown-menu-md overflow-hidden p-0"
+                    >
+                      <Nav pills className=" flex-column p-2">
+                        <NavItem>
+                          <NavLinkStrap
+                            href="#/"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            <FontAwesomeIcon
+                              icon={["fas", "eye"]}
+                              className="font-size-md mr-3"
+                            />
+                            <span>Details</span>
+                          </NavLinkStrap>
+                        </NavItem>
+                        {/*<ModalClientTransDetails item={item} />*/}
+                      </Nav>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
                 </td>
               </tr>
             );

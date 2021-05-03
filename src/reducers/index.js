@@ -7,6 +7,7 @@ import client from "./client";
 import employe from "./employe";
 import notification from "./notification";
 import compensation from "./compensation";
+import cagnote from "./cagnote";
 export default combineReducers({
   ThemeOptions,
   auth,
@@ -16,4 +17,5 @@ export default combineReducers({
   employe,
   compensation,
   notification,
+  cagnote,
 });

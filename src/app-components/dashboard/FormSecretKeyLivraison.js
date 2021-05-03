@@ -7,8 +7,12 @@ import { checkSecretKey } from "../../actions/async";
 import { showAlert } from "../../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ClipLoader } from "react-spinners";
-import { clientDigipay_Livraison } from "../../actions/transaction";
+import {
+  clientDigipay_Livraison,
+  vendor_Livraison,
+} from "../../actions/transaction";
 import { connect } from "react-redux";
+import { VENDOR, CLIENT } from "../../utils/choices";
 const formikEnhancer = withFormik({
   /*validationSchema: Yup.object().shape({
     secret_key: Yup.number()
@@ -34,13 +38,29 @@ const formikEnhancer = withFormik({
       ).then((res) => {
         if (res) {
           if (res.checked) {
-            props.clientDigipay_Livraison(
-              {
-                transaction: props.transaction.transactionID,
-                confirm: props.confirmed,
-              },
-              showAlert
-            );
+            if (props.role.value === CLIENT) {
+              props.clientDigipay_Livraison(
+                {
+                  transaction: props.transaction.transactionID,
+                  confirm: props.confirmed,
+                },
+                showAlert
+              );
+            } else if (props.role.value === VENDOR) {
+              props.vendor_Livraison(
+                {
+                  transaction: props.transaction.transactionID,
+                  confirm: props.confirmed,
+                },
+                showAlert
+              );
+            } else {
+              showAlert(
+                "warning",
+                "Action non autorise !",
+                <FontAwesomeIcon icon={["fas", "question-circle"]} />
+              );
+            }
             setSubmitting(false);
             props.handleModalLivraison(null);
           } else if (res.checked === false) {
@@ -127,10 +147,11 @@ const FormSecretKeyLivraison = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  //user: state.auth.user,
+  role: state.auth.role,
   access: state.auth.access,
 });
 
 export default connect(mapStateToProps, {
   clientDigipay_Livraison,
+  vendor_Livraison,
 })(FormSecretKeyLivraison);

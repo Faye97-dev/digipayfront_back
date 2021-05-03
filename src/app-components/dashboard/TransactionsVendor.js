@@ -52,6 +52,7 @@ import FormFilter from "../transaction/FormFilter";
 import CollapseModel from "./CollapseModel";
 import { PaginateData } from "../../utils/dataTable";
 import FormSecretKeyLivraison from "./FormSecretKeyLivraison";
+
 const filtersOptions = {
   status: {
     label: "Status",
@@ -171,7 +172,7 @@ class TransactionsVendor extends Component {
       <>
         {this.state.current.length === 0 ? (
           <tr>
-            <td colSpan="8">
+            <td colSpan="9">
               <div className="d-flex align-items-center justify-content-center pt-3">
                 <img style={{ width: "17%" }} src={empty} />
               </div>
@@ -304,7 +305,9 @@ class TransactionsVendor extends Component {
                           </NavLinkStrap>
                         </NavItem>
                         {this.props.role?.value === VENDOR &&
-                          item.transaction.status === TO_VALIDATE && (
+                          item.transaction.status === TO_VALIDATE &&
+                          item.transaction.destinataire.id ===
+                            this.props.user.id && (
                             <NavItem>
                               <NavLinkStrap
                                 href="#/"
@@ -625,6 +628,7 @@ class TransactionsVendor extends Component {
 const mapStateToProps = (state) => ({
   transactions: state.transaction.transactions,
   role: state.auth.role,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps, {
