@@ -5,6 +5,9 @@ import {
   CLEAN_SESSION,
   ADD_CAGNOTE,
   PARTICIPATE_CAGNOTE,
+  ADD_DONATION,
+  UPDATE_DONATION,
+  CLOTURE_CAGNOTE,
 } from "../actions/types.js";
 
 const initialState = {
@@ -17,7 +20,10 @@ export default function (state = initialState, action) {
       if (
         action.payload === GET_CAGNOTES ||
         action.payload === ADD_CAGNOTE ||
-        action.payload === PARTICIPATE_CAGNOTE
+        action.payload === PARTICIPATE_CAGNOTE ||
+        action.payload === ADD_DONATION ||
+        action.payload === UPDATE_DONATION ||
+        action.payload === CLOTURE_CAGNOTE
       ) {
         return {
           ...state,
@@ -56,6 +62,19 @@ export default function (state = initialState, action) {
           loading: false,
         },
       };
+    case ADD_DONATION:
+    case UPDATE_DONATION:
+    case CLOTURE_CAGNOTE:
+      return {
+        ...state,
+        cagnotes: {
+          ...state.cagnotes,
+          payload: [
+            ...updateItemInList(action.payload, state.cagnotes.payload),
+          ],
+          loading: false,
+        },
+      };
     case CLEAN_SESSION:
       return {
         ...state,
@@ -72,8 +91,12 @@ export default function (state = initialState, action) {
 
 const updateItemInList = (item, listItems) => {
   const result = [...listItems].map((value) => {
-    if (value.id === item.id) {
-      return { ...item };
+    if (value.cagnote.id === item.cagnote.id) {
+      return {
+        ...item,
+        cagnote: { ...item.cagnote },
+        participation: item.participation ? { ...item.participation } : null,
+      };
     } else {
       return value;
     }

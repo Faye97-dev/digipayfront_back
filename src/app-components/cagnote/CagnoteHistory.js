@@ -49,11 +49,20 @@ class CagnoteHistory extends Component {
       page: 1,
       current: [],
       searchOpen: false,
+      modal4: false,
+      currentItem: null,
     };
 
     this.handleChangePage = this.handleChangePage.bind(this);
     this.Paginate = this.Paginate.bind(this);
   }
+
+  toggle4 = (item) =>
+    this.setState({
+      ...this.state,
+      modal4: !this.state.modal4,
+      currentItem: item,
+    });
 
   openSearch = () => this.setState({ ...this.state, searchOpen: true });
   closeSearch = () => this.setState({ ...this.state, searchOpen: false });
@@ -202,10 +211,13 @@ class CagnoteHistory extends Component {
                       className="dropdown-menu-md overflow-hidden p-0"
                     >
                       <Nav pills className=" flex-column p-2">
-                        {/*<NavItem>
+                        <NavItem>
                           <NavLinkStrap
                             href="#/"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              this.toggle4(item);
+                            }}
                           >
                             <FontAwesomeIcon
                               icon={["fas", "eye"]}
@@ -213,11 +225,17 @@ class CagnoteHistory extends Component {
                             />
                             <span>Details</span>
                           </NavLinkStrap>
-                        </NavItem>*/}
-                        <ModalDetails item={item} user={this.props.user} />
+                        </NavItem>
                       </Nav>
                     </DropdownMenu>
                   </UncontrolledDropdown>
+                  {/*<ModalDetails
+                    item={item}
+                    user={this.props.user}
+                    access={this.props.access}
+                    modal={this.state.modal4}
+                    handleModal={this.toggle4}
+                  />*/}
                 </td>
               </tr>
             );
@@ -230,7 +248,7 @@ class CagnoteHistory extends Component {
       <>
         <Card className="card-box shadow-none">
           <div className="px-4 pt-4 text-primary">
-            <h5 className="font-weight-bold text-dark">Cagnotes</h5>
+            <h5 className="font-weight-bold text-dark">Cagnottes</h5>
           </div>
           <div className="d-flex justify-content-between px-4 py-3">
             <div
@@ -342,6 +360,14 @@ class CagnoteHistory extends Component {
               />
             </div>
           )}
+
+          <ModalDetails
+            item={this.state.currentItem}
+            user={this.props.user}
+            access={this.props.access}
+            modal={this.state.modal4}
+            handleModal={this.toggle4}
+          />
         </Card>
       </>
     );
@@ -352,6 +378,7 @@ const mapStateToProps = (state) => ({
   cagnotes: state.cagnote.cagnotes,
   role: state.auth.role,
   user: state.auth.user,
+  access: state.auth.access,
 });
 
 export default connect(mapStateToProps, {

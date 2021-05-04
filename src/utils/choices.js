@@ -27,7 +27,7 @@ export const TRANSFERT = "01";
 export const RETRAIT = "02";
 export const COMP_VERSEMENT = "03";
 export const COMP_RETRAIT = "04";
-export const DONATION = "09";
+export const CAGNOTE = "09";
 export const RECOLTE = "10";
 
 export const NONE = "NONE";
@@ -56,7 +56,7 @@ export const mapTypeNames = {
   "06": "PAIEMENT",
   "07": "ENVOI",
   "08": "REMBOURSEMENT",
-  "09": "DONATION",
+  "09": "CAGNOTTE",
   10: "RECOLTE",
 };
 

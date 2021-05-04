@@ -92,6 +92,45 @@ export async function getNotWhitrated(tel, agence, showAlert, access = null) {
   }
 }
 
+export async function getParticipantsCagnote(
+  cagnote,
+  showAlert,
+  access = null
+) {
+  let data;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  await axios
+    .post(
+      HOST + `api/func/client_digiPay/participants-cagnote/`,
+      { cagnote },
+      config
+    )
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Récupération des participants non-terminées !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+}
+
 export const checkExistTel_Client = async (form, showAlert, access = null) => {
   const config = {
     headers: {

@@ -6,6 +6,9 @@ import {
   GET_CAGNOTES,
   ADD_CAGNOTE,
   PARTICIPATE_CAGNOTE,
+  ADD_DONATION,
+  UPDATE_DONATION,
+  CLOTURE_CAGNOTE,
 } from "./types";
 import { updateSolde, updateSolde_clientDigipay } from "./async";
 import { expiredToken } from "../utils/alerts";
@@ -171,6 +174,225 @@ export const client_participate_cagnote = (
         showAlert(
           "danger",
           "Donation Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
+
+export const client_add_donation = (
+  body,
+  showAlert,
+  setSubmitting,
+  closeModal,
+  closeModal2
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: ADD_DONATION,
+  });
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const access = getState().auth.access;
+
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .post(HOST + `api/func/client_digiPay/participer-cagnote/`, body, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        dispatch({
+          type: ADD_DONATION,
+          payload: res.data,
+        });
+
+        showAlert(
+          "success",
+          "Donation Complete !",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        setSubmitting(false);
+        closeModal();
+        setTimeout(() => {
+          closeModal2();
+        }, 1200);
+      } else {
+        dispatch({
+          type: ERROR_CAGNOTE,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+        setSubmitting(false);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_CAGNOTE,
+      });
+      setSubmitting(false);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Donation Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
+
+export const client_update_donation = (
+  body,
+  showAlert,
+  setSubmitting,
+  closeModal,
+  closeModal2
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: UPDATE_DONATION,
+  });
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const access = getState().auth.access;
+
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .post(HOST + `api/func/client_digiPay/update-participation/`, body, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        dispatch({
+          type: UPDATE_DONATION,
+          payload: res.data,
+        });
+
+        showAlert(
+          "success",
+          "Donation Complete !",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        setSubmitting(false);
+        closeModal();
+        setTimeout(() => {
+          closeModal2();
+        }, 1200);
+      } else {
+        dispatch({
+          type: ERROR_CAGNOTE,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+        setSubmitting(false);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_CAGNOTE,
+      });
+      setSubmitting(false);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Donation Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
+
+export const client_cloturer_cagnote = (
+  body,
+  showAlert,
+  setSubmitting,
+  closeModal,
+  closeModal2
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: CLOTURE_CAGNOTE,
+  });
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const access = getState().auth.access;
+
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .post(HOST + `api/func/client_digiPay/cloturer-cagnote/`, body, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        dispatch({
+          type: CLOTURE_CAGNOTE,
+          payload: res.data,
+        });
+
+        showAlert(
+          "success",
+          "Cloture de la cagnotte Complete !",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+        setSubmitting(false);
+        closeModal();
+        setTimeout(() => {
+          closeModal2();
+        }, 1200);
+      } else {
+        dispatch({
+          type: ERROR_CAGNOTE,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+        setSubmitting(false);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_CAGNOTE,
+      });
+      setSubmitting(false);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Cloture de la cagnotte Non-Complete!",
           <FontAwesomeIcon icon={["fas", "times"]} />
         );
       }

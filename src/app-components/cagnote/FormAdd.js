@@ -11,11 +11,17 @@ import { showAlert } from "../../utils/alerts";
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
-    nom: Yup.string().required(" Nom de la cagnote est obligatoire !"),
+    nom: Yup.string()
+      .max(20, "Nombre de caractères limite dépassé !")
+      .required(" Nom de la cagnote est obligatoire !"),
     objectif: Yup.number()
-      .min(100, " Montant doit etre plus 100 MRU !")
-      .max(100000, " Montant ne peut depasser 100000 MRU !")
-      .required(" Montant est obligatoire !"),
+      .min(0, "Montant doit etre moins 0 MRU !")
+      .max(1000000, " Montant ne peut dépassé 1000000 MRU !")
+      .required("Montant doit etre moins 0 MRU !"),
+
+    motif: Yup.string()
+      .max(30, "Nombre de caractères limite dépassé !")
+      .required("La description de la cagnotte est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({
     nom: "",
@@ -27,9 +33,6 @@ const formikEnhancer = withFormik({
     const payload = {
       ...values,
     };
-    //console.log(payload);
-    //setSubmitting(false);
-
     props.addCagnote(payload, showAlert, setSubmitting, resetForm);
   },
   displayName: "MyForm",
@@ -62,6 +65,11 @@ const MyForm = (props) => {
           <Col xl="12" style={{ margin: "12px 0" }}>
             <Label for="motif">Description</Label>
             <Field name="motif" type="text" />
+            {errors.motif && touched.motif && (
+              <div style={{ color: "red", marginTop: ".5rem" }}>
+                {errors.motif}
+              </div>
+            )}
           </Col>
         </Row>
         <Row>

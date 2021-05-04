@@ -45,7 +45,7 @@ import {
   mapTypeNames,
   mapColorTypes,
   mapStatusNames,
-  DONATION,
+  CAGNOTE,
   RECOLTE,
 } from "../../utils/choices";
 import FormFilter from "../transaction/FormFilter";
@@ -192,7 +192,7 @@ class TransactionsClient extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {item.type_transaction !== DONATION &&
+                      {item.type_transaction !== CAGNOTE &&
                       item.type_transaction !== RECOLTE ? (
                         <>
                           {!keys.includes("agence_origine") &&
@@ -206,7 +206,7 @@ class TransactionsClient extends Component {
                         </>
                       ) : (
                         <>
-                          {item.type_transaction == DONATION &&
+                          {item.type_transaction == CAGNOTE &&
                             `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
                           {item.type_transaction == RECOLTE &&
                             `${item.transaction.expediteur.nom}`}
@@ -214,7 +214,7 @@ class TransactionsClient extends Component {
                       )}
                     </a>
                     <span className="text-black-50 d-block">
-                      {item.type_transaction !== DONATION &&
+                      {item.type_transaction !== CAGNOTE &&
                       item.type_transaction !== RECOLTE ? (
                         <>
                           {!keys.includes("agence_origine") &&
@@ -229,7 +229,7 @@ class TransactionsClient extends Component {
                         </>
                       ) : (
                         <>
-                          {item.type_transaction == DONATION &&
+                          {item.type_transaction == CAGNOTE &&
                             item.transaction.expediteur.tel}
                           {item.type_transaction == RECOLTE &&
                             `${item.transaction.expediteur.responsable.first_name} ${item.transaction.expediteur.responsable.last_name}`}
@@ -246,7 +246,7 @@ class TransactionsClient extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {item.type_transaction !== DONATION &&
+                      {item.type_transaction !== CAGNOTE &&
                       item.type_transaction !== RECOLTE ? (
                         <>
                           {keys.includes("agence_origine")
@@ -257,20 +257,20 @@ class TransactionsClient extends Component {
                         <>
                           {item.type_transaction == RECOLTE &&
                             `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
-                          {item.type_transaction == DONATION &&
+                          {item.type_transaction == CAGNOTE &&
                             `${item.transaction.destinataire.nom}`}
                         </>
                       )}
                     </a>
                     <span className="text-black-50 d-block">
-                      {item.type_transaction !== DONATION &&
+                      {item.type_transaction !== CAGNOTE &&
                       item.type_transaction !== RECOLTE ? (
                         <>{item.transaction.destinataire.tel}</>
                       ) : (
                         <>
                           {item.type_transaction == RECOLTE &&
                             item.transaction.destinataire.tel}
-                          {item.type_transaction == DONATION &&
+                          {item.type_transaction == CAGNOTE &&
                             `${item.transaction.destinataire.responsable.first_name} ${item.transaction.destinataire.responsable.last_name}`}
                         </>
                       )}

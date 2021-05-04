@@ -35,6 +35,7 @@ import {
 // post request body sercure id of user
 // profile statistique move get a to post request
 // reset all form, handle item , show info value to null ,change submiting to the second step
+// check a account if is active before traitement for all actions
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
