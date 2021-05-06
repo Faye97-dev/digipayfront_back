@@ -787,3 +787,69 @@ export const client_check_cagnoteId = async (
     });
   return data;
 };
+
+export const checkClientDigipay_grpPayement = async (
+  form,
+  showAlert,
+  access = null
+) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  let data;
+  await axios
+    .post(HOST + `api/grp-payement/check-client_digipay/`, form, config)
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du numero telephone non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+};
+
+export const clientPayementMasse = async (form, showAlert, access = null) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  let data;
+  await axios
+    .post(HOST + `api/func/client_digiPay/payement-masse/`, form, config)
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Paiement de masse non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+};

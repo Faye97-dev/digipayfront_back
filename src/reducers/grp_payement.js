@@ -6,6 +6,8 @@ import {
   ADD_GRP_PAYEMENT,
   PARTICIPATE_GRP_PAYEMENT,
   UPDATE_USER_GRP_PAYEMENT,
+  DELETE_USER_GRP_PAYEMENT,
+  DELETE_GRP_PAYEMENT,
 } from "../actions/types.js";
 
 const initialState = {
@@ -19,7 +21,9 @@ export default function (state = initialState, action) {
         action.payload === GET_GRP_PAYEMENTS ||
         action.payload === ADD_GRP_PAYEMENT ||
         action.payload === PARTICIPATE_GRP_PAYEMENT ||
-        action.payload === UPDATE_USER_GRP_PAYEMENT
+        action.payload === UPDATE_USER_GRP_PAYEMENT ||
+        action.payload === DELETE_USER_GRP_PAYEMENT ||
+        action.payload === DELETE_GRP_PAYEMENT
       ) {
         return {
           ...state,
@@ -59,7 +63,8 @@ export default function (state = initialState, action) {
       };
 
     //case ADD_DONATION:
-    //case UPDATE_DONATION:
+    case PARTICIPATE_GRP_PAYEMENT:
+    case DELETE_USER_GRP_PAYEMENT:
     case UPDATE_USER_GRP_PAYEMENT:
       return {
         ...state,
@@ -86,7 +91,6 @@ export default function (state = initialState, action) {
 }
 
 const updateItemInList = (item, listItems) => {
-  //console.log(item, listItems);
   const result = [...listItems].map((value) => {
     if (value.id === item.id) {
       return { ...item };

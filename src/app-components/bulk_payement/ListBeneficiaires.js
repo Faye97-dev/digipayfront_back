@@ -7,6 +7,8 @@ import { getBeneficiairesGrpPayement } from "../../actions/async";
 import { showAlert } from "../../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalEditBeneficiaire from "./ModalEditBeneficiaire";
+import ModalDeleteBeneficiaire from "./ModalDeleteBeneficiaire";
+import ModalAddBeneficiaire from "./ModalAddBeneficiaire";
 
 export default function ListBeneficiaires(props) {
   const [loading, setLoading] = useState(false);
@@ -21,13 +23,35 @@ export default function ListBeneficiaires(props) {
         return item;
       }
     });
-    return setBeneficiaire(temp);
+    return setBeneficiaire([...temp]);
+  };
+
+  const setBeneficiaire_after_delete = (val) => {
+    const temp = beneficiaires.filter((item) => val.id !== item.id);
+    return setBeneficiaire([...temp]);
+  };
+
+  const setBeneficiaire_after_add = (val) => {
+    return setBeneficiaire([val, ...beneficiaires]);
   };
 
   const [modalEditBeneficiaire, setModalEditBeneficiaire] = useState(false);
   const handleModalEditBeneficiaire = (item = null) => {
     setCurrentItem(item);
     setModalEditBeneficiaire(!modalEditBeneficiaire);
+  };
+
+  const [modalDeleteBeneficiaire, setModalDeleteBeneficiaire] = useState(false);
+  const handleModalDeleteBeneficiaire = (item = null) => {
+    setCurrentItem(item);
+    setModalDeleteBeneficiaire(!modalDeleteBeneficiaire);
+  };
+
+  const [newBeneficiare, setNewBeneficiare] = useState(null);
+  const [modalAddBeneficiaire, setModalAddBeneficiaire] = useState(false);
+  const handleModalAddBeneficiaire = () => {
+    setModalAddBeneficiaire(!modalAddBeneficiaire);
+    setNewBeneficiare(null);
   };
 
   useEffect(() => {
@@ -47,6 +71,17 @@ export default function ListBeneficiaires(props) {
   }, []);
   return (
     <>
+      <div className="px-3">
+        <Button
+          color="success btn btn-sm px-2 py-0 mt-3 mr-auto"
+          outline
+          disabled={loading}
+          onClick={handleModalAddBeneficiaire}
+        >
+          <FontAwesomeIcon icon={["fa", "plus"]} />
+        </Button>
+      </div>
+
       {loading ? (
         <div className="p-3">
           <SyncLoader color={"var(--primary)"} loading={true} />
@@ -100,6 +135,9 @@ export default function ListBeneficiaires(props) {
                                   color="danger btn btn-sm px-2 py-0 mx-1"
                                   outline
                                   disabled={loading}
+                                  onClick={() =>
+                                    handleModalDeleteBeneficiaire(item)
+                                  }
                                 >
                                   <FontAwesomeIcon icon={["fa", "trash"]} />
                                 </Button>
@@ -113,14 +151,28 @@ export default function ListBeneficiaires(props) {
                   </PerfectScrollbar>
                 </div>
               </div>
-              <ModalEditBeneficiaire
-                modal={modalEditBeneficiaire}
-                handleModal={handleModalEditBeneficiaire}
-                item={currentItem}
-                syncActionToState={setBeneficiaire_after_update}
-              />
             </>
           )}
+          <ModalEditBeneficiaire
+            modal={modalEditBeneficiaire}
+            handleModal={handleModalEditBeneficiaire}
+            item={currentItem}
+            syncActionToState={setBeneficiaire_after_update}
+          />
+          <ModalDeleteBeneficiaire
+            modal={modalDeleteBeneficiaire}
+            handleModal={handleModalDeleteBeneficiaire}
+            item={currentItem}
+            syncActionToState={setBeneficiaire_after_delete}
+          />
+          <ModalAddBeneficiaire
+            modal={modalAddBeneficiaire}
+            handleModal={handleModalAddBeneficiaire}
+            client={newBeneficiare}
+            setClient={setNewBeneficiare}
+            grp_payement={props.grp_payement}
+            syncActionToState={setBeneficiaire_after_add}
+          />
         </>
       )}
     </>

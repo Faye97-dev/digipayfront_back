@@ -1,4 +1,4 @@
-export const HOST = "https://digipaybackend.herokuapp.com/"
+export const HOST = "http://127.0.0.1:8000/"; //"http://192.168.1.23:8000/"
 export const CHANGE_ROLE = "CHANGE_ROLE";
 export const DATA_LOADING = "DATA_LOADING";
 
@@ -76,4 +76,3 @@ export const UPDATE_USER_GRP_PAYEMENT = "UPDATE_USER_GRP_PAYEMENT";
 export const DELETE_USER_GRP_PAYEMENT = "DELETE_USER_GRP_PAYEMENT";
 //export const UPDATE_DONATION = "UPDATE_DONATION";
 //export const CLOTURE_GRP_PAYEMENT = "CLOTURE_GRP_PAYEMENT";
-

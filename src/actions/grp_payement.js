@@ -171,3 +171,126 @@ export const editBeneficiaireGrpPayement = (
       }
     });
 };
+
+export const deleteBeneficiaireGrpPayement = (
+  form,
+  showAlert,
+  setSubmitting,
+  closeModal,
+  syncActionToState
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: DELETE_USER_GRP_PAYEMENT,
+  });
+
+  const access = getState().auth.access;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  const body = { ...form };
+  axios
+    .delete(HOST + `api/beneficiaire-grp_payement/delete/${body.id}/`, config)
+    .then((res) => {
+      dispatch({
+        type: DELETE_USER_GRP_PAYEMENT,
+        payload: res.data[1],
+      });
+
+      setSubmitting(false);
+      syncActionToState(res.data[0]);
+      closeModal(null);
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_GRP_PAYEMENT,
+      });
+      setSubmitting(false);
+
+      console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de la suppression du beneficiaire !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
+
+export const addBeneficiaireGrpPayement = (
+  form,
+  showAlert,
+  setSubmitting,
+  closeModal,
+  syncActionToState
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: PARTICIPATE_GRP_PAYEMENT,
+  });
+
+  const access = getState().auth.access;
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  const body = { ...form };
+  axios
+    .post(HOST + `api/beneficiaire-grp_payement/create/`, body, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        dispatch({
+          type: PARTICIPATE_GRP_PAYEMENT,
+          payload: res.data[1],
+        });
+
+        setSubmitting(false);
+        syncActionToState(res.data[0]);
+        closeModal(null);
+      } else {
+        dispatch({
+          type: ERROR_GRP_PAYEMENT,
+        });
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+        setSubmitting(false);
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_GRP_PAYEMENT,
+      });
+      setSubmitting(false);
+
+      console.log(err);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur d'ajout d'un beneficiaire",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};

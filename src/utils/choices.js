@@ -30,6 +30,7 @@ export const COMP_VERSEMENT = "03";
 export const COMP_RETRAIT = "04";
 export const CAGNOTE = "09";
 export const RECOLTE = "10";
+export const PAIEMENT_MASSE = "11";
 
 export const NONE = "NONE";
 export const INF_3000 = "INF_3000";
@@ -46,6 +47,7 @@ export const mapColorTypes = {
   "08": "success",
   "09": "warning",
   10: "success",
+  11: "primary",
 };
 
 export const mapTypeNames = {
@@ -59,6 +61,7 @@ export const mapTypeNames = {
   "08": "REMBOURSEMENT",
   "09": "CAGNOTTE",
   10: "RECOLTE",
+  11: "PAIEMENT MASSE",
 };
 
 // transactions status

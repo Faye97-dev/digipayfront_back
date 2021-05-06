@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { Row, Col, CardBody, Card, Button, Modal, Badge } from "reactstrap";
 import ListBeneficiaires from "./ListBeneficiaires";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ModalPayementMasse from "./ModalPayementMasse";
 export default function ModalDetails(props) {
   const { item, user } = props;
 
-  const [modalAddDon, setModalAddDon] = useState(false);
-  const handleModalAddDon = () => setModalAddDon(!modalAddDon);
+  const [modalPay, setModalPay] = useState(false);
+  const handleModalPay = () => setModalPay(!modalPay);
+  const [loadingPay, setLoadingPay] = useState(false);
 
   return (
     <>
@@ -96,17 +98,13 @@ export default function ModalDetails(props) {
                         <span className="font-size-lg mb-0 py-2">
                           Liste des beneficiaires
                         </span>
-                        <Button
-                          color="success btn btn-sm px-2 py-0 ml-auto"
-                          outline
-                        >
-                          <FontAwesomeIcon icon={["fa", "plus"]} />
-                        </Button>
                       </div>
-                      <ListBeneficiaires
-                        grp_payement={item.id}
-                        access={props.access}
-                      />
+                      {!loadingPay && (
+                        <ListBeneficiaires
+                          grp_payement={item.id}
+                          access={props.access}
+                        />
+                      )}
                     </Card>
                   </div>
                 </div>
@@ -131,16 +129,18 @@ export default function ModalDetails(props) {
                         className="btn btn-block mb-4 px-2 px-sm-4 "
                         color="primary"
                         size="md"
-                        onClick={handleModalAddDon}
+                        onClick={handleModalPay}
                       >
                         Payer
                       </Button>
-                      {/*<ModalAddDon
-                        modal={modalAddDon}
-                        handleModal={handleModalAddDon}
+                      <ModalPayementMasse
+                        modal={modalPay}
+                        handleModal={handleModalPay}
                         handleModalDetail={props.handleModal}
                         item={item}
-                        />*/}
+                        setLoading={setLoadingPay}
+                        loading={loadingPay}
+                      />
                     </div>
                   )}
                 </div>
