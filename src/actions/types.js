@@ -1,4 +1,4 @@
-export const HOST = "http://127.0.0.1:8000/"; //"http://192.168.1.23:8000/"
+export const HOST = "https://digipaybackend.herokuapp.com/";
 export const CHANGE_ROLE = "CHANGE_ROLE";
 export const DATA_LOADING = "DATA_LOADING";
 
