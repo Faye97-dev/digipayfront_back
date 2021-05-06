@@ -54,6 +54,11 @@ const SidebarUserbox = (props) => {
         {props.user && props.user.first_name + " " + props.user.last_name}
         <span className="d-block text-white py-1">
           <Badge color="primary">{props.role && props.role.label}</Badge>
+          {props.user?.premium && (
+            <Badge color="info" className="mx-1">
+              Pro
+            </Badge>
+          )}
         </span>
         <small className="d-block text-white-20">
           {props.user && props.user.tel}

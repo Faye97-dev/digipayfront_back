@@ -3,19 +3,15 @@ import { connect } from "react-redux";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { RiseLoader } from "react-spinners";
-import PrivateRoute from "./utils/PrivateRoute";
-// Layout Blueprints
+import PrivateRoute from "../utils/PrivateRoute";
 
 import {
-  LeftSidebar,
   CollapsedSidebar,
   MinimalLayout,
   PresentationLayout,
-} from "./layout-blueprints";
+} from "../layout-blueprints";
 
-// Example Pages
-
-import PageError505 from "./example-pages/PageError505";
+import LeftSidebar from "./premium_sidebar/LeftSidebar";
 
 /**/
 const importDashboardByRole = (role) => {
@@ -26,27 +22,27 @@ const importDashboardByRole = (role) => {
   );
   if (role === "RESPONSABLE_AGENCE") {
     component = lazy(() =>
-      import("./app-components/dashboard/DashboardResponsable")
+      import("../app-components/dashboard/DashboardResponsable")
     );
   } else if (role === "EMPLOYE_AGENCE") {
     component = lazy(() =>
-      import("./app-components/dashboard/DashboardEmploye")
+      import("../app-components/dashboard/DashboardEmploye")
     );
   } else if (role === "CLIENT") {
     component = lazy(() =>
-      import("./app-components/dashboard/DashboardClient")
+      import("../app-components/dashboard/DashboardClient")
     );
   } else if (role === "VENDOR") {
     component = lazy(() =>
-      import("./app-components/dashboard/DashboardVendor")
+      import("../app-components/dashboard/DashboardVendor")
     );
   } else if (role === "SYSADMIN") {
     component = lazy(() =>
-      import("./app-components/dashboard/DashboardSysAdmin")
+      import("../app-components/dashboard/DashboardSysAdmin")
     );
   } else if (role === "AGENT_COMPENSATION") {
     component = lazy(() =>
-      import("./app-components/dashboard/DashboardCompensation")
+      import("../app-components/dashboard/DashboardCompensation")
     );
   }
 
@@ -64,45 +60,43 @@ const importTransactionByRole = (role) => {
     role === "RESPONSABLE_AGENCE" ||
     role === "EMPLOYE_AGENCE"
   ) {
-    component = lazy(() => import("./app-components/transaction/Transaction"));
+    component = lazy(() => import("../app-components/transaction/Transaction"));
   } else if (role === "CLIENT") {
     component = lazy(() =>
-      import("./app-components/transaction/TransactionClient")
+      import("../app-components/transaction/TransactionClient")
     );
   } else if (role === "VENDOR") {
     component = lazy(() =>
-      import("./app-components/transaction/TransactionVendor")
+      import("../app-components/transaction/TransactionVendor")
     );
   } else if (role === "AGENT_COMPENSATION") {
     component = lazy(() =>
-      import("./app-components/transaction/TransactionCompensation")
+      import("../app-components/transaction/TransactionCompensation")
     );
   }
   return component;
 };
-const Agence = lazy(() => import("./app-components/agence/Agence"));
-const Employe = lazy(() => import("./app-components/employe/Employe"));
-const Mesenger = lazy(() => import("./app-components/mesenger/Mesenger"));
-const Recharge = lazy(() => import("./app-components/recharge/FormBanquaire"));
-const Login = lazy(() => import("./app-components/auth/Login"));
+const Agence = lazy(() => import("../app-components/agence/Agence"));
+const Employe = lazy(() => import("../app-components/employe/Employe"));
+const Mesenger = lazy(() => import("../app-components/mesenger/Mesenger"));
+const Recharge = lazy(() => import("../app-components/recharge/FormBanquaire"));
+const Login = lazy(() => import("../app-components/auth/Login"));
 const Compensation = lazy(() =>
-  import("./app-components/compensation/Compensation")
+  import("../app-components/compensation/Compensation")
 );
-/*const Statistique = lazy(() =>
-  import("./app-components/statistiques/Statistique")
-);*/
-const Profil = lazy(() => import("./app-components/profil/Profil"));
+
+const Profil = lazy(() => import("../app-components/profil/Profil"));
 const Notification = lazy(() =>
-  import("./app-components/notification/Notification")
+  import("../app-components/notification/Notification")
 );
-const Contact = lazy(() => import("./app-components/contact/Contact"));
-const Cagnote = lazy(() => import("./app-components/cagnote/Cagnote"));
-/**/
+const Contact = lazy(() => import("../app-components/contact/Contact"));
+const Cagnote = lazy(() => import("../app-components/cagnote/Cagnote"));
+const BulkPayement = lazy(() =>
+  import("../app-components/bulk_payement/BulkPayement")
+);
+const PageLoginBasic = lazy(() => import("../example-pages/PageLoginBasic"));
 
-const PageLoginBasic = lazy(() => import("./example-pages/PageLoginBasic"));
-
-const Page404 = lazy(() => import("./app-components/pageError/Page404"));
-//const PageProfile = lazy(() => import("./example-pages/PageProfile"));
+const Page404 = lazy(() => import("../app-components/pageError/Page404"));
 
 const Routes = (props) => {
   const location = useLocation();
@@ -166,7 +160,7 @@ const Routes = (props) => {
         "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
-        //"AGENT_COMPENSATION",
+
         "CLIENT",
         "VENDOR",
       ],
@@ -179,25 +173,9 @@ const Routes = (props) => {
     {
       component: Compensation,
       link: "/Compensation",
-      roles: [
-        "SYSADMIN",
-        //"EMPLOYE_AGENCE",
-        "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
-      ],
+      roles: ["SYSADMIN", "RESPONSABLE_AGENCE", "AGENT_COMPENSATION"],
     },
-    /*{
-      component: Statistique,
-      link: "/Statistique",
-      roles: [
-        "SYSADMIN",
-        "EMPLOYE_AGENCE",
-        "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
-        "CLIENT",
-        "VENDOR",
-      ],
-    },*/
+
     {
       component: Notification,
       link: "/Notification",
@@ -224,6 +202,11 @@ const Routes = (props) => {
     {
       component: Cagnote,
       link: "/Cagnote",
+      roles: ["CLIENT"],
+    },
+    {
+      component: BulkPayement,
+      link: "/PaiementMasse",
       roles: ["CLIENT"],
     },
   ];
@@ -282,22 +265,7 @@ const Routes = (props) => {
               </Switch>
             </PresentationLayout>
           </Route>
-          <Route
-            path={
-              /*[
-              "/Dashboard",
-              "/Transaction",
-              "/Agence",
-              "/Employe",
-              "/RechargeBanquaire",
-              "/Compensation",
-              "/Statistique",
-              "/Notification",
-              "/Contact",
-            ]*/
-              PathSidebar
-            }
-          >
+          <Route path={PathSidebar}>
             <LeftSidebar>
               <Switch location={location} key={location.pathname}>
                 <motion.div
@@ -332,18 +300,6 @@ const Routes = (props) => {
                   variants={pageVariants}
                   transition={pageTransition}
                 >
-                  {/*RoutesCollapsed.filter((item) =>
-                    item.roles.includes(props.role)
-                  ).map((item, index) => {
-                    return (
-                      <Route
-                        key={index}
-                        path={item.link}
-                        component={item.component}
-                      />
-                    );
-                  })*/}
-                  {/*<PrivateRoute path="/Chat" component={Mesenger} />*/}
                   <PrivateRoute path="/Profil" component={Profil} />
                 </motion.div>
               </Switch>

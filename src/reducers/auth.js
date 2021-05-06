@@ -44,7 +44,7 @@ const initialState = {
   isLoading: false,
   agenceStatus_isLoading: false,
   user: null,
-  role: { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
+  role: { value: "ANONYMOUS", label: "ANONYMOUS" },
 };
 
 export default function (state = initialState, action) {
@@ -99,7 +99,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         agenceStatus_isLoading: false,
         tokenExpired: false,
-        role: { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
+        role: { value: "ANONYMOUS", label: "ANONYMOUS" },
       };
     case LOGOUT:
       localStorage.removeItem("access");
@@ -113,7 +113,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         agenceStatus_isLoading: false,
         tokenExpired: false,
-        role: { value: "EMPLOYE_AGENCE", label: "EMPLOYE_AGENCE" },
+        role: { value: "ANONYMOUS", label: "ANONYMOUS" },
       };
     case AGENCE_STATUS_LOADING:
       return {

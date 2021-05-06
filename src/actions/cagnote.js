@@ -10,7 +10,6 @@ import {
   UPDATE_DONATION,
   CLOTURE_CAGNOTE,
 } from "./types";
-import { updateSolde, updateSolde_clientDigipay } from "./async";
 import { expiredToken } from "../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

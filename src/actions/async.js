@@ -131,6 +131,45 @@ export async function getParticipantsCagnote(
   return data;
 }
 
+export async function getBeneficiairesGrpPayement(
+  grp_payement,
+  showAlert,
+  access = null
+) {
+  let data;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  await axios
+    .post(
+      HOST + `api/beneficiaire-grp_payement/list/`,
+      { grp_payement },
+      config
+    )
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Récupération des beneficiaires non-terminées !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+}
+
 export const checkExistTel_Client = async (form, showAlert, access = null) => {
   const config = {
     headers: {

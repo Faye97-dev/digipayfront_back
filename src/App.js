@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter } from "react-router-dom";
 import configureStore from "./config/configureStore";
 import { Provider } from "react-redux";
-import Routes from "./Routes";
+//import Routes from "./routers/Routes";
 import ScrollToTop from "./utils/ScrollToTop";
 import { ToastContainer, toast } from "react-toastify";
 import { loadUser } from "./actions/auth";
@@ -133,6 +133,7 @@ import {
   faSignOutAlt,
   faLink,
 } from "@fortawesome/free-solid-svg-icons";
+import MainRouter from "./routers/MainRouter";
 library.add(
   far,
   faSquare,
@@ -268,7 +269,7 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter basename="/">
           <ScrollToTop>
-            <Routes />
+            <MainRouter />
           </ScrollToTop>
           <ToastContainer
             enableMultiContainer

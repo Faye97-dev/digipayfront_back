@@ -8,6 +8,7 @@ import employe from "./employe";
 import notification from "./notification";
 import compensation from "./compensation";
 import cagnote from "./cagnote";
+import grp_payement from "./grp_payement";
 export default combineReducers({
   ThemeOptions,
   auth,
@@ -18,4 +19,5 @@ export default combineReducers({
   compensation,
   notification,
   cagnote,
+  grp_payement,
 });

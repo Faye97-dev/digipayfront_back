@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Card } from "reactstrap";
+import { SyncLoader } from "react-spinners";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { getParticipantsCagnote } from "../../actions/async";
 import { showAlert } from "../../utils/alerts";
@@ -24,7 +23,9 @@ export default function ListParticipants(props) {
   return (
     <>
       {loading ? (
-        <span className="p-3">loading ...</span>
+        <div className="p-3">
+          <SyncLoader color={"var(--primary)"} loading={true} />
+        </div>
       ) : (
         <>
           {participants.length === 0 ? (
