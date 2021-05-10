@@ -9,6 +9,7 @@ import {
   ADD_DONATION,
   UPDATE_DONATION,
   CLOTURE_CAGNOTE,
+  DELETE_CAGNOTE,
 } from "./types";
 import { expiredToken } from "../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -56,10 +57,13 @@ export const getCagnotes = (showAlert) => (dispatch, getState) => {
     });
 };
 
-export const addCagnote = (form, showAlert, setSubmitting, resetForm) => (
-  dispatch,
-  getState
-) => {
+export const addCagnote = (
+  form,
+  showAlert,
+  setSubmitting,
+  resetForm,
+  clearData = null
+) => (dispatch, getState) => {
   dispatch({
     type: DATA_LOADING,
     payload: ADD_CAGNOTE,
@@ -89,6 +93,7 @@ export const addCagnote = (form, showAlert, setSubmitting, resetForm) => (
         "Ajout Cagnote Complete !",
         <FontAwesomeIcon icon={["fas", "check"]} />
       );
+      if (clearData) clearData(null);
       setSubmitting(false);
       resetForm();
     })
@@ -103,7 +108,7 @@ export const addCagnote = (form, showAlert, setSubmitting, resetForm) => (
       } else {
         showAlert(
           "danger",
-          "Erreur de la creation d'une cagnote!",
+          "Erreur de la creation d'une cagnotte!",
           <FontAwesomeIcon icon={["fas", "times"]} />
         );
       }

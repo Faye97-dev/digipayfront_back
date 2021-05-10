@@ -15,9 +15,9 @@ const formikEnhancer = withFormik({
       .required(" Montant est obligatoire !"),
   }),
   mapPropsToValues: (props) => ({
-    montant: "",
+    montant: props.item.participation.montant || "",
   }),
-  handleSubmit: (values, { props, setSubmitting }) => {
+  handleSubmit: (values, { props, setSubmitting, setFieldError }) => {
     const payload = {
       ...values,
     };
@@ -25,13 +25,23 @@ const formikEnhancer = withFormik({
     payload["cagnote"] = props.item.cagnote.id;
     payload["client"] = props.user.id;
 
-    props.client_update_donation(
-      payload,
-      showAlert,
-      setSubmitting,
-      props.handleModal,
-      props.handleModalDetail
-    );
+    if (values.montant <= props.item.participation.montant) {
+      setFieldError(
+        "montant",
+        `Le montant doit etre superieur ${
+          props.item.participation.montant + 10
+        } MRU`
+      );
+      setSubmitting(false);
+    } else {
+      props.client_update_donation(
+        payload,
+        showAlert,
+        setSubmitting,
+        props.handleModal,
+        props.handleModalDetail
+      );
+    }
   },
   displayName: "MyForm",
 });

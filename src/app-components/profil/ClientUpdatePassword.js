@@ -64,19 +64,23 @@ function ClientUpdatePassword(props) {
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
-    old_password: Yup.string()
-      .required("Veuillez renseigner votre ancien code PIN !")
-      .length(4, "Votre code PIN doit avoir 4 chiffres !"),
+    old_password: Yup.string().required(
+      "Veuillez renseigner votre ancien code PIN !"
+    ),
+    //.min(1000, "Votre code PIN doit avoir 4 chiffres !")
+    //.max(9999, "Votre code PIN doit avoir 4 chiffres !"),
 
-    new_password: Yup.string()
+    new_password: Yup.number()
       .required("Veuillez renseigner votre nouveau code PIN !")
-      .length(4, "Votre code PIN doit avoir 4 chiffres !"),
+      .min(1000, "Votre code PIN doit avoir 4 chiffres !")
+      .max(9999, "Votre code PIN doit avoir 4 chiffres !"),
 
     //.matches(/[a-zA-Z]/, 'Password can only contain Latin letters.')
 
-    confirm_password: Yup.string()
+    confirm_password: Yup.number()
       .required("Veuillez confirmer votre code PIN !")
-      .length(4, "Votre code PIN doit avoir 4 chiffres !")
+      .min(1000, "Votre code PIN doit avoir 4 chiffres !")
+      .max(9999, "Votre code PIN doit avoir 4 chiffres !")
       .oneOf(
         [Yup.ref("new_password"), null],
         "Le code PIN doit etre identique !"
@@ -109,10 +113,25 @@ const MyForm = (props) => {
           <Col xl="12" style={{ margin: "12px 0" }}>
             <Label for="old_password">Mot de passe actuel</Label>
             <div className="d-flex align-items-center">
-              <Field
-                name="old_password"
-                type={showOldPswd ? "number" : "password"}
-              />
+              {showOldPswd ? (
+                <Field name="old_password" type="number" />
+              ) : (
+                <Field
+                  name="old_password"
+                  type="password"
+                  pattern="[0-9]*"
+                  inputmode="numeric"
+                />
+              )}
+
+              {/*<Field name="old_password">
+                {({ field, form, meta }) => (
+                  <div>
+                    <input type="password" pattern="[0-9]*" {...field} />
+                  </div>
+                )}
+                </Field>*/}
+
               <div className="pl-2">
                 <ShowPassword
                   showPswd={showOldPswd}

@@ -75,7 +75,7 @@ export default function ListBeneficiaires(props) {
         <Button
           color="success btn btn-sm px-2 py-0 mt-3 mr-auto"
           outline
-          disabled={loading}
+          disabled={loading || props.loadingPay}
           onClick={handleModalAddBeneficiaire}
         >
           <FontAwesomeIcon icon={["fa", "plus"]} />
@@ -123,7 +123,7 @@ export default function ListBeneficiaires(props) {
                                 <Button
                                   color="warning btn btn-sm px-2 py-0 mx-1"
                                   outline
-                                  disabled={loading}
+                                  disabled={loading || props.loadingPay}
                                   onClick={() =>
                                     handleModalEditBeneficiaire(item)
                                   }
@@ -134,7 +134,7 @@ export default function ListBeneficiaires(props) {
                                 <Button
                                   color="danger btn btn-sm px-2 py-0 mx-1"
                                   outline
-                                  disabled={loading}
+                                  disabled={loading || props.loadingPay}
                                   onClick={() =>
                                     handleModalDeleteBeneficiaire(item)
                                   }

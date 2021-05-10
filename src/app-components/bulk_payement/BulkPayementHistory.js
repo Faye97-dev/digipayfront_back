@@ -30,6 +30,7 @@ import SkeletonLoader from "../../utils/SkeletonLoader";
 
 import { PaginateData } from "../../utils/dataTable";
 import ModalDetails from "./ModalDetails";
+import ModalDelete from "./ModalDelete";
 
 const updateCurrentItem = (item, data) => {
   if (item) {
@@ -53,6 +54,7 @@ class BulkPayementHistory extends Component {
       current: [],
       searchOpen: false,
       modal4: false,
+      modalDelete: false,
       currentItem: null,
     };
 
@@ -64,6 +66,13 @@ class BulkPayementHistory extends Component {
     this.setState({
       ...this.state,
       modal4: !this.state.modal4,
+      currentItem: item,
+    });
+
+  deleteToggle = (item) =>
+    this.setState({
+      ...this.state,
+      modalDelete: !this.state.modalDelete,
       currentItem: item,
     });
 
@@ -193,6 +202,21 @@ class BulkPayementHistory extends Component {
                             <span>Details</span>
                           </NavLinkStrap>
                         </NavItem>
+                        <NavItem>
+                          <NavLinkStrap
+                            href="#/"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              this.deleteToggle(item);
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={["fas", "trash"]}
+                              className="font-size-md mr-3"
+                            />
+                            <span>Supprimer</span>
+                          </NavLinkStrap>
+                        </NavItem>
                       </Nav>
                     </DropdownMenu>
                   </UncontrolledDropdown>
@@ -314,6 +338,13 @@ class BulkPayementHistory extends Component {
             access={this.props.access}
             modal={this.state.modal4}
             handleModal={this.toggle4}
+          />
+          <ModalDelete
+            item={this.state.currentItem}
+            user={this.props.user}
+            access={this.props.access}
+            modal={this.state.modalDelete}
+            handleModal={this.deleteToggle}
           />
         </Card>
       </>

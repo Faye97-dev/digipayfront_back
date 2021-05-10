@@ -212,7 +212,7 @@ const SidebarMenu = (props) => {
     },
     {
       id: 11,
-      label: "Cagnotes",
+      label: "Cagnottes",
       link: "/Cagnote",
       icon: <DollarSign />,
       roles: ["CLIENT"],

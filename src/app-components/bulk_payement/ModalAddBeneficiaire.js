@@ -39,7 +39,7 @@ const formikEnhancer = withFormik({
     payload["id"] = props.item.id;*/
 
     if (!values.digipay) {
-      const payload1 = { ...payload, user: props.user.id };
+      const payload1 = { tel: payload.tel, user: props.user.id };
       checkClientDigipay_grpPayement(payload1, showAlert, props.access).then(
         (res) => {
           if (res) {
@@ -60,7 +60,8 @@ const formikEnhancer = withFormik({
       );
     } else {
       const payload2 = {
-        ...payload,
+        motif: payload.motif,
+        montant: payload.montant,
         beneficiaire: props.client.id,
         grp_payement: props.grp_payement,
       };

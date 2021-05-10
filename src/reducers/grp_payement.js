@@ -8,6 +8,7 @@ import {
   UPDATE_USER_GRP_PAYEMENT,
   DELETE_USER_GRP_PAYEMENT,
   DELETE_GRP_PAYEMENT,
+  DELETE_CAGNOTE,
 } from "../actions/types.js";
 
 const initialState = {
@@ -72,6 +73,19 @@ export default function (state = initialState, action) {
           ...state.grp_payements,
           payload: [
             ...updateItemInList(action.payload, state.grp_payements.payload),
+          ],
+          loading: false,
+        },
+      };
+    case DELETE_GRP_PAYEMENT:
+      return {
+        ...state,
+        grp_payements: {
+          ...state.grp_payements,
+          payload: [
+            ...state.grp_payements.payload.filter(
+              (item) => item.id !== action.payload
+            ),
           ],
           loading: false,
         },

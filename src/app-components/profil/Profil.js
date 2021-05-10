@@ -310,8 +310,7 @@ function Profil(props) {
                 </Card>
 
                 <Card className="my-4 bg-white">
-                  {props.role?.value === CLIENT ||
-                  props.role?.value === VENDOR ? (
+                  {props.role?.value === CLIENT ? (
                     <ClientUpdatePassword />
                   ) : (
                     <UpdatePassword />

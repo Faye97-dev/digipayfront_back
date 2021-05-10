@@ -99,12 +99,12 @@ export default function ModalDetails(props) {
                           Liste des beneficiaires
                         </span>
                       </div>
-                      {!loadingPay && (
-                        <ListBeneficiaires
-                          grp_payement={item.id}
-                          access={props.access}
-                        />
-                      )}
+
+                      <ListBeneficiaires
+                        grp_payement={item.id}
+                        access={props.access}
+                        loadingPay={loadingPay}
+                      />
                     </Card>
                   </div>
                 </div>

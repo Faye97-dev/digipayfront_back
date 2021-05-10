@@ -76,7 +76,6 @@ const formikEnhancer = withFormik({
 
 const MyForm = (props) => {
   const { touched, errors, handleSubmit, isSubmitting, setFieldValue } = props;
-  //const [checked, setChecked] = useState(false);
 
   const toggle = () => {
     setFieldValue("livraison", !props.values.livraison);

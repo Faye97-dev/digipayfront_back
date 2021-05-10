@@ -47,11 +47,13 @@ import {
   mapStatusNames,
   CAGNOTE,
   RECOLTE,
+  PAIEMENT_MASSE,
 } from "../../utils/choices";
 import FormFilter from "../transaction/FormFilter";
 import CollapseModel from "./CollapseModel";
 import { PaginateData } from "../../utils/dataTable";
 import ModalClientTransDetails from "../transaction/ModalClientTransDetails";
+import ModalPayementMasseBeneficiaires from "../transaction/ModalPayementMasseBeneficiaires";
 
 const filtersOptions = {
   status: {
@@ -88,12 +90,20 @@ class TransactionsClient extends Component {
       page: 1,
       current: [],
       searchOpen: false,
+      modalPayementMasse: false,
+      currentItem: null,
     };
 
     this.handleChangePage = this.handleChangePage.bind(this);
     this.Paginate = this.Paginate.bind(this);
   }
 
+  togglePayementMasse = (item) =>
+    this.setState({
+      ...this.state,
+      modalPayementMasse: !this.state.modalPayementMasse,
+      currentItem: item,
+    });
   openSearch = () => this.setState({ ...this.state, searchOpen: true });
   closeSearch = () => this.setState({ ...this.state, searchOpen: false });
 
@@ -249,9 +259,28 @@ class TransactionsClient extends Component {
                       {item.type_transaction !== CAGNOTE &&
                       item.type_transaction !== RECOLTE ? (
                         <>
-                          {keys.includes("agence_origine")
-                            ? item.transaction.destinataire.nom
-                            : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                          {item.type_transaction === PAIEMENT_MASSE &&
+                          this.props.user.id ===
+                            item.transaction?.expediteur.id ? (
+                            <Button
+                              color="primary"
+                              size="sm"
+                              onClick={(e) => {
+                                this.togglePayementMasse(item);
+                              }}
+                            >
+                              <FontAwesomeIcon
+                                icon={["fas", "users"]}
+                                className="font-size-md p-0 m-0"
+                              />
+                            </Button>
+                          ) : (
+                            <>
+                              {keys.includes("agence_origine")
+                                ? item.transaction.destinataire.nom
+                                : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                            </>
+                          )}
                         </>
                       ) : (
                         <>
@@ -265,7 +294,15 @@ class TransactionsClient extends Component {
                     <span className="text-black-50 d-block">
                       {item.type_transaction !== CAGNOTE &&
                       item.type_transaction !== RECOLTE ? (
-                        <>{item.transaction.destinataire.tel}</>
+                        <>
+                          {item.type_transaction === PAIEMENT_MASSE &&
+                          this.props.user.id ===
+                            item.transaction?.expediteur.id ? (
+                            <></>
+                          ) : (
+                            <>{item.transaction.destinataire.tel}</>
+                          )}
+                        </>
                       ) : (
                         <>
                           {item.type_transaction == RECOLTE &&
@@ -278,7 +315,12 @@ class TransactionsClient extends Component {
                   </div>
                 </td>
                 <td className="font-size-lg font-weight-bold text-center">
-                  <span>{item.transaction.montant}</span>
+                  <span>
+                    {item.type_transaction === PAIEMENT_MASSE &&
+                    this.props.user.id === item.transaction?.expediteur.id
+                      ? item.transaction.total
+                      : item.transaction.montant}
+                  </span>
                   <small className="px-2">MRU</small>
                 </td>
                 <td className="font-size-lg font-weight-bold text-center">
@@ -636,90 +678,23 @@ class TransactionsClient extends Component {
               />
             </div>
           )}
+          <ModalPayementMasseBeneficiaires
+            item={this.state.currentItem}
+            user={this.props.user}
+            access={this.props.access}
+            modal={this.state.modalPayementMasse}
+            handleModal={this.togglePayementMasse}
+          />
         </Card>
       </>
     );
   }
 }
 
-/*
-function TransactionsClient(props) {
- 
-  useEffect(() => props.getTransactions(showAlert), []);
-
-  return (
-    <>
-      <Card className="card-box shadow-none">
-        
-        <div className="p-4">
-          <CardBody>
-            <div className="table-responsive">
-              <Table hover borderless className="text-nowrap mb-0">
-                <thead>
-                  <tr>
-                    <th
-                      className="text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Numero
-                    </th>
-                    <th
-                      className=" text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Date
-                    </th>
-                    <th
-                      className="text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Origine
-                    </th>
-                    <th
-                      className="text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Beneficiaire
-                    </th>
-                    <th
-                      className="text-center text-center text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Montant
-                    </th>
-                    <th
-                      className="text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Type
-                    </th>
-                    <th
-                      className="text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Status
-                    </th>
-                    <th
-                      className="text-center font-size-lg font-weight-normal   text-dark"
-                      scope="col"
-                    >
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>{transactions}</tbody>
-              </Table>
-            </div>
-          </CardBody>
-        </div>
-        
-      </Card>
-    </>
-  );
-}
-*/
 const mapStateToProps = (state) => ({
   transactions: state.transaction.transactions,
+  user: state.auth.user,
+  access: state.auth.access,
 });
 
 export default connect(mapStateToProps, {

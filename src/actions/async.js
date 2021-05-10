@@ -170,6 +170,45 @@ export async function getBeneficiairesGrpPayement(
   return data;
 }
 
+export async function getBeneficiairesByNumeroGrpPayement(
+  body,
+  showAlert,
+  access = null
+) {
+  let data;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  await axios
+    .post(
+      HOST + `api/func/transaction/beneficiaires-payement_masse/`,
+      body,
+      config
+    )
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Récupération des beneficiaires non-terminées !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+}
+
 export const checkExistTel_Client = async (form, showAlert, access = null) => {
   const config = {
     headers: {
@@ -805,6 +844,41 @@ export const checkClientDigipay_grpPayement = async (
   let data;
   await axios
     .post(HOST + `api/grp-payement/check-client_digipay/`, form, config)
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Validation du numero telephone non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+};
+
+export const checkClientDigipay_newCagnote = async (
+  form,
+  showAlert,
+  access = null
+) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  let data;
+  await axios
+    .post(HOST + `api/cagnote/check-client_digipay/`, form, config)
     .then((res) => {
       data = res.data;
     })

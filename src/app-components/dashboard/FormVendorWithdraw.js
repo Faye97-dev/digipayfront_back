@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { randomCodeRetrait } from "../../actions/async";
 import { showAlert } from "../../utils/alerts";
 import { SyncLoader } from "react-spinners";
-import ModalPINConfirmation from "../../utils/ModalPINConfirmation";
+//import ModalPINConfirmation from "../../utils/ModalPINConfirmation";
 
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
@@ -20,25 +20,25 @@ const formikEnhancer = withFormik({
     montant: "",
   }),
   handleSubmit: (values, { props, setSubmitting, resetForm }) => {
-    if (props.validCodePIN) {
-      const payload = {
-        ...values,
-      };
+    //if (props.validCodePIN) {
+    const payload = {
+      ...values,
+    };
 
-      payload["role"] = props.user.role;
-      payload["id"] = props.user.id;
+    payload["role"] = props.user.role;
+    payload["id"] = props.user.id;
 
-      randomCodeRetrait(payload, showAlert, props.access).then((res) => {
-        //reset confirmation PIN code to False
-        props.setValidCodePIN(false);
+    randomCodeRetrait(payload, showAlert, props.access).then((res) => {
+      //reset confirmation PIN code to False
+      //props.setValidCodePIN(false);
 
-        setSubmitting(false);
-        resetForm();
-      });
-    } else {
+      setSubmitting(false);
+      resetForm();
+    });
+    /*} else {
       props.handlePINModal();
       setSubmitting(false);
-    }
+    }*/
   },
   displayName: "MyForm",
 });
@@ -48,14 +48,14 @@ const MyForm = (props) => {
 
   return (
     <>
-      <ModalPINConfirmation
+      {/*<ModalPINConfirmation
         handleSubmit={handleSubmit}
         codePINModal={props.codePINModal}
         handlePINModal={props.handlePINModal}
         setValidCodePIN={props.setValidCodePIN}
         valuePIN={props.valuePIN}
         setValuePIN={props.setValuePIN}
-      />
+      />*/}
       <Form onSubmit={handleSubmit} className="px-sm-5 px-1">
         <Row>
           <Col xl="12" style={{ margin: "12px 0" }}>
@@ -92,25 +92,25 @@ const MyEnhancedForm = formikEnhancer(MyForm);
 
 const FormVendorWithdraw = (props) => {
   /*Confirmation code PIN */
-  const [validCodePIN, setValidCodePIN] = useState(false);
+  //const [validCodePIN, setValidCodePIN] = useState(false);
   /* Value code PIN */
-  const [valuePIN, setValuePIN] = useState("");
+  //const [valuePIN, setValuePIN] = useState("");
   /* Modal PIN */
-  const [codePINModal, setcodePINModal] = useState(false);
+  /*const [codePINModal, setcodePINModal] = useState(false);
   const handlePINModal = () => {
     setValuePIN("");
     setcodePINModal(!codePINModal);
-  };
+  };*/
 
   return (
     <MyEnhancedForm
       {...props}
-      validCodePIN={validCodePIN}
+      /*validCodePIN={validCodePIN}
       setValidCodePIN={setValidCodePIN}
       codePINModal={codePINModal}
       handlePINModal={handlePINModal}
       valuePIN={valuePIN}
-      setValuePIN={setValuePIN}
+      setValuePIN={setValuePIN}*/
     />
   );
 };

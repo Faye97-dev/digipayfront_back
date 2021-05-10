@@ -294,3 +294,59 @@ export const addBeneficiaireGrpPayement = (
       }
     });
 };
+
+export const client_deleteGrpPayement = (
+  form,
+  showAlert,
+  setSubmitting,
+  closeInfo
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: DELETE_GRP_PAYEMENT,
+  });
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const access = getState().auth.access;
+
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .delete(HOST + `api/grp-payement/delete/${form.id}/`, config)
+    .then((res) => {
+      dispatch({
+        type: DELETE_GRP_PAYEMENT,
+        payload: form.id,
+      });
+
+      showAlert(
+        "success",
+        "Suppression Complete !",
+        <FontAwesomeIcon icon={["fas", "check"]} />
+      );
+      setSubmitting(false);
+      closeInfo(null);
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_GRP_PAYEMENT,
+      });
+      setSubmitting(false);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Suppression du groupe de paiement non-complete !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
