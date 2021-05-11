@@ -37,8 +37,8 @@ export const login = (data, resetForm, setSubmitting, showAlert) => (
     },
   };
   //const body = JSON.stringify(data);
-  //const body = { ...data, device_connecte: "hhhhhhuuii" };
-  const body = { ...data };
+  const body = { ...data, debugMode: true };
+  //const body = { ...data };
   axios
     .post(HOST + "api/login/", body, config)
     .then((res) => {
@@ -67,7 +67,7 @@ export const login = (data, resetForm, setSubmitting, showAlert) => (
         "Login Echec!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      console.log(err.response);
+      console.log(err.response.data);
     });
 };
 

@@ -59,10 +59,10 @@ export const getCagnotes = (showAlert) => (dispatch, getState) => {
 
 export const addCagnote = (
   form,
-  showAlert,
-  setSubmitting,
+  showAlert
+  /*setSubmitting,
   resetForm,
-  clearData = null
+  clearData = null*/
 ) => (dispatch, getState) => {
   dispatch({
     type: DATA_LOADING,
@@ -93,15 +93,15 @@ export const addCagnote = (
         "Ajout Cagnote Complete !",
         <FontAwesomeIcon icon={["fas", "check"]} />
       );
-      if (clearData) clearData(null);
+      /*if (clearData) clearData(null);
       setSubmitting(false);
-      resetForm();
+      resetForm();*/
     })
     .catch((err) => {
       dispatch({
         type: ERROR_CAGNOTE,
       });
-      setSubmitting(false);
+      //setSubmitting(false);
 
       if (err.response && err.response.status === 401) {
         expiredToken(dispatch, getState().auth.tokenExpired);

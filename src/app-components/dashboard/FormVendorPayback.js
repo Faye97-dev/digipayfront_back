@@ -10,42 +10,70 @@ import { checkCode_transaction } from "../../actions/async";
 import { showAlert } from "../../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { VENDOR, CLIENT } from "../../utils/choices";
-
+import { valid_code_PIN } from "../../actions/async";
 const formikEnhancer = withFormik({
   validationSchema: Yup.object().shape({
     numero_transaction: Yup.string().required(
       "Numero de transaction est obligatoire !"
     ),
+    PIN: Yup.string()
+      .required("Veuillez renseigner votre mot de passe !")
+      .min(8, "Votre mot de passe est trop court , minimum 8 lettres !"),
   }),
   mapPropsToValues: (props) => ({
     numero_transaction: "",
+    PIN: "",
   }),
   handleSubmit: (values, { props, setSubmitting, resetForm }) => {
     const payload = {
       ...values,
     };
-    payload["vendor"] = props.user.id;
-    checkCode_transaction(payload, showAlert, props.access).then((res) => {
+
+    valid_code_PIN(
+      { id: props.user.id, PIN: payload.PIN },
+      showAlert,
+      props.access
+    ).then((res) => {
       if (res) {
-        const keys = Object.keys({ ...res });
-        if (keys.includes("msg")) {
-          showAlert(
-            "warning",
-            res.msg,
-            <FontAwesomeIcon icon={["far", "question-circle"]} />
+        if (res.PIN) {
+          const payload1 = {
+            vendor: props.user.id,
+            numero_transaction: payload.numero_transaction,
+          };
+          checkCode_transaction(payload1, showAlert, props.access).then(
+            (res) => {
+              if (res) {
+                const keys = Object.keys({ ...res });
+                if (keys.includes("msg")) {
+                  showAlert(
+                    "warning",
+                    res.msg,
+                    <FontAwesomeIcon icon={["far", "question-circle"]} />
+                  );
+                } else {
+                  //console.log(res);
+                  if (res.transaction) {
+                    const temp = res.transaction;
+                    temp.transactionId = res.id;
+                    props.handleItem(temp);
+                    props.showDivInfo();
+                  }
+                }
+              }
+              setSubmitting(false);
+              resetForm();
+            }
           );
         } else {
-          //console.log(res);
-          if (res.transaction) {
-            const temp = res.transaction;
-            temp.transactionId = res.id;
-            props.handleItem(temp);
-            props.showDivInfo();
-          }
+          showAlert(
+            "warning",
+            "Votre mot de passe est incorrect. Veuillez ressayer Svp !",
+            <FontAwesomeIcon icon={["far", "question-circle"]} />
+          );
+          setSubmitting(false);
         }
       }
       setSubmitting(false);
-      resetForm();
     });
   },
   displayName: "MyForm",
@@ -66,6 +94,16 @@ const MyForm = (props) => {
                 {errors.numero_transaction && touched.numero_transaction && (
                   <div style={{ color: "red", marginTop: ".5rem" }}>
                     {errors.numero_transaction}
+                  </div>
+                )}
+              </Col>
+              <Col xl="12" style={{ margin: "12px 0" }}>
+                <Label for="PIN">Mot de passe</Label>
+                <Field name="PIN" type="password" />
+
+                {errors.PIN && touched.PIN && (
+                  <div style={{ color: "red", marginTop: ".5rem" }}>
+                    {errors.PIN}
                   </div>
                 )}
               </Col>

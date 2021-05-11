@@ -152,35 +152,24 @@ export default function ModalDetails(props) {
                         </div>
                         <div className="divider my-2"></div>
 
-                        {item.cagnote.responsable.id !==
-                        item.cagnote.beneficiaire.id ? (
-                          <>
-                            <div className="d-flex align-items-center justify-content-between px-3 py-1">
-                              <div className=" font-size-md">Responsable</div>
-                              <div className=" font-size-md text-primary">
-                                {`${item.cagnote.responsable.first_name} ${item.cagnote.responsable.last_name}`}
-                              </div>
+                        {/*item.cagnote.responsable.id !==
+                        item.cagnote.beneficiaire.id ? (*/}
+                        <>
+                          <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                            <div className=" font-size-md">Responsable</div>
+                            <div className=" font-size-md text-primary">
+                              {`${item.cagnote.responsable.first_name} ${item.cagnote.responsable.last_name}`}
                             </div>
-                            <div className="divider my-2"></div>
-                            <div className="d-flex align-items-center justify-content-between px-3 py-1">
-                              <div className=" font-size-md">Beneficiaire</div>
-                              <div className=" font-size-md text-primary">
-                                {`${item.cagnote.beneficiaire.first_name} ${item.cagnote.beneficiaire.last_name}`}
-                              </div>
+                          </div>
+                          <div className="divider my-2"></div>
+                          <div className="d-flex align-items-center justify-content-between px-3 py-1">
+                            <div className=" font-size-md">Beneficiaire</div>
+                            <div className=" font-size-md text-primary">
+                              {`${item.cagnote.beneficiaire.first_name} ${item.cagnote.beneficiaire.last_name}`}
                             </div>
-                            <div className="divider my-2"></div>
-                          </>
-                        ) : (
-                          <>
-                            <div className="d-flex align-items-center justify-content-between px-3 py-1">
-                              <div className=" font-size-md">Responsable</div>
-                              <div className=" font-size-md text-primary">
-                                {`${item.cagnote.responsable.first_name} ${item.cagnote.responsable.last_name}`}
-                              </div>
-                            </div>
-                            <div className="divider my-2"></div>
-                          </>
-                        )}
+                          </div>
+                          <div className="divider my-2"></div>
+                        </>
 
                         <div className="d-flex align-items-center justify-content-between px-3 py-1">
                           <div className=" font-size-md">Montant souhaité</div>

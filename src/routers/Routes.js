@@ -60,7 +60,7 @@ const importTransactionByRole = (role) => {
     </>
   );
   if (
-    role === "SYSADMIN" ||
+    //role === "SYSADMIN" ||
     role === "RESPONSABLE_AGENCE" ||
     role === "EMPLOYE_AGENCE"
   ) {
@@ -146,7 +146,7 @@ const Routes = (props) => {
       component: Agence,
       link: "/Agence",
       roles: [
-        "SYSADMIN",
+        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -157,13 +157,16 @@ const Routes = (props) => {
     {
       component: Employe,
       link: "/Employe",
-      roles: ["SYSADMIN", "RESPONSABLE_AGENCE"],
+      roles: [
+        //"SYSADMIN",
+        "RESPONSABLE_AGENCE",
+      ],
     },
     {
       component: Transaction,
       link: "/Transaction",
       roles: [
-        "SYSADMIN",
+        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         //"AGENT_COMPENSATION",
@@ -180,7 +183,7 @@ const Routes = (props) => {
       component: Compensation,
       link: "/Compensation",
       roles: [
-        "SYSADMIN",
+        //"SYSADMIN",
         //"EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -237,7 +240,7 @@ const Routes = (props) => {
       component: { Mesenger },
       link: "/Chat",
       roles: [
-        "SYSADMIN",
+        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",

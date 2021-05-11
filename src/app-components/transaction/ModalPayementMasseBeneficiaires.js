@@ -94,11 +94,6 @@ export default function ModalPayementMasseBeneficiaires(props) {
                                             </div>
 
                                             <div className="py-1 ">
-                                              <span className="font-weight-normal text-primary font-size-md">
-                                                {item.date_creation}
-                                              </span>
-                                            </div>
-                                            <div className="py-1 ">
                                               <span className="font-weight-normal text-black font-size-md">
                                                 {item.remarque &&
                                                 item.remarque !== ""
@@ -106,6 +101,11 @@ export default function ModalPayementMasseBeneficiaires(props) {
                                                   : "------"}
                                               </span>
                                             </div>
+                                            {/*<div className="py-1 ">
+                                              <span className="font-weight-normal text-primary font-size-md">
+                                                {item.date_creation}
+                                              </span>
+                                                </div>*/}
                                           </div>
                                           <div className="divider my-2"></div>
                                         </div>

@@ -38,6 +38,8 @@ import {
   DollarSign,
   Phone,
   MessageCircle,
+  PhoneCall,
+  File,
 } from "react-feather";
 
 import { Row, Col, Button, Modal } from "reactstrap";
@@ -50,7 +52,7 @@ const SidebarMenu = (props) => {
 
   const toggleSidebarMobile = () => setSidebarToggleMobile(false);
 
-  const [dashboardOpen, setDashboardOpen] = useState(false);
+  /*const [dashboardOpen, setDashboardOpen] = useState(false);
   const toggleDashboard = (event) => {
     setDashboardOpen(!dashboardOpen);
     event.preventDefault();
@@ -72,15 +74,9 @@ const SidebarMenu = (props) => {
   const toggleOtherPages = (event) => {
     setOtherPagesOpen(!otherPagesOpen);
     event.preventDefault();
-  };
+  };*/
 
-  const [applicationOpen, setApplicationOpen] = useState(false);
-  const toggleApplication = (event) => {
-    setApplicationOpen(!applicationOpen);
-    event.preventDefault();
-  };
-
-  const [designSystemOpen, setDesignSystemOpen] = useState(false);
+  /*const [designSystemOpen, setDesignSystemOpen] = useState(false);
   const toggleDesignSystem = (event) => {
     setDesignSystemOpen(!designSystemOpen);
     event.preventDefault();
@@ -144,8 +140,28 @@ const SidebarMenu = (props) => {
   const togglePagesRecover = (event) => {
     setPagesRecoverOpen(!pagesRecoverOpen);
     event.preventDefault();
+  };*/
+
+  /* sysAdmin */
+  const [transactionOpen, setTransactionOpen] = useState(false);
+  const toggleTransaction = (event) => {
+    setTransactionOpen(!transactionOpen);
+    event.preventDefault();
   };
 
+  const [utilisateurOpen, setUtilisateurOpen] = useState(false);
+  const toggleUtilisateur = (event) => {
+    setUtilisateurOpen(!utilisateurOpen);
+    event.preventDefault();
+  };
+
+  const [settingOpen, setSettingOpen] = useState(false);
+  const toggleSetting = (event) => {
+    setSettingOpen(!settingOpen);
+    event.preventDefault();
+  };
+
+  /* Modal List des agences */
   const [modalRechargeEspece, setModalRechargeEspece] = useState(false);
   const handleModal = () => setModalRechargeEspece(!modalRechargeEspece);
 
@@ -156,7 +172,6 @@ const SidebarMenu = (props) => {
       link: "/Dashboard",
       icon: <PieChart />,
       roles: [
-        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -189,26 +204,19 @@ const SidebarMenu = (props) => {
       click: handleModal,
       link: "/Agence",
     },
-    {
+    /*{
       id: 4,
       label: "Employes",
       link: "/Employe",
       icon: <User />,
       roles: ["SYSADMIN"],
-    },
+    },*/
     {
       id: 5,
       label: "Transactions",
       link: "/Transaction",
       icon: <CreditCard />,
-      roles: [
-        "SYSADMIN",
-        "EMPLOYE_AGENCE",
-        "RESPONSABLE_AGENCE",
-        //"AGENT_COMPENSATION",
-        "CLIENT",
-        "VENDOR",
-      ],
+      roles: ["EMPLOYE_AGENCE", "RESPONSABLE_AGENCE", "CLIENT", "VENDOR"],
     },
     {
       id: 11,
@@ -236,12 +244,7 @@ const SidebarMenu = (props) => {
       label: "Compensations",
       link: "/Compensation",
       icon: <DollarSign />,
-      roles: [
-        "SYSADMIN",
-        //"EMPLOYE_AGENCE",
-        "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
-      ],
+      roles: ["RESPONSABLE_AGENCE", "AGENT_COMPENSATION"],
     },
     {
       id: 8,
@@ -249,7 +252,6 @@ const SidebarMenu = (props) => {
       link: "/Notification",
       icon: <MessageCircle />,
       roles: [
-        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -263,7 +265,6 @@ const SidebarMenu = (props) => {
       link: "/Agence",
       icon: <MapPin />,
       roles: [
-        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -299,6 +300,126 @@ const SidebarMenu = (props) => {
         "VENDOR",
       ],
     },*/
+
+    /*  SysAdmin Links */
+
+    {
+      id: 17,
+      label: "Tableau de bord",
+      link: "/Dashboard",
+      icon: <PieChart />,
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      id: 11,
+      label: "Transactions",
+      icon: <CreditCard />,
+      toggle: [transactionOpen, toggleTransaction],
+      roles: ["SYSADMIN"],
+      children: [
+        {
+          label: "Transactions par agences",
+          link: "/Transaction/Agence",
+        },
+        {
+          label: "Transactions directs",
+          link: "/Transaction/Direct",
+        },
+        {
+          label: "Cagnottes",
+          link: "/Transaction/Cagnotte",
+        },
+        {
+          label: "Compensations",
+          link: "/Compensation",
+        },
+      ],
+    },
+
+    {
+      id: 12,
+      label: "Utilisateurs",
+      icon: <Users />,
+      roles: ["SYSADMIN"],
+      toggle: [utilisateurOpen, toggleUtilisateur],
+      children: [
+        {
+          label: "Agences",
+          link: "/Utilisateur/Agence",
+        },
+        {
+          label: "Commerçants",
+          link: "/Utilisateur/Commerçant",
+        },
+        {
+          label: "Clients",
+          link: "/Utilisateur/Client",
+        },
+        {
+          label: "Agents trésoriers",
+          link: "/Utilisateur/Trésorier",
+        },
+      ],
+    },
+
+    {
+      id: 15,
+      label: "Administrateurs",
+      icon: <Users />,
+      link: "/Administrateur",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      id: 13,
+      label: "Recharge Téléphonique",
+      icon: <PhoneCall />,
+      link: "/RechargeTéléphonique",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      id: 14,
+      label: "Opérations Banquaires",
+      icon: <CreditCard />,
+      link: "/OpérationBanquaire",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      id: 18,
+      label: "Notifications",
+      link: "/Notification",
+      icon: <MessageCircle />,
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      id: 20,
+      label: "Reporting",
+      link: "/Reporting",
+      icon: <File />,
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      id: 16,
+      label: "Paramètres",
+      icon: <Settings />,
+      roles: ["SYSADMIN"],
+      toggle: [settingOpen, toggleSetting],
+      children: [
+        {
+          label: "Paramètres générales",
+          link: "/Paramètres",
+        },
+        {
+          label: "Paramètres avancées",
+          link: "/Paramètres/Avancées",
+        },
+      ],
+    },
   ];
 
   const Menu = (
@@ -355,8 +476,8 @@ const SidebarMenu = (props) => {
                 <li>
                   <a
                     href="#/"
-                    onClick={toggleApplication}
-                    className={clsx({ active: applicationOpen })}
+                    onClick={item.toggle[1]}
+                    className={clsx({ active: item.toggle[0] })}
                   >
                     <span className="sidebar-icon">{item.icon}</span>
                     <span className="sidebar-item-label">{item.label}</span>
@@ -364,7 +485,7 @@ const SidebarMenu = (props) => {
                       <ChevronRight />
                     </span>
                   </a>
-                  <Collapse isOpen={applicationOpen}>
+                  <Collapse isOpen={item.toggle[0]}>
                     <ul>
                       {item.children.map((child, key) => {
                         if (child.link) {
