@@ -116,12 +116,13 @@ const MyForm = (props) => {
               {showOldPswd ? (
                 <Field name="old_password" type="number" />
               ) : (
-                <Field
+                <Field name="old_password" type="password" />
+                /*<Field
                   name="old_password"
                   type="password"
                   pattern="[0-9]*"
                   inputmode="numeric"
-                />
+                />*/
               )}
 
               {/*<Field name="old_password">
