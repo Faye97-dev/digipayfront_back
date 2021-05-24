@@ -38,7 +38,8 @@ const formikEnhancer = withFormik({
       ).then((res) => {
         if (res) {
           if (res.checked) {
-            if (props.role.value === CLIENT) {
+            console.log(props.transaction);
+            if (props.transaction?.expediteurRole === CLIENT) {
               props.clientDigipay_Livraison(
                 {
                   transaction: props.transaction.transactionID,
@@ -46,7 +47,7 @@ const formikEnhancer = withFormik({
                 },
                 showAlert
               );
-            } else if (props.role.value === VENDOR) {
+            } else if (props.transaction?.expediteurRole === VENDOR) {
               props.vendor_Livraison(
                 {
                   transaction: props.transaction.transactionID,

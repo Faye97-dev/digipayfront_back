@@ -44,6 +44,8 @@ import {
 // some attribute in serializers to readonly or writeonly
 // delete user when token is alive
 // Custom django Admin , model __str__
+// code retrait timeout , livraison .... ,qrcode notification not showing on prod
+// delete notif after livraison vendor
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),

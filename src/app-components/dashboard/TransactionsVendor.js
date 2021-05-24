@@ -316,6 +316,8 @@ class TransactionsVendor extends Component {
                                   this.handleModalLivraison({
                                     transfertID: item.transaction.id,
                                     transactionID: item.id,
+                                    expediteurRole:
+                                      item.transaction.expediteur.role,
                                   });
                                 }}
                               >
