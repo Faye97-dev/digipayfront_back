@@ -314,7 +314,7 @@ export const updateSolde = async (id, access = null) => {
 };
 
 export const updateSolde_clientDigipay = async (id, access = null) => {
-  /* same update solde function for vendor and client */
+  /* same update solde function for vendor and client and agent */
   let data;
   const config = {
     headers: {

@@ -12,7 +12,7 @@ class DashboardSysAdmin extends Component {
     return (
       <>
         <HeaderProgress />
-        <TransactionsHistory></TransactionsHistory>
+        {/*<TransactionsHistory></TransactionsHistory>*/}
         <TopAgenceEmploye></TopAgenceEmploye>
         <Chart />
         <Progress />

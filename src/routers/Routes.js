@@ -59,11 +59,7 @@ const importTransactionByRole = (role) => {
       <span>Bad request</span>
     </>
   );
-  if (
-    //role === "SYSADMIN" ||
-    role === "RESPONSABLE_AGENCE" ||
-    role === "EMPLOYE_AGENCE"
-  ) {
+  if (role === "RESPONSABLE_AGENCE" || role === "EMPLOYE_AGENCE") {
     component = lazy(() => import("../app-components/transaction/Transaction"));
   } else if (role === "CLIENT") {
     component = lazy(() =>
@@ -97,12 +93,37 @@ const Notification = lazy(() =>
 );
 const Contact = lazy(() => import("../app-components/contact/Contact"));
 const Cagnote = lazy(() => import("../app-components/cagnote/Cagnote"));
-/**/
-
 const PageLoginBasic = lazy(() => import("../example-pages/PageLoginBasic"));
 
 const Page404 = lazy(() => import("../app-components/pageError/Page404"));
 //const PageProfile = lazy(() => import("./example-pages/PageProfile"));
+
+/* SysAdmin Routes */
+const SysAdmin_TransfertAgence = lazy(() =>
+  import("../app-components/sysadmin/transfert_agence/TransfertAgence")
+);
+const SysAdmin_Transfert = lazy(() =>
+  import("../app-components/sysadmin/transfert/Transfert")
+);
+const SysAdmin_TransfertCagnote = lazy(() =>
+  import("../app-components/sysadmin/transfert_cagnote/TransfertCagnote")
+);
+const SysAdmin_Compensation = lazy(() =>
+  import("../app-components/sysadmin/compensation/Compensation")
+);
+
+const SysAdmin_Agence = lazy(() =>
+  import("../app-components/sysadmin/agence/Agence")
+);
+const SysAdmin_Agent = lazy(() =>
+  import("../app-components/sysadmin/agent/Agent")
+);
+const SysAdmin_Client = lazy(() =>
+  import("../app-components/sysadmin/client/Client")
+);
+const SysAdmin_Vendor = lazy(() =>
+  import("../app-components/sysadmin/vendor/Vendor")
+);
 
 const Routes = (props) => {
   const location = useLocation();
@@ -146,7 +167,6 @@ const Routes = (props) => {
       component: Agence,
       link: "/Agence",
       roles: [
-        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -157,16 +177,12 @@ const Routes = (props) => {
     {
       component: Employe,
       link: "/Employe",
-      roles: [
-        //"SYSADMIN",
-        "RESPONSABLE_AGENCE",
-      ],
+      roles: ["RESPONSABLE_AGENCE"],
     },
     {
       component: Transaction,
       link: "/Transaction",
       roles: [
-        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         //"AGENT_COMPENSATION",
@@ -182,12 +198,7 @@ const Routes = (props) => {
     {
       component: Compensation,
       link: "/Compensation",
-      roles: [
-        //"SYSADMIN",
-        //"EMPLOYE_AGENCE",
-        "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
-      ],
+      roles: ["RESPONSABLE_AGENCE", "AGENT_COMPENSATION"],
     },
     /*{
       component: Statistique,
@@ -205,7 +216,6 @@ const Routes = (props) => {
       component: Notification,
       link: "/Notification",
       roles: [
-        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -229,7 +239,57 @@ const Routes = (props) => {
       link: "/Cagnote",
       roles: ["CLIENT"],
     },
+
+    /*  SysAdmin Routes */
+    {
+      component: SysAdmin_TransfertAgence,
+      link: "/Transaction/Agence",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Transfert,
+      link: "/Transaction/Direct",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_TransfertCagnote,
+      link: "/Transaction/Cagnotte",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Compensation,
+      link: "/Compensation",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Agence,
+      link: "/Utilisateur/Agence",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Agent,
+      link: "/Utilisateur/Trésorier",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Client,
+      link: "/Utilisateur/Client",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Vendor,
+      link: "/Utilisateur/Commerçant",
+      roles: ["SYSADMIN"],
+    },
   ];
+
   const PathSidebar = RoutesSidebar.filter((item) =>
     item.roles.includes(props.role)
   ).map((item) => {
@@ -240,7 +300,6 @@ const Routes = (props) => {
       component: { Mesenger },
       link: "/Chat",
       roles: [
-        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",

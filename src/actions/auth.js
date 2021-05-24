@@ -67,7 +67,7 @@ export const login = (data, resetForm, setSubmitting, showAlert) => (
         "Login Echec!",
         <FontAwesomeIcon icon={["fas", "times"]} />
       );
-      console.log(err.response.data);
+      //console.log(err.response.data);
     });
 };
 

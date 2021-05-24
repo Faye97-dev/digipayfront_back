@@ -214,7 +214,7 @@ export const deleteBeneficiaireGrpPayement = (
       });
       setSubmitting(false);
 
-      console.log(err);
+      //console.log(err);
       if (err.response && err.response.status === 401) {
         expiredToken(dispatch, getState().auth.tokenExpired);
       } else {
@@ -282,7 +282,7 @@ export const addBeneficiaireGrpPayement = (
       });
       setSubmitting(false);
 
-      console.log(err);
+      //console.log(err);
       if (err.response && err.response.status === 401) {
         expiredToken(dispatch, getState().auth.tokenExpired);
       } else {

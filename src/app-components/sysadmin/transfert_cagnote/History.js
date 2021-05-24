@@ -35,11 +35,9 @@ import {
 
 import { CardBody, UncontrolledTooltip, Progress } from "reactstrap";
 import { connect } from "react-redux";
-import { getTransactions } from "../../actions/transaction";
-import { showAlert } from "../../utils/alerts";
 
-import empty from "../../assets/images/empty.png";
-import SkeletonLoader from "../../utils/SkeletonLoader";
+import empty from "../../../assets/images/empty.png";
+import SkeletonLoader from "../../../utils/SkeletonLoader";
 import {
   mapColorStatus,
   mapTypeNames,
@@ -48,12 +46,11 @@ import {
   CAGNOTE,
   RECOLTE,
   PAIEMENT_MASSE,
-} from "../../utils/choices";
-import FormFilter from "../transaction/FormFilter";
-import CollapseModel from "./CollapseModel";
-import { PaginateData } from "../../utils/dataTable";
-import ModalClientTransDetails from "../transaction/ModalClientTransDetails";
-import ModalPayementMasseBeneficiaires from "../transaction/ModalPayementMasseBeneficiaires";
+} from "../../../utils/choices";
+
+import { PaginateData } from "../../../utils/dataTable";
+import ModalClientTransDetails from "../../transaction/ModalClientTransDetails";
+import ModalPayementMasseBeneficiaires from "../../transaction/ModalPayementMasseBeneficiaires";
 
 const filtersOptions = {
   status: {
@@ -78,7 +75,7 @@ const filtersOptions = {
   },
 };
 
-class TransactionsClient extends Component {
+class History extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -98,21 +95,21 @@ class TransactionsClient extends Component {
     this.Paginate = this.Paginate.bind(this);
   }
 
-  togglePayementMasse = (item) =>
+  /*togglePayementMasse = (item) =>
     this.setState({
       ...this.state,
       modalPayementMasse: !this.state.modalPayementMasse,
       currentItem: item,
-    });
+    });*/
   openSearch = () => this.setState({ ...this.state, searchOpen: true });
   closeSearch = () => this.setState({ ...this.state, searchOpen: false });
 
   componentDidMount() {
-    this.props.getTransactions(true, showAlert);
+    //this.props.getTransactions(true, showAlert);
     //this.Paginate([...fetchData], this.state.totalRowsPerPage);
   }
 
-  UNSAFE_componentWillUpdate(nextProps) {
+  /*UNSAFE_componentWillUpdate(nextProps) {
     if (nextProps.transactions.loading === false && this.state.init) {
       console.log(" sync transactions props with state  ...");
       this.Paginate(
@@ -130,15 +127,7 @@ class TransactionsClient extends Component {
         init: true,
       });
     }
-
-    /*if (
-      nextState.search === "" &&
-      this.state.search !== "" &&
-      (nextState.filterValues === {} || allNull(nextState.filterValues))
-    ) {
-      this.reset();
-    }*/
-  }
+  }*/
 
   Paginate(data, rows) {
     const [page, paginated] = PaginateData(data, rows);
@@ -170,7 +159,7 @@ class TransactionsClient extends Component {
       </tr>
     ) : (
       <>
-        {this.state.current.length === 0 ? (
+        {demoData.length === 0 ? (
           <tr>
             <td colSpan="9">
               <div className="d-flex align-items-center justify-content-center pt-3">
@@ -182,7 +171,7 @@ class TransactionsClient extends Component {
             </td>
           </tr>
         ) : (
-          this.state.current.map((item) => {
+          demoData.map((item) => {
             const keys = Object.keys({ ...item.transaction });
             return (
               <tr key={item.id}>
@@ -266,7 +255,8 @@ class TransactionsClient extends Component {
                               color="primary"
                               size="sm"
                               onClick={(e) => {
-                                this.togglePayementMasse(item);
+                                //this.togglePayementMasse(item);
+                                console.log("in build ....");
                               }}
                             >
                               <FontAwesomeIcon
@@ -402,134 +392,7 @@ class TransactionsClient extends Component {
         )}
       </>
     );
-    const transactions_mobile = this.props.transactions.loading ? (
-      <SkeletonLoader />
-    ) : this.state.current.length === 0 ? (
-      <>
-        <div className="d-flex align-items-center justify-content-center pt-3">
-          <img style={{ width: "17%" }} src={empty} />
-        </div>
-        <div className="d-flex align-items-center justify-content-center pt-1">
-          <span>Pas de données disponibles </span>
-        </div>
-      </>
-    ) : (
-      this.state.current.map((item) => {
-        const keys = Object.keys({ ...item.transaction });
-        return (
-          <div key={item.id}>
-            <CollapseModel
-              type_transaction={item.type_transaction}
-              montant={item.transaction.montant}
-              destinataire={
-                keys.includes("agence_origine")
-                  ? item.transaction.destinataire.nom
-                  : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`
-              }
-            >
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Numero
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {item.code_transaction}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Date
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {item.date}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Origine
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {!keys.includes("agence_origine") &&
-                    `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
-                  {keys.includes("agence_origine") &&
-                    item.transaction.expediteur &&
-                    item.transaction.expediteur.nom}
-                  {keys.includes("agence_origine") &&
-                    !item.transaction.expediteur &&
-                    item.transaction.agence_origine.nom}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Beneficiaire
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {keys.includes("agence_origine")
-                    ? item.transaction.destinataire.nom
-                    : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
-                  {" - " + item.transaction.destinataire.tel}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Montant
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {item.transaction.montant}
-                  <small className="px-2 font-weight-normal">MRU</small>
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Frais
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  0<small className="px-2 font-weight-normal">MRU</small>
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Status
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  <Badge
-                    className={
-                      "px-4 py-1 h-auto text-" +
-                      mapColorStatus[item.transaction.status] +
-                      " border-1 border-" +
-                      mapColorStatus[item.transaction.status]
-                    }
-                    color={"neutral-" + mapColorStatus[item.transaction.status]}
-                  >
-                    {mapStatusNames[item.transaction.status]}
-                  </Badge>
-                </div>
-              </div>
-              <div className="divider my-3" />
-            </CollapseModel>
-          </div>
-        );
-      })
-    );
+
     return (
       <>
         <Card className="card-box shadow-none d-none d-md-block">
@@ -564,14 +427,8 @@ class TransactionsClient extends Component {
                 >
                   <Filter className="w-50" />
                 </DropdownToggle>
-                <DropdownMenu right className="dropdown-menu-xxl p-0">
-                  <div className="p-3">
-                    <FormFilter
-                      handleFilter={() => console.log("in build ...")}
-                      filterValues={{}}
-                      filtersOptions={filtersOptions}
-                    />
-                  </div>
+                <DropdownMenu right className="dropdown-menu-md p-0">
+                  <div></div>
                 </DropdownMenu>
               </UncontrolledDropdown>
             </div>
@@ -656,36 +513,13 @@ class TransactionsClient extends Component {
             </div>
           )}
         </Card>
-        {/*mobile version*/}
-        <Card className="card-box shadow-none d-block d-md-none">
-          <div className="px-4 pt-4 text-primary">
-            <h5 className="font-weight-bold text-dark">
-              Historiques de transactions
-            </h5>
-          </div>
-          <div className="divider" />
-          <div className="pb-1 pt-3 px-0">
-            <CardBody>{transactions_mobile}</CardBody>
-          </div>
-          {!this.props.transactions.loading && this.state.current.length !== 0 && (
-            <div className="d-flex align-items-center justify-content-center mt-2 mb-4">
-              <RcPagination
-                defaultPageSize={this.state.totalRowsPerPage}
-                onChange={this.handleChangePage}
-                current={this.state.page}
-                total={this.state.totalData}
-                locale={localeInfo}
-              />
-            </div>
-          )}
-          <ModalPayementMasseBeneficiaires
+        {/*<ModalPayementMasseBeneficiaires
             item={this.state.currentItem}
             user={this.props.user}
             access={this.props.access}
             modal={this.state.modalPayementMasse}
             handleModal={this.togglePayementMasse}
-          />
-        </Card>
+          />*/}
       </>
     );
   }
@@ -697,6 +531,186 @@ const mapStateToProps = (state) => ({
   access: state.auth.access,
 });
 
-export default connect(mapStateToProps, {
-  getTransactions,
-})(TransactionsClient);
+export default connect(mapStateToProps, {})(History);
+
+const demoData = [
+  {
+    id: 246,
+    code_transaction: "TR0900462",
+    type_transaction: "09",
+    categorie_transaction: "NONE",
+    date: "10-05-2021 03:13:04",
+    transaction: {
+      id: 462,
+      expediteur: {
+        id: 2,
+        username: "ali1",
+        first_name: "ahmed",
+        role: "CLIENT",
+        last_name: "mahmoud",
+        tel: "20151418",
+        email: "aliahmed@gmail.com",
+        adresse: "cite plage 1",
+      },
+      destinataire: {
+        id: 7,
+        nbre_participants: 1,
+        numero_cagnote: "9900007",
+        responsable: {
+          id: 2,
+          username: "ali1",
+          first_name: "ahmed",
+          last_name: "mahmoud",
+          role: "CLIENT",
+        },
+        beneficiaire: {
+          id: 3,
+          username: "ali2",
+          first_name: "Mohamed",
+          last_name: "Faye",
+          role: "CLIENT",
+        },
+        nom: "Cagnote 1",
+        solde: 125.0,
+        objectif: 0.0,
+        motif: "test",
+        actif: false,
+        verse_au_solde: true,
+        date: "10-05-2021 02:39:08",
+      },
+      montant: 125.0,
+      motif: null,
+      remarque: null,
+      status: "COMFIRMED",
+      is_edited: false,
+      date_creation: "10-05-2021 03:13:04",
+      date_modifcation: "10-05-2021 03:13:04",
+      user_created: null,
+      user_edited: null,
+      type_transaction: "CAGNOTE",
+      frais_origine: 0.0,
+      frais_destination: 0.0,
+      frais_societe: 0.0,
+    },
+  },
+
+  {
+    id: 245,
+    code_transaction: "TR1000461",
+    type_transaction: "10",
+    categorie_transaction: "NONE",
+    date: "10-05-2021 03:10:23",
+    transaction: {
+      id: 461,
+      expediteur: {
+        id: 6,
+        nbre_participants: 1,
+        numero_cagnote: "9900006",
+        responsable: {
+          id: 2,
+          username: "ali1",
+          first_name: "ahmed",
+          last_name: "mahmoud",
+          role: "CLIENT",
+        },
+        beneficiaire: {
+          id: 3,
+          username: "ali2",
+          first_name: "Mohamed",
+          last_name: "Faye",
+          role: "CLIENT",
+        },
+        nom: "Cagnotte 2",
+        solde: 40050.0,
+        objectif: 250.0,
+        motif: "bla bla",
+        actif: false,
+        verse_au_solde: true,
+        date: "10-05-2021 02:38:20",
+      },
+      destinataire: {
+        id: 2,
+        username: "ali1",
+        first_name: "ahmed",
+        role: "CLIENT",
+        last_name: "mahmoud",
+        tel: "20151418",
+        email: "aliahmed@gmail.com",
+        adresse: "cite plage 1",
+      },
+      montant: 40050.0,
+      motif: null,
+      remarque: null,
+      status: "COMFIRMED",
+      is_edited: false,
+      date_creation: "10-05-2021 03:10:23",
+      date_modifcation: "10-05-2021 03:10:23",
+      user_created: null,
+      user_edited: null,
+      type_transaction: "RECOLTE",
+      frais_origine: 0.0,
+      frais_destination: 0.0,
+      frais_societe: 0.0,
+    },
+  },
+
+  {
+    id: 244,
+    code_transaction: "TR0900460",
+    type_transaction: "09",
+    categorie_transaction: "NONE",
+    date: "10-05-2021 03:07:36",
+    transaction: {
+      id: 460,
+      expediteur: {
+        id: 2,
+        username: "ali1",
+        first_name: "ahmed",
+        role: "CLIENT",
+        last_name: "mahmoud",
+        tel: "20151418",
+        email: "aliahmed@gmail.com",
+        adresse: "cite plage 1",
+      },
+      destinataire: {
+        id: 6,
+        nbre_participants: 1,
+        numero_cagnote: "9900006",
+        responsable: {
+          id: 2,
+          username: "ali1",
+          first_name: "ahmed",
+          last_name: "mahmoud",
+          role: "CLIENT",
+        },
+        beneficiaire: {
+          id: 3,
+          username: "ali2",
+          first_name: "Mohamed",
+          last_name: "Faye",
+          role: "CLIENT",
+        },
+        nom: "Cagnotte 2",
+        solde: 255.0,
+        objectif: 250.0,
+        motif: "bla bla",
+        actif: false,
+        verse_au_solde: true,
+        date: "10-05-2021 02:38:20",
+      },
+      montant: 255.0,
+      motif: null,
+      remarque: null,
+      status: "COMFIRMED",
+      is_edited: false,
+      date_creation: "10-05-2021 03:07:36",
+      date_modifcation: "10-05-2021 03:09:41",
+      user_created: null,
+      user_edited: null,
+      type_transaction: "CAGNOTE",
+      frais_origine: 0.0,
+      frais_destination: 0.0,
+      frais_societe: 0.0,
+    },
+  },
+];

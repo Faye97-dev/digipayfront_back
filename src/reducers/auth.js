@@ -11,6 +11,7 @@ import {
   UPDATE_SOLDE,
   USER_LOADED,
   UPDATE_SOLDE_CLIENT_DIGIPAY,
+  UPDATE_SOLDE_AGENT,
   UPDATE_PROFIL_FAIL,
   UPDATE_VENDOR_SUCCESS,
   UPDATE_CLIENT_DIGIPAY_SUCCESS,
@@ -20,22 +21,29 @@ import {
   TOKEN_EXPIRED,
 } from "../actions/types.js";
 
-// add refresh token method , and check forbidden 301 error , secure api ,profil info , profil page , 404 page , routes changement warning
+// routes changement warning
 // datatable niveau 3 , connect filter data with db ,
-// diconnect agence when logout , mouse cursor on ordering datatable , logout message de confirmation , check du solde avant retrait
+// diconnect agence when logout , mouse cursor on ordering datatable , logout message de confirmation
 // refont code client envoie  , agence retrait add confirmation code ....
 // FormClientsend and other Form : reset form
 // asyn file handle forbidden issue , agence transfert check destinataire !== expediteur , sync notifications with actions
-// sync status of transaction after payback vendor
-// atomic transaction backend , remove clotures , restric serializer models , hash code payement , remove duplicates fetch ...
-// bugs qr code notif , retrait agence spinner , envoie cash client to vendor ? , move check_clientdigipay in service.py , sync  solde after recharge agence
-// statistiques actions  move it to redux ?? , check refresh token before logout , register username = tel and can't update , devtools redux remove to prod
+// atomic transaction backend , restric serializer models , hash code payement , remove duplicates fetch ...
+// move check_clientdigipay in service.py
+// statistiques actions  move it to redux ?? , check refresh token before logout , register username = tel and can't update ,
 // validate password format backend and frontend
 // clean models file , refactor pre-transction action in models , remove serializer , remove clotures
-// post request body sercure id of user
+// post request body sercure id of user and id in params
 // profile statistique move get a to post request
 // reset all form, handle item , show info value to null ,change submiting to the second step
 // check a account if is active before traitement for all actions
+// client form password secure form to number type front and back
+// identifiant random on register for all users
+// Backend : store all proprety attributes in db  : ( code de transaction ....)
+// remove refresh token
+// Sync premiumRoutes with Routes
+// some attribute in serializers to readonly or writeonly
+// delete user when token is alive
+// Custom django Admin , model __str__
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
@@ -150,6 +158,14 @@ export default function (state = initialState, action) {
           ...state.user,
           solde: action.payload.solde,
           on_hold: action.payload.on_hold,
+        },
+      };
+    case UPDATE_SOLDE_AGENT:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          solde: action.payload.solde,
         },
       };
     case UPDATE_CLIENT_DIGIPAY_SUCCESS:

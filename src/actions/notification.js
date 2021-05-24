@@ -27,12 +27,16 @@ export const getNotifications = (showAlert) => (dispatch, getState) => {
   }
   const user = getState().auth.user;
   axios
-    .get(HOST + `api/notification/list/`, {
-      params: {
-        user: user.id,
-      },
-      headers: config.headers,
-    })
+    .get(
+      HOST + `api/notification/list/`,
+      config
+      /*{
+        params: {
+          user: user.id,
+        },
+        headers: config.headers,
+      }*/
+    )
     .then((res) => {
       //setTimeout(() => {
       dispatch({

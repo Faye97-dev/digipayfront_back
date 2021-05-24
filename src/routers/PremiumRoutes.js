@@ -55,11 +55,7 @@ const importTransactionByRole = (role) => {
       <span>Bad request</span>
     </>
   );
-  if (
-    //role === "SYSADMIN" ||
-    role === "RESPONSABLE_AGENCE" ||
-    role === "EMPLOYE_AGENCE"
-  ) {
+  if (role === "RESPONSABLE_AGENCE" || role === "EMPLOYE_AGENCE") {
     component = lazy(() => import("../app-components/transaction/Transaction"));
   } else if (role === "CLIENT") {
     component = lazy(() =>
@@ -140,7 +136,6 @@ const Routes = (props) => {
       component: Agence,
       link: "/Agence",
       roles: [
-        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -151,21 +146,12 @@ const Routes = (props) => {
     {
       component: Employe,
       link: "/Employe",
-      roles: [
-        //"SYSADMIN",
-        "RESPONSABLE_AGENCE",
-      ],
+      roles: ["RESPONSABLE_AGENCE"],
     },
     {
       component: Transaction,
       link: "/Transaction",
-      roles: [
-        //"SYSADMIN",
-        "EMPLOYE_AGENCE",
-        "RESPONSABLE_AGENCE",
-        "CLIENT",
-        "VENDOR",
-      ],
+      roles: ["EMPLOYE_AGENCE", "RESPONSABLE_AGENCE", "CLIENT", "VENDOR"],
     },
     {
       component: Recharge,
@@ -175,18 +161,13 @@ const Routes = (props) => {
     {
       component: Compensation,
       link: "/Compensation",
-      roles: [
-        //"SYSADMIN",
-        "RESPONSABLE_AGENCE",
-        "AGENT_COMPENSATION",
-      ],
+      roles: ["RESPONSABLE_AGENCE", "AGENT_COMPENSATION"],
     },
 
     {
       component: Notification,
       link: "/Notification",
       roles: [
-        "SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
@@ -226,7 +207,6 @@ const Routes = (props) => {
       component: { Mesenger },
       link: "/Chat",
       roles: [
-        //"SYSADMIN",
         "EMPLOYE_AGENCE",
         "RESPONSABLE_AGENCE",
         "AGENT_COMPENSATION",
