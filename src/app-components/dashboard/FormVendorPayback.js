@@ -209,12 +209,28 @@ const FormVendor = (props) => {
                               </div>
                             </div>
                             <div className="divider my-2"></div>
-                            <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
-                              <div className=" font-size-md">Téléphone</div>
-                              <div className=" font-size-lg text-primary">
-                                {item && item.expediteur && item.expediteur.tel}
+                            {item?.expediteur.role === VENDOR && (
+                              <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
+                                <div className=" font-size-md">
+                                  Code commerçant
+                                </div>
+                                <div className=" font-size-lg text-primary">
+                                  {item &&
+                                    item.expediteur &&
+                                    item.expediteur.myId}
+                                </div>
                               </div>
-                            </div>
+                            )}
+                            {item?.expediteur.role === CLIENT && (
+                              <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
+                                <div className=" font-size-md">Téléphone</div>
+                                <div className=" font-size-lg text-primary">
+                                  {item &&
+                                    item.expediteur &&
+                                    item.expediteur.tel}
+                                </div>
+                              </div>
+                            )}
                             {/*<div className="divider my-2"></div>
                             <div className="d-flex align-items-center justify-content-between flex-wrap px-3 py-1">
                               <div className=" font-size-md">Email</div>

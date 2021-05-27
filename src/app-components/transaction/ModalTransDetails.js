@@ -25,6 +25,7 @@ import {
 
 import {
   mapColorStatus,
+  mapStatusNames,
   mapTypeNames,
   mapColorTypes,
 } from "../../utils/choices";
@@ -215,7 +216,7 @@ export default function ModalTransDetails(props) {
                             mapColorStatus[item.transaction.status]
                           }
                         >
-                          {item.transaction.status}
+                          {mapStatusNames[item.transaction.status]}
                         </div>
                       </div>
                       <div className="divider my-2"></div>

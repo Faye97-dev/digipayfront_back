@@ -288,8 +288,8 @@ const ModalFastPayement = (props) => {
                     </div>
                   </div>
                   <div className="d-flex align-items-center justify-content-between flex-wrap px-4 py-1">
-                    <div className=" font-size-md">Telephone</div>
-                    <div className=" font-size-lg text-primary">{`${props.vendorInfo?.tel}`}</div>
+                    <div className=" font-size-md">Code commerçant</div>
+                    <div className=" font-size-lg text-primary">{`${props.vendorInfo?.myId}`}</div>
                   </div>
                 </div>
               </Col>

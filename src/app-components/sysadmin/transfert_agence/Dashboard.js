@@ -122,7 +122,7 @@ function StatTransaction() {
               </CircularProgressbarWithChildren>
               <div className="pl-3">
                 <div className="text-black-50 font-weight-normal">
-                  Transferts Complets
+                  Transferts Valides
                 </div>
                 <div className="display-4 font-weight-bold pt-2 text-black">
                   <CountUp start={0} end={683} duration={6} delay={2} />

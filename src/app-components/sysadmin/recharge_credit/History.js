@@ -33,6 +33,7 @@ import SkeletonLoader from "../../../utils/SkeletonLoader";
 
 import { PaginateData } from "../../../utils/dataTable";
 import ModalDetails from "./ModalDetails";
+import FormUpload from "./FormUpload";
 const filtersOptions = {
   status: {
     label: "Status",
@@ -134,7 +135,7 @@ class History extends Component {
   render() {
     const agents = this.props.agents.loading ? (
       <tr>
-        <td colSpan="9">
+        <td colSpan="5">
           <SkeletonLoader />
         </td>
       </tr>
@@ -142,7 +143,7 @@ class History extends Component {
       <>
         {demoData.length === 0 ? (
           <tr>
-            <td colSpan="9">
+            <td colSpan="5">
               <div className="d-flex align-items-center justify-content-center pt-3">
                 <img style={{ width: "17%" }} src={empty} />
               </div>
@@ -157,41 +158,10 @@ class History extends Component {
             return (
               <tr key={item.id}>
                 <td className="text-center text-black-30">
-                  <span className="font-weight-bold">{item.identifiant}</span>
-                </td>
-                <td className="text-center text-black-30">
-                  <span className="font-weight-bold">{item.date}</span>
-                </td>
-                <td className="text-center">
-                  <div>
-                    <a
-                      href="#/"
-                      onClick={(e) => e.preventDefault()}
-                      className="font-weight-bold text-black-30"
-                      title="..."
-                    >
-                      {item.nom}
-                    </a>
-                    <span className="text-black-50 d-block">{item.tel}</span>
-                  </div>
-                </td>
-                <td className="text-center">
-                  <div>
-                    <a
-                      href="#/"
-                      onClick={(e) => e.preventDefault()}
-                      className="font-weight-bold text-black-30"
-                      title="..."
-                    >
-                      {item.email}
-                    </a>
-                    <span className="text-black-50 d-block">
-                      {item.adresse}
-                    </span>
-                  </div>
+                  <span className="font-weight-bold">{item.carte}</span>
                 </td>
                 <td className="font-size-lg font-weight-bold text-center">
-                  <span>{item.solde}</span>
+                  <span>{item.montant}</span>
                   <small className="px-2">MRU</small>
                 </td>
 
@@ -199,13 +169,27 @@ class History extends Component {
                   <Badge
                     className={
                       "px-4 py-1 h-auto text-" +
-                      mapStatusClientsColors[item.status] +
+                      mapOperateurColors[item.operateur] +
                       " border-1 border-" +
-                      mapStatusClientsColors[item.status]
+                      mapOperateurColors[item.operateur]
                     }
-                    color={"neutral-" + mapStatusClientsColors[item.status]}
+                    color={"neutral-" + mapOperateurColors[item.operateur]}
                   >
-                    {mapStatusClientsNames[item.status]}
+                    {mapOperateurNames[item.operateur]}
+                  </Badge>
+                </td>
+
+                <td className="text-center">
+                  <Badge
+                    className={
+                      "px-4 py-1 h-auto text-" +
+                      mapStatusColors[item.status] +
+                      " border-1 border-" +
+                      mapStatusColors[item.status]
+                    }
+                    color={"neutral-" + mapStatusColors[item.status]}
+                  >
+                    {mapStatusNames[item.status]}
                   </Badge>
                 </td>
 
@@ -258,7 +242,7 @@ class History extends Component {
         <Card className="card-box shadow-none d-none d-md-block">
           <div className="px-4 pt-4 text-primary">
             <h5 className="font-weight-bold text-dark">
-              Listes des trésoriers
+              Listes des cartes de credit
             </h5>
           </div>
           <div className="d-flex justify-content-between px-4 py-3">
@@ -271,12 +255,19 @@ class History extends Component {
               <span className="icon-wrapper text-black">
                 <FontAwesomeIcon icon={["fas", "search"]} />
               </span>
-              <Input
+              {/*<Input
                 type="search"
                 onFocus={this.openSearch}
                 onBlur={this.closeSearch}
                 placeholder="Search orders..."
-              />
+              />*/}
+              <Button
+                color="primary"
+                onClick={this.props.handleModalAjoutCredit}
+                className="hover-scale-sm font-weight-bold px-2 mb-2"
+              >
+                <span className="px-2">Ajouter des cartes</span>
+              </Button>
             </div>
             <div className="d-flex align-items-center">
               <UncontrolledDropdown>
@@ -304,31 +295,19 @@ class History extends Component {
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                       >
-                        Identifiant
+                        Carte de credit
                       </th>
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                       >
-                        Date de creation
+                        Montant
                       </th>
                       <th
                         className=" text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
                       >
-                        Nom Complet
-                      </th>
-                      <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                      >
-                        Contact
-                      </th>
-                      <th
-                        className="text-center font-size-lg font-weight-normal   text-dark"
-                        scope="col"
-                      >
-                        Solde
+                        Operateur
                       </th>
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
@@ -336,6 +315,7 @@ class History extends Component {
                       >
                         Status
                       </th>
+
                       <th
                         className="text-center font-size-lg font-weight-normal   text-dark"
                         scope="col"
@@ -361,7 +341,7 @@ class History extends Component {
             </div>
           )}
         </Card>
-        <ModalDetails
+        {/*<ModalDetails
           item={this.state.currentItem}
           user={this.props.user}
           access={this.props.access}
@@ -369,6 +349,10 @@ class History extends Component {
           handleModal={this.toggleDetail}
           mapStatusClientsColors={mapStatusClientsColors}
           mapStatusClientsNames={mapStatusClientsNames}
+        />*/}
+        <FormUpload
+          modalAjoutCredit={this.props.modalAjoutCredit}
+          handleModalAjoutCredit={this.props.handleModalAjoutCredit}
         />
       </>
     );
@@ -383,77 +367,72 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps, {})(History);
 
-const mapStatusClientsColors = {
+const mapStatusColors = {
   "01": "success",
-  "02": "info",
-  "03": "warning",
-  "04": "danger",
+  "02": "danger",
 };
-const mapStatusClientsNames = {
+const mapStatusNames = {
   "01": "Actif",
-  "02": "En Attente",
-  "03": "Désactivé",
-  "04": "Bloqué",
+  "02": "Expiré",
+};
+
+const mapOperateurColors = {
+  "01": "primary",
+  "02": "warning",
+  "03": "info",
+};
+const mapOperateurNames = {
+  "01": "Chinguitel",
+  "02": "Mauritel",
+  "03": "Mattel",
 };
 
 const demoData = [
   {
     id: 243,
-    identifiant: "AGT1100459",
+    carte: "4789 65423 15896",
     status: "01",
-    date: "09-05-2021 16:49:03",
-    nom: "Med Vadel",
-    tel: "47896230",
-    adresse: "TVZ",
-    email: "med@gmail.com",
-    solde: 2569.0,
+    operateur: "02",
+    montant: 200.0,
   },
 
   {
     id: 244,
-    identifiant: "AGT5800070",
-    status: "04",
-    date: "12-02-2021 18:00:03",
-    nom: "Cheikh Ahmed",
-    tel: "20478963",
-    adresse: "KSAR",
-    email: "cheikh@gmail.com",
-    solde: 300.0,
+    carte: "2047 89651 03589",
+    status: "02",
+    operateur: "03",
+    montant: 500.0,
   },
 
   {
     id: 245,
-    identifiant: "AGT0701259",
-    status: "01",
-    date: "21-01-2021 12:19:51",
-    nom: "Salma Saleck",
-    tel: "33302117",
-    adresse: "TVZ",
-    email: "salma@gmail.com",
-    solde: 48901.0,
-  },
-
-  /*{
-    id: 300,
-    identifiant: "AGT0881103",
+    carte: "4782 02201 69203",
     status: "02",
-    date: "18-03-2021 20:01:08",
-    nom: "Brahim Mahmoud",
-    tel: "27901410",
-    adresse: "Cite plage",
-    email: "brahim@gmail.com",
-    solde: 74100.0,
-  },*/
+    operateur: "02",
+    montant: 100.0,
+  },
 
   {
     id: 246,
-    identifiant: "AGT3600210",
-    status: "03",
-    date: "09-03-2021 21:28:09",
-    nom: "Samba Dia",
-    tel: "20179630",
-    adresse: "E-Nord",
-    email: "samba@gmail.com",
-    solde: 1020.0,
+    carte: "3021 89520 25003",
+    status: "01",
+    operateur: "01",
+    montant: 30.0,
+  },
+
+  {
+    id: 247,
+    carte: "4108 20478 01259",
+    status: "01",
+    operateur: "03",
+    montant: 200.0,
+  },
+
+  {
+    id: 248,
+    carte: "2014 25890 44203",
+    status: "02",
+    operateur: "01",
+    montant: 40.0,
   },
 ];

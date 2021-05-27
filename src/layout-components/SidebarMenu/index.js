@@ -319,7 +319,7 @@ const SidebarMenu = (props) => {
       roles: ["SYSADMIN"],
       children: [
         {
-          label: "Transactions par agences",
+          label: "Transactions via agence",
           link: "/Transaction/Agence",
         },
         {

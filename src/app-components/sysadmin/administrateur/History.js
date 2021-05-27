@@ -258,7 +258,7 @@ class History extends Component {
         <Card className="card-box shadow-none d-none d-md-block">
           <div className="px-4 pt-4 text-primary">
             <h5 className="font-weight-bold text-dark">
-              Listes des trésoriers
+              Listes des administrateurs
             </h5>
           </div>
           <div className="d-flex justify-content-between px-4 py-3">
@@ -399,7 +399,7 @@ const mapStatusClientsNames = {
 const demoData = [
   {
     id: 243,
-    identifiant: "AGT1100459",
+    identifiant: "ADT1100459",
     status: "01",
     date: "09-05-2021 16:49:03",
     nom: "Med Vadel",
@@ -411,7 +411,7 @@ const demoData = [
 
   {
     id: 244,
-    identifiant: "AGT5800070",
+    identifiant: "ADT5800070",
     status: "04",
     date: "12-02-2021 18:00:03",
     nom: "Cheikh Ahmed",
@@ -423,7 +423,7 @@ const demoData = [
 
   {
     id: 245,
-    identifiant: "AGT0701259",
+    identifiant: "ADT0701259",
     status: "01",
     date: "21-01-2021 12:19:51",
     nom: "Salma Saleck",
@@ -435,7 +435,7 @@ const demoData = [
 
   /*{
     id: 300,
-    identifiant: "AGT0881103",
+    identifiant: "ADT0881103",
     status: "02",
     date: "18-03-2021 20:01:08",
     nom: "Brahim Mahmoud",
@@ -447,7 +447,7 @@ const demoData = [
 
   {
     id: 246,
-    identifiant: "AGT3600210",
+    identifiant: "ADT3600210",
     status: "03",
     date: "09-03-2021 21:28:09",
     nom: "Samba Dia",

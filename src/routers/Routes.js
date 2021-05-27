@@ -125,6 +125,17 @@ const SysAdmin_Vendor = lazy(() =>
   import("../app-components/sysadmin/vendor/Vendor")
 );
 
+const SysAdmin_Administrateur = lazy(() =>
+  import("../app-components/sysadmin/administrateur/Administrateur")
+);
+
+const SysAdmin_RechargeCredit = lazy(() =>
+  import("../app-components/sysadmin/recharge_credit/RechargeCredit")
+);
+
+const SysAdmin_Notification = lazy(() =>
+  import("../app-components/sysadmin/notification/Notification")
+);
 const Routes = (props) => {
   const location = useLocation();
   const Dashboard = importDashboardByRole(props.role);
@@ -286,6 +297,30 @@ const Routes = (props) => {
     {
       component: SysAdmin_Vendor,
       link: "/Utilisateur/Commerçant",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Vendor,
+      link: "/Utilisateur/Commerçant",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Administrateur,
+      link: "/Administrateur",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_RechargeCredit,
+      link: "/RechargeTéléphonique",
+      roles: ["SYSADMIN"],
+    },
+
+    {
+      component: SysAdmin_Notification,
+      link: "/Notification",
       roles: ["SYSADMIN"],
     },
   ];

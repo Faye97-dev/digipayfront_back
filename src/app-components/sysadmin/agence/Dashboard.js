@@ -21,7 +21,7 @@ function StatTransaction() {
   return (
     <>
       <Row>
-        <Col xl="3" md="6">
+        <Col xl="4" md="6">
           <Card className="card-box p-3 mb-5">
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
@@ -47,7 +47,7 @@ function StatTransaction() {
             </div>
           </Card>
         </Col>
-        <Col xl="3" md="6">
+        <Col xl="4" md="6">
           <Card className="card-box p-3 mb-5">
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
@@ -73,7 +73,8 @@ function StatTransaction() {
             </div>
           </Card>
         </Col>
-        <Col xl="3" md="6">
+
+        {/*<Col xl="4" md="6">
           <Card className="card-box p-3 mb-5">
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren
@@ -98,9 +99,9 @@ function StatTransaction() {
               </div>
             </div>
           </Card>
-        </Col>
+         </Col>*/}
 
-        <Col xl="3" md="6">
+        <Col xl="4" md="6">
           <Card className="card-box p-3 mb-5">
             <div className="d-flex align-items-center">
               <CircularProgressbarWithChildren

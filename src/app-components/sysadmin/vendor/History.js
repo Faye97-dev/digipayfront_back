@@ -432,7 +432,7 @@ const demoData = [
     solde: 48901.0,
   },
 
-  {
+  /*{
     id: 300,
     identifiant: "CM0881103",
     status: "02",
@@ -442,7 +442,7 @@ const demoData = [
     adresse: "Cite plage",
     email: "brahim@gmail.com",
     solde: 74100.0,
-  },
+  },*/
 
   {
     id: 246,

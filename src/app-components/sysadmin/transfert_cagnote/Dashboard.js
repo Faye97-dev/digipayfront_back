@@ -207,7 +207,7 @@ function StatTransaction() {
               </CircularProgressbarWithChildren>
               <div className="pl-3">
                 <div className="text-black-50 font-weight-normal">
-                  Cagnottes Bloquées
+                  Cagnottes Annulées
                 </div>
                 <div className="display-4 font-weight-bold pt-2 text-black">
                   <CountUp start={0} end={54} duration={6} delay={2} />
