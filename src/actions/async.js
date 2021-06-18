@@ -927,3 +927,150 @@ export const clientPayementMasse = async (form, showAlert, access = null) => {
     });
   return data;
 };
+
+export const getFacturiersList = async (showAlert, access = null) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  let data;
+  await axios
+    .get(HOST + `api/user/facturier/list/`, config)
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Recuperation des facturiers non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+};
+
+// somelec api
+
+export const getFactureSomelecByReference = async (
+  reference,
+  showAlert,
+  access = null
+) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  /*if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }*/
+
+  let data;
+  await axios
+    .get(
+      `https://digisolution.herokuapp.com/api/chercherFacture/${reference}`,
+      config
+    )
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        //expiredTokenWarning();
+      } else {
+        showAlert(
+          "danger",
+          "Recuperation de la facture Somelec non-complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+  return data;
+};
+
+export const updateFactureSomelec = async (body, showAlert, access = null) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  /*if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }*/
+
+  let data;
+  await axios
+    .post(
+      `https://digisolution.herokuapp.com/api/effectuerPaiement`,
+      body,
+      config
+    )
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        //expiredTokenWarning();
+      } else {
+        setTimeout(() => {
+          showAlert(
+            "danger",
+            "Mise a jour de la facture Somelec non-complete!",
+            <FontAwesomeIcon icon={["fas", "times"]} />
+          );
+        }, 2000);
+      }
+    });
+  return data;
+};
+
+export const reclamationFactureSomelec = async (
+  body,
+  showAlert,
+  access = null
+) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  let data;
+  await axios
+    .post(HOST + `api/func/client_digiPay/reclamation-somelec/`, body, config)
+    .then((res) => {
+      data = res.data;
+    })
+    .catch((err) => {
+      data = null;
+      if (err.response && err.response.status === 401) {
+        expiredTokenWarning();
+      } else {
+        setTimeout(() => {
+          showAlert(
+            "danger",
+            "Reclamation du paiement de la facture non-complete!",
+            <FontAwesomeIcon icon={["fas", "times"]} />
+          );
+        }, 4500);
+      }
+    });
+  return data;
+};

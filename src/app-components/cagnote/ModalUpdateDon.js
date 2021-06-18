@@ -28,7 +28,7 @@ const formikEnhancer = withFormik({
     if (values.montant <= props.item.participation.montant) {
       setFieldError(
         "montant",
-        `Le montant doit etre superieur ${
+        `Le montant doit etre au moins ${
           props.item.participation.montant + 10
         } MRU`
       );

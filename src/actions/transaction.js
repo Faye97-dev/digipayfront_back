@@ -15,7 +15,12 @@ import {
   ADD_PAYBACK,
   UPDATE_TRANSACTION,
 } from "./types";
-import { updateSolde, updateSolde_clientDigipay } from "./async";
+import {
+  updateSolde,
+  updateSolde_clientDigipay,
+  updateFactureSomelec,
+  reclamationFactureSomelec,
+} from "./async";
 import { expiredToken } from "../utils/alerts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -818,6 +823,131 @@ export const achatCredit_clientDigipay = (body, showAlert) => (
       //setSubmitting(false);
 
       //}, 10000);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Transaction Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
+
+export const payementSomelec_clientDigipay = (
+  body,
+  showAlert,
+  setSubmitting,
+  closeModal
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: ADD_PAIEMENT,
+  });
+
+  const user = getState().auth.user;
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const access = getState().auth.access;
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .post(HOST + `api/func/client_digiPay/payement-somelec/`, body, config)
+    .then((res) => {
+      const keys = Object.keys({ ...res.data });
+      if (!keys.includes("msg")) {
+        dispatch({
+          type: ADD_PAIEMENT,
+          payload: res.data,
+        });
+
+        showAlert(
+          "success",
+          "Transaction Complete!",
+          <FontAwesomeIcon icon={["fas", "check"]} />
+        );
+
+        updateSolde_clientDigipay(user.id, getState().auth.access).then(
+          (res) => {
+            if (res) {
+              dispatch({
+                type: UPDATE_SOLDE_CLIENT_DIGIPAY,
+                payload: res,
+              });
+            }
+          }
+        );
+        //
+        const somelecBody = {
+          reference: body.reference,
+          montant: body.montant,
+          date: res.data.date,
+          banque: "RimCash",
+          code_transaction: res.data.code_transaction,
+          client: res.data.transaction.expediteur.tel,
+        };
+        //console.log(somelecBody);
+
+        updateFactureSomelec(somelecBody, showAlert).then((res2) => {
+          if (res2) {
+            //console.log(res2);
+            setSubmitting(false);
+            closeModal();
+          } else {
+            const reclamationBody = {
+              client: user.id,
+              facturier: res.data.transaction.destinataire.id,
+              transaction: res.data.id,
+            };
+            reclamationFactureSomelec(reclamationBody, showAlert, access).then(
+              (res3) => {
+                if (res3) {
+                  //console.log(res3);
+                  setTimeout(() => {
+                    showAlert(
+                      "warning",
+                      "Le paiement de votre facture a été interompu , Veuillez consulter vos notifications !",
+                      <FontAwesomeIcon icon={["far", "question-circle"]} />
+                    );
+                    setSubmitting(false);
+                    closeModal();
+                  }, 4500);
+                } else {
+                  setTimeout(() => {
+                    setSubmitting(false);
+                    closeModal();
+                  }, 4500);
+                }
+              }
+            );
+          }
+        });
+      } else if (keys.includes("msg")) {
+        dispatch({
+          type: ERROR_TRANS,
+        });
+        setSubmitting(false);
+        showAlert(
+          "warning",
+          res.data.msg,
+          <FontAwesomeIcon icon={["far", "question-circle"]} />
+        );
+      }
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_TRANS,
+      });
+
+      setSubmitting(false);
+      closeModal();
+
       if (err.response && err.response.status === 401) {
         expiredToken(dispatch, getState().auth.tokenExpired);
       } else {

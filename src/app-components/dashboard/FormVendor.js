@@ -30,7 +30,7 @@ const formikEnhancer = withFormik({
   }),
   mapPropsToValues: (props) => ({
     montant: "",
-    delai: 0,
+    delai: 1,
     label: "",
     livraison: false,
   }),
@@ -68,8 +68,6 @@ const formikEnhancer = withFormik({
       setSubmitting(false);
       resetForm();
     });
-    /*console.log(payload);
-    setSubmitting(false);*/
   },
   displayName: "MyForm",
 });

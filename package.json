@@ -11,6 +11,8 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.6.0",
+    "ag-grid-community": "^25.3.0",
+    "ag-grid-react": "^25.3.0",
     "apexcharts": "3.19.0",
     "availity-reactstrap-validation": "2.6.1",
     "axios": "^0.21.0",

@@ -8,6 +8,7 @@ import {
   ADD_DONATION,
   UPDATE_DONATION,
   CLOTURE_CAGNOTE,
+  DELETE_CAGNOTE,
 } from "../actions/types.js";
 
 const initialState = {
@@ -23,7 +24,8 @@ export default function (state = initialState, action) {
         action.payload === PARTICIPATE_CAGNOTE ||
         action.payload === ADD_DONATION ||
         action.payload === UPDATE_DONATION ||
-        action.payload === CLOTURE_CAGNOTE
+        action.payload === CLOTURE_CAGNOTE ||
+        action.payload === DELETE_CAGNOTE
       ) {
         return {
           ...state,
@@ -65,6 +67,7 @@ export default function (state = initialState, action) {
     case ADD_DONATION:
     case UPDATE_DONATION:
     case CLOTURE_CAGNOTE:
+    case DELETE_CAGNOTE:
       return {
         ...state,
         cagnotes: {

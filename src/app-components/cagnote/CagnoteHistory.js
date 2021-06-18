@@ -17,7 +17,7 @@ import {
 import { NavLink as NavLinkStrap } from "reactstrap";
 
 import RcPagination from "rc-pagination";
-import localeInfo from "rc-pagination/lib/locale/en_US";
+import localeInfo from "rc-pagination/lib/locale/fr_FR";
 import { Filter } from "react-feather";
 
 import { CardBody } from "reactstrap";
@@ -36,6 +36,7 @@ import {
 
 import { PaginateData } from "../../utils/dataTable";
 import ModalDetails from "./ModalDetails";
+import ModalDelete from "./ModalDelete";
 
 class CagnoteHistory extends Component {
   constructor(props) {
@@ -49,7 +50,8 @@ class CagnoteHistory extends Component {
       page: 1,
       current: [],
       searchOpen: false,
-      modal4: false,
+      modalInfo: false,
+      modalDelete: false,
       currentItem: null,
     };
 
@@ -57,10 +59,17 @@ class CagnoteHistory extends Component {
     this.Paginate = this.Paginate.bind(this);
   }
 
-  toggle4 = (item) =>
+  toggleInfo = (item) =>
     this.setState({
       ...this.state,
-      modal4: !this.state.modal4,
+      modalInfo: !this.state.modalInfo,
+      currentItem: item,
+    });
+
+  toggleDelete = (item) =>
+    this.setState({
+      ...this.state,
+      modalDelete: !this.state.modalDelete,
       currentItem: item,
     });
 
@@ -162,7 +171,16 @@ class CagnoteHistory extends Component {
                 </td>
                 <td className="text-center text-black-30">
                   <span className="font-weight-bold">
-                    {item.cagnote.actif ? (
+                    {item.cagnote.archive ? (
+                      <Badge
+                        className={
+                          "px-4 py-1 h-auto text-danger border-1 border-danger"
+                        }
+                        color="neutral-danger"
+                      >
+                        Archivé
+                      </Badge>
+                    ) : item.cagnote.actif ? (
                       <Badge
                         className={
                           "px-4 py-1 h-auto text-success border-1 border-success"
@@ -174,9 +192,9 @@ class CagnoteHistory extends Component {
                     ) : (
                       <Badge
                         className={
-                          "px-4 py-1 h-auto text-danger border-1 border-danger"
+                          "px-4 py-1 h-auto text-warning border-1 border-warning"
                         }
-                        color={"neutral-danger"}
+                        color={"neutral-warning"}
                       >
                         Cloturé
                       </Badge>
@@ -216,7 +234,7 @@ class CagnoteHistory extends Component {
                             href="#/"
                             onClick={(e) => {
                               e.preventDefault();
-                              this.toggle4(item);
+                              this.toggleInfo(item);
                             }}
                           >
                             <FontAwesomeIcon
@@ -226,16 +244,30 @@ class CagnoteHistory extends Component {
                             <span>Details</span>
                           </NavLinkStrap>
                         </NavItem>
+                        {item.cagnote.actif &&
+                          !item.cagnote.archive &&
+                          !item.cagnote.verse_au_solde &&
+                          item.cagnote.responsable.id ===
+                            this.props.user.id && (
+                            <NavItem>
+                              <NavLinkStrap
+                                href="#/"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  this.toggleDelete(item);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={["fas", "trash"]}
+                                  className="font-size-md mr-3"
+                                />
+                                <span>Supprimer</span>
+                              </NavLinkStrap>
+                            </NavItem>
+                          )}
                       </Nav>
                     </DropdownMenu>
                   </UncontrolledDropdown>
-                  {/*<ModalDetails
-                    item={item}
-                    user={this.props.user}
-                    access={this.props.access}
-                    modal={this.state.modal4}
-                    handleModal={this.toggle4}
-                  />*/}
                 </td>
               </tr>
             );
@@ -365,8 +397,16 @@ class CagnoteHistory extends Component {
             item={this.state.currentItem}
             user={this.props.user}
             access={this.props.access}
-            modal={this.state.modal4}
-            handleModal={this.toggle4}
+            modal={this.state.modalInfo}
+            handleModal={this.toggleInfo}
+          />
+
+          <ModalDelete
+            item={this.state.currentItem}
+            user={this.props.user}
+            access={this.props.access}
+            modal={this.state.modalDelete}
+            handleModal={this.toggleDelete}
           />
         </Card>
       </>

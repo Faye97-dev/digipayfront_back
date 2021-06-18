@@ -402,3 +402,59 @@ export const client_cloturer_cagnote = (
       }
     });
 };
+
+export const client_delete_cagnote = (
+  body,
+  showAlert,
+  setSubmitting,
+  closeModal
+) => (dispatch, getState) => {
+  dispatch({
+    type: DATA_LOADING,
+    payload: DELETE_CAGNOTE,
+  });
+
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const access = getState().auth.access;
+
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+
+  axios
+    .post(HOST + `api/cagnote/delete/`, body, config)
+    .then((res) => {
+      dispatch({
+        type: DELETE_CAGNOTE,
+        payload: res.data,
+      });
+
+      showAlert(
+        "success",
+        "Suppression de la cagnotte Complete !",
+        <FontAwesomeIcon icon={["fas", "check"]} />
+      );
+      setSubmitting(false);
+      closeModal();
+    })
+    .catch((err) => {
+      dispatch({
+        type: ERROR_CAGNOTE,
+      });
+      setSubmitting(false);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Suppression de la cagnotte Non-Complete!",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};

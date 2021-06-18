@@ -8,6 +8,8 @@ import RechargeCredit from "./RechargeCredit";
 import { connect } from "react-redux";
 import { updateSolde_clientDigipay } from "../../actions/async";
 import { UPDATE_SOLDE_CLIENT_DIGIPAY } from "../../actions/types";
+import DemoAgGrid from "./DemoAgGrid";
+import ClientFacturePayement from "./ClientFacturePayement";
 
 class DashboardClient extends Component {
   render() {
@@ -16,9 +18,11 @@ class DashboardClient extends Component {
         <DashboardAmount {...this.props}></DashboardAmount>
         <TabsClient></TabsClient>
         {/*<div className="d-none d-xl-block">*/}
+        <ClientFacturePayement />
         <RechargeCredit></RechargeCredit>
         {/*</div>*/}
         <TransactionsClient></TransactionsClient>
+        {/*<DemoAgGrid />*/}
       </>
     );
   }

@@ -118,7 +118,6 @@ const formikEnhancer = withFormik({
 
     // trans sup 3000
     if (
-      //values.expediteur !== "" &&
       payload.categorie_transaction === "SUP_3000" &&
       values.expediteurInfo === null
     ) {
@@ -551,7 +550,6 @@ class CustomSearchInput extends React.Component {
 class MySelect extends React.Component {
   handleChange = (item) => {
     // this is going to call setFieldValue and manually update values.topcis
-    //console.log(item);
     this.props.onChange(this.props.name, item);
     if (this.props.reset) {
       this.props.setFieldValue("agence_destination", "");
@@ -647,11 +645,11 @@ const FormTransfert = (props) => {
                   </h1>
                   <div className="rounded">
                     <div className="px-1 py-0">
-                      <Card className="card-box mb-4">
-                        <CardBody>
-                          <FormAddClient showModal={showModal} />
-                        </CardBody>
-                      </Card>
+                      {/*<Card className="card-box mb-4">
+                        <CardBody>*/}
+                      <FormAddClient showModal={showModal} />
+                      {/*</CardBody>
+                      </Card>*/}
                     </div>
                   </div>
                 </div>

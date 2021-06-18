@@ -39,75 +39,77 @@ export default function ModalDetails(props) {
                 </div>
               </Col>
             </Row>
-            {item.cagnote.actif && !item.cagnote.verse_au_solde && (
-              <Row>
-                <Col xl="12">
-                  <div className="d-flex justify-content-between flex-wrap px-4 py-2">
-                    {!item.participation &&
-                      item.cagnote.responsable.id === user.id && (
-                        <>
-                          <div>
-                            <Button
-                              className="btn btn-block mb-4 px-2 px-sm-4 font-weight-bold"
-                              color="primary"
-                              size="sm"
-                              onClick={handleModalAddDon}
-                            >
-                              Faire une donation
-                            </Button>
-                          </div>
-                          <ModalAddDon
-                            modal={modalAddDon}
-                            handleModal={handleModalAddDon}
-                            handleModalDetail={props.handleModal}
-                            item={item}
-                          />
-                        </>
-                      )}
-
-                    {item.participation && (
-                      <div>
-                        <Button
-                          className="btn  btn-block mb-4 px-2 px-sm-4 font-weight-bold"
-                          onClick={handleModalUpdateDon}
-                          color="warning"
-                          size="sm"
-                        >
-                          Mettre a jour votre donation
-                        </Button>
-                        <ModalUpdateDon
-                          modal={modalUpdateDon}
-                          handleModal={handleModalUpdateDon}
-                          handleModalDetail={props.handleModal}
-                          item={item}
-                        />
-                      </div>
-                    )}
-
-                    {item.cagnote.responsable.id === user.id &&
-                      item.cagnote.solde !== 0 &&
-                      item.cagnote.nbre_participants !== 0 && (
-                        <div>
-                          <Button
-                            className="btn  btn-block mb-4 px-2 px-sm-4 font-weight-bold"
-                            onClick={handleModalCloture}
-                            color="danger"
-                            size="sm"
-                          >
-                            Cloturer la cagnotte
-                            <ModalCloture
-                              modal={modalCloture}
-                              handleModal={handleModalCloture}
+            {item.cagnote.actif &&
+              !item.cagnote.verse_au_solde &&
+              !item.cagnote.archive && (
+                <Row>
+                  <Col xl="12">
+                    <div className="d-flex justify-content-between flex-wrap px-4 py-2">
+                      {!item.participation &&
+                        item.cagnote.responsable.id === user.id && (
+                          <>
+                            <div>
+                              <Button
+                                className="btn btn-block mb-4 px-2 px-sm-4 font-weight-bold"
+                                color="primary"
+                                size="sm"
+                                onClick={handleModalAddDon}
+                              >
+                                Faire une donation
+                              </Button>
+                            </div>
+                            <ModalAddDon
+                              modal={modalAddDon}
+                              handleModal={handleModalAddDon}
                               handleModalDetail={props.handleModal}
                               item={item}
                             />
+                          </>
+                        )}
+
+                      {item.participation && (
+                        <div>
+                          <Button
+                            className="btn  btn-block mb-4 px-2 px-sm-4 font-weight-bold"
+                            onClick={handleModalUpdateDon}
+                            color="warning"
+                            size="sm"
+                          >
+                            Mettre a jour votre donation
                           </Button>
+                          <ModalUpdateDon
+                            modal={modalUpdateDon}
+                            handleModal={handleModalUpdateDon}
+                            handleModalDetail={props.handleModal}
+                            item={item}
+                          />
                         </div>
                       )}
-                  </div>
-                </Col>
-              </Row>
-            )}
+
+                      {item.cagnote.responsable.id === user.id &&
+                        item.cagnote.solde !== 0 &&
+                        item.cagnote.nbre_participants !== 0 && (
+                          <div>
+                            <Button
+                              className="btn  btn-block mb-4 px-2 px-sm-4 font-weight-bold"
+                              onClick={handleModalCloture}
+                              color="success"
+                              size="sm"
+                            >
+                              Cloturer la cagnotte
+                              <ModalCloture
+                                modal={modalCloture}
+                                handleModal={handleModalCloture}
+                                handleModalDetail={props.handleModal}
+                                item={item}
+                              />
+                            </Button>
+                          </div>
+                        )}
+                    </div>
+                  </Col>
+                </Row>
+              )}
 
             <Row className="no-gutters">
               <Col md="12" xl="6">
@@ -203,7 +205,16 @@ export default function ModalDetails(props) {
                           <div className=" font-size-md">Status</div>
                           <div className="d-flex flex-wrap align-items-center justify-content-end ">
                             <div className="p-1">
-                              {item.cagnote.actif ? (
+                              {item.cagnote.archive ? (
+                                <Badge
+                                  className={
+                                    "px-4 py-1 h-auto text-danger border-1 border-danger"
+                                  }
+                                  color="neutral-danger"
+                                >
+                                  Archivé
+                                </Badge>
+                              ) : item.cagnote.actif ? (
                                 <Badge
                                   className={
                                     "px-4 py-1 h-auto text-success border-1 border-success"
@@ -215,26 +226,14 @@ export default function ModalDetails(props) {
                               ) : (
                                 <Badge
                                   className={
-                                    "px-4 py-1 h-auto text-danger border-1 border-danger"
+                                    "px-4 py-1 h-auto text-warning border-1 border-warning"
                                   }
-                                  color={"neutral-danger"}
+                                  color={"neutral-warning"}
                                 >
                                   Cloturé
                                 </Badge>
                               )}
                             </div>
-                            {/*<div className="p-1">
-                            {item.cagnote.verse_au_solde && (
-                              <Badge
-                                className={
-                                  "px-4 py-1 h-auto text-success border-1 border-success"
-                                }
-                                color="neutral-success"
-                              >
-                                Versé au solde
-                              </Badge>
-                            )}
-                          </div>*/}
                           </div>
                         </div>
                       </CardBody>

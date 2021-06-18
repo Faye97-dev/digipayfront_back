@@ -7,6 +7,7 @@ import {
   UPDATE_EMPLOYE_SUCCESS,
   UPDATE_RESPONSABLE_SUCCESS,
   UPDATE_AGENT_SUCCESS,
+  UPDATE_FACTURIER_SUCCESS,
 } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { expiredToken } from "../utils/alerts";
@@ -219,6 +220,53 @@ export const updateAgentProfil = (id, body, setSubmitting, showAlert) => (
     .then((res) => {
       dispatch({
         type: UPDATE_AGENT_SUCCESS,
+        payload: res.data,
+      });
+      showAlert(
+        "success",
+        "Modification du profil avec success!",
+        <FontAwesomeIcon icon={["fas", "check"]} />
+      );
+      setSubmitting(false);
+      //console.log(res.data);
+    })
+    .catch((err) => {
+      dispatch({
+        type: UPDATE_PROFIL_FAIL,
+      });
+
+      setSubmitting(false);
+      if (err.response && err.response.status === 401) {
+        expiredToken(dispatch, getState().auth.tokenExpired);
+      } else {
+        showAlert(
+          "danger",
+          "Erreur de modifcation du profil !",
+          <FontAwesomeIcon icon={["fas", "times"]} />
+        );
+      }
+    });
+};
+
+export const updateFacturierProfil = (id, body, setSubmitting, showAlert) => (
+  dispatch,
+  getState
+) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const access = getState().auth.access;
+  //console.log(" reducer :", getState().auth.user);
+  if (access) {
+    config.headers["Authorization"] = `JWT ${access}`;
+  }
+  axios
+    .put(HOST + `api/user/facturier/update/${id}/`, body, config)
+    .then((res) => {
+      dispatch({
+        type: UPDATE_FACTURIER_SUCCESS,
         payload: res.data,
       });
       showAlert(

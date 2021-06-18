@@ -22,7 +22,7 @@ import {
 import { NavLink as NavLinkStrap } from "reactstrap";
 import Select from "react-select";
 import RcPagination from "rc-pagination";
-import localeInfo from "rc-pagination/lib/locale/en_US";
+import localeInfo from "rc-pagination/lib/locale/fr_FR";
 import {
   Settings,
   Filter,
@@ -48,6 +48,8 @@ import {
   CAGNOTE,
   RECOLTE,
   PAIEMENT_MASSE,
+  CAGNOTE_ANNULE,
+  PAIEMENT_FACTURE,
 } from "../../utils/choices";
 import FormFilter from "../transaction/FormFilter";
 import CollapseModel from "./CollapseModel";
@@ -76,6 +78,30 @@ const filtersOptions = {
       { value: "04", label: "COMP_RETRAIT" },*/
     ],
   },
+};
+
+const addCase = (callbacks, cases, fn) => {
+  for (let i = 0; i < cases.length; i++) {
+    callbacks[cases[i]] = callbacks[cases[i]] || [];
+    callbacks[cases[i]].push(fn);
+  }
+  return callbacks;
+};
+
+const multipleAddCase = (callbacks, data) => {
+  data.forEach((item) => {
+    callbacks = addCase(callbacks, item.cases, item.fn);
+  });
+  return callbacks;
+};
+
+export const customSwitch = (data, condition, defautCase) => {
+  const callbacks = multipleAddCase({}, data);
+  if (callbacks[condition]) {
+    return callbacks[condition][0]();
+  } else {
+    return defautCase();
+  }
 };
 
 class TransactionsClient extends Component {
@@ -202,8 +228,42 @@ class TransactionsClient extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {item.type_transaction !== CAGNOTE &&
-                      item.type_transaction !== RECOLTE ? (
+                      {customSwitch(
+                        [
+                          {
+                            cases: [CAGNOTE],
+                            fn: () =>
+                              `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`,
+                          },
+
+                          {
+                            cases: [RECOLTE, CAGNOTE_ANNULE],
+                            fn: () => `${item.transaction.expediteur.nom}`,
+                          },
+                        ],
+                        item.type_transaction,
+                        () => {
+                          if (!keys.includes("agence_origine")) {
+                            return `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`;
+                          }
+                          if (
+                            keys.includes("agence_origine") &&
+                            item.transaction.expediteur
+                          ) {
+                            return item.transaction.expediteur.nom;
+                          }
+                          if (
+                            keys.includes("agence_origine") &&
+                            !item.transaction.expediteur
+                          ) {
+                            return item.transaction.agence_origine.nom;
+                          }
+                        }
+                      )}
+
+                      {/*item.type_transaction !== CAGNOTE &&
+                      item.type_transaction !== RECOLTE &&
+                      item.type_transaction !== CAGNOTE_ANNULE ? (
                         <>
                           {!keys.includes("agence_origine") &&
                             `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
@@ -218,14 +278,49 @@ class TransactionsClient extends Component {
                         <>
                           {item.type_transaction === CAGNOTE &&
                             `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
-                          {item.type_transaction === RECOLTE &&
+                          {(item.type_transaction === RECOLTE ||
+                            item.type_transaction === CAGNOTE_ANNULE) &&
                             `${item.transaction.expediteur.nom}`}
                         </>
-                      )}
+                          )*/}
                     </a>
                     <span className="text-black-50 d-block">
-                      {item.type_transaction !== CAGNOTE &&
-                      item.type_transaction !== RECOLTE ? (
+                      {customSwitch(
+                        [
+                          {
+                            cases: [CAGNOTE],
+                            fn: () => item.transaction.expediteur.tel,
+                          },
+
+                          {
+                            cases: [RECOLTE, CAGNOTE_ANNULE],
+                            fn: () =>
+                              `${item.transaction.expediteur.responsable.first_name} ${item.transaction.expediteur.responsable.last_name}`,
+                          },
+                        ],
+                        item.type_transaction,
+                        () => {
+                          if (!keys.includes("agence_origine")) {
+                            return item.transaction.expediteur.tel;
+                          }
+                          if (
+                            keys.includes("agence_origine") &&
+                            item.transaction.expediteur
+                          ) {
+                            return item.transaction.expediteur.tel;
+                          }
+                          if (
+                            keys.includes("agence_origine") &&
+                            !item.transaction.expediteur
+                          ) {
+                            return item.transaction.agence_origine.type_agence;
+                          }
+                        }
+                      )}
+
+                      {/*item.type_transaction !== CAGNOTE &&
+                      item.type_transaction !== RECOLTE &&
+                      item.type_transaction !== CAGNOTE_ANNULE ? (
                         <>
                           {!keys.includes("agence_origine") &&
                             item.transaction.expediteur &&
@@ -241,10 +336,11 @@ class TransactionsClient extends Component {
                         <>
                           {item.type_transaction === CAGNOTE &&
                             item.transaction.expediteur.tel}
-                          {item.type_transaction === RECOLTE &&
+                          {(item.type_transaction === RECOLTE ||
+                            item.type_transaction === CAGNOTE_ANNULE) &&
                             `${item.transaction.expediteur.responsable.first_name} ${item.transaction.expediteur.responsable.last_name}`}
                         </>
-                      )}
+                          )*/}
                     </span>
                   </div>
                 </td>
@@ -256,8 +352,63 @@ class TransactionsClient extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {item.type_transaction !== CAGNOTE &&
-                      item.type_transaction !== RECOLTE ? (
+                      {customSwitch(
+                        [
+                          {
+                            cases: [CAGNOTE],
+                            fn: () => `${item.transaction.destinataire.nom}`,
+                          },
+
+                          {
+                            cases: [PAIEMENT_FACTURE],
+                            fn: () =>
+                              `${item.transaction.destinataire.first_name}`,
+                          },
+
+                          {
+                            cases: [RECOLTE, CAGNOTE_ANNULE],
+                            fn: () =>
+                              `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`,
+                          },
+                        ],
+                        item.type_transaction,
+                        () => {
+                          if (
+                            item.type_transaction === PAIEMENT_MASSE &&
+                            this.props.user.id ===
+                              item.transaction?.expediteur.id
+                          ) {
+                            return (
+                              <Button
+                                color="primary"
+                                size="sm"
+                                onClick={(e) => {
+                                  this.togglePayementMasse(item);
+                                }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={["fas", "users"]}
+                                  className="font-size-md p-0 m-0"
+                                />
+                              </Button>
+                            );
+                          }
+
+                          if (
+                            //item.type_transaction !== PAIEMENT_MASSE &&
+                            !keys.includes("agence_origine")
+                          ) {
+                            return `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`;
+                          }
+
+                          if (keys.includes("agence_origine")) {
+                            return item.transaction.destinataire.nom;
+                          }
+                        }
+                      )}
+                      {/*item.type_transaction !== CAGNOTE &&
+                      item.type_transaction !== RECOLTE &&
+                      item.type_transaction !== CAGNOTE_ANNULE ? (
                         <>
                           {item.type_transaction === PAIEMENT_MASSE &&
                           this.props.user.id ===
@@ -284,16 +435,49 @@ class TransactionsClient extends Component {
                         </>
                       ) : (
                         <>
-                          {item.type_transaction === RECOLTE &&
+                          {(item.type_transaction === RECOLTE ||
+                            item.type_transaction === CAGNOTE_ANNULE) &&
                             `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
                           {item.type_transaction === CAGNOTE &&
                             `${item.transaction.destinataire.nom}`}
                         </>
-                      )}
+                      )*/}
                     </a>
                     <span className="text-black-50 d-block">
-                      {item.type_transaction !== CAGNOTE &&
-                      item.type_transaction !== RECOLTE ? (
+                      {customSwitch(
+                        [
+                          {
+                            cases: [CAGNOTE],
+                            fn: () =>
+                              `${item.transaction.destinataire.responsable.first_name} ${item.transaction.destinataire.responsable.last_name}`,
+                          },
+
+                          {
+                            cases: [PAIEMENT_FACTURE],
+                            fn: () => `${item.transaction.remarque}`,
+                          },
+
+                          {
+                            cases: [RECOLTE, CAGNOTE_ANNULE],
+                            fn: () => item.transaction.destinataire.tel,
+                          },
+                        ],
+                        item.type_transaction,
+                        () => {
+                          if (
+                            item.type_transaction === PAIEMENT_MASSE &&
+                            this.props.user.id ===
+                              item.transaction?.expediteur.id
+                          ) {
+                            return <></>;
+                          } else {
+                            return item.transaction.destinataire.tel;
+                          }
+                        }
+                      )}
+                      {/*item.type_transaction !== CAGNOTE &&
+                      item.type_transaction !== RECOLTE &&
+                      item.type_transaction !== CAGNOTE_ANNULE ? (
                         <>
                           {item.type_transaction === PAIEMENT_MASSE &&
                           this.props.user.id ===
@@ -305,21 +489,32 @@ class TransactionsClient extends Component {
                         </>
                       ) : (
                         <>
-                          {item.type_transaction === RECOLTE &&
+                          {(item.type_transaction === RECOLTE ||
+                            item.type_transaction === CAGNOTE_ANNULE) &&
                             item.transaction.destinataire.tel}
                           {item.type_transaction === CAGNOTE &&
                             `${item.transaction.destinataire.responsable.first_name} ${item.transaction.destinataire.responsable.last_name}`}
                         </>
-                      )}
+                          )*/}
                     </span>
                   </div>
                 </td>
                 <td className="font-size-lg font-weight-bold text-center">
                   <span>
-                    {item.type_transaction === PAIEMENT_MASSE &&
+                    {customSwitch([], item.type_transaction, () => {
+                      if (
+                        item.type_transaction === PAIEMENT_MASSE &&
+                        this.props.user.id === item.transaction?.expediteur.id
+                      ) {
+                        return item.transaction.total;
+                      } else {
+                        return item.transaction.montant;
+                      }
+                    })}
+                    {/*item.type_transaction === PAIEMENT_MASSE &&
                     this.props.user.id === item.transaction?.expediteur.id
                       ? item.transaction.total
-                      : item.transaction.montant}
+                    : item.transaction.montant*/}
                   </span>
                   <small className="px-2">MRU</small>
                 </td>
@@ -354,15 +549,6 @@ class TransactionsClient extends Component {
                   </Badge>
                 </td>
                 <td className="text-center">
-                  {/*<Button
-                    color="primary"
-                    className="mx-1 rounded-sm shadow-none hover-scale-sm d-30 border-0 p-0 d-inline-flex align-items-center justify-content-center"
-                  >
-                    <FontAwesomeIcon
-                      icon={["fas", "eye"]}
-                      className="font-size-sm"
-                    />
-                  </Button>*/}
                   <UncontrolledDropdown>
                     <DropdownToggle
                       size="sm"
@@ -420,12 +606,58 @@ class TransactionsClient extends Component {
           <div key={item.id}>
             <CollapseModel
               type_transaction={item.type_transaction}
-              montant={item.transaction.montant}
-              destinataire={
-                keys.includes("agence_origine")
-                  ? item.transaction.destinataire.nom
-                  : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`
-              }
+              montant={customSwitch([], item.type_transaction, () => {
+                if (
+                  item.type_transaction === PAIEMENT_MASSE &&
+                  this.props.user.id === item.transaction?.expediteur.id
+                ) {
+                  return item.transaction.total;
+                } else {
+                  return item.transaction.montant;
+                }
+              })}
+              destinataire={customSwitch(
+                [
+                  {
+                    cases: [CAGNOTE],
+                    fn: () => `${item.transaction.destinataire.nom}`,
+                  },
+
+                  {
+                    cases: [RECOLTE, CAGNOTE_ANNULE],
+                    fn: () =>
+                      `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`,
+                  },
+                ],
+                item.type_transaction,
+                () => {
+                  if (
+                    item.type_transaction === PAIEMENT_MASSE &&
+                    this.props.user.id === item.transaction?.expediteur.id
+                  ) {
+                    return (
+                      <FontAwesomeIcon
+                        onClick={(e) => {
+                          this.togglePayementMasse(item);
+                        }}
+                        icon={["fas", "users"]}
+                        className="font-size-md p-0 m-0 text-primary"
+                      />
+                    );
+                  }
+
+                  if (
+                    //item.type_transaction !== PAIEMENT_MASSE &&
+                    !keys.includes("agence_origine")
+                  ) {
+                    return `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`;
+                  }
+
+                  if (keys.includes("agence_origine")) {
+                    return item.transaction.destinataire.nom;
+                  }
+                }
+              )}
             >
               <div className="d-flex align-items-center justify-content-between flex-wrap">
                 <div>
@@ -456,14 +688,38 @@ class TransactionsClient extends Component {
                   </span>
                 </div>
                 <div className="font-weight-bold text-black font-size-sm">
-                  {!keys.includes("agence_origine") &&
-                    `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
-                  {keys.includes("agence_origine") &&
-                    item.transaction.expediteur &&
-                    item.transaction.expediteur.nom}
-                  {keys.includes("agence_origine") &&
-                    !item.transaction.expediteur &&
-                    item.transaction.agence_origine.nom}
+                  {customSwitch(
+                    [
+                      {
+                        cases: [CAGNOTE],
+                        fn: () =>
+                          `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`,
+                      },
+
+                      {
+                        cases: [RECOLTE, CAGNOTE_ANNULE],
+                        fn: () => `${item.transaction.expediteur.nom}`,
+                      },
+                    ],
+                    item.type_transaction,
+                    () => {
+                      if (!keys.includes("agence_origine")) {
+                        return `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`;
+                      }
+                      if (
+                        keys.includes("agence_origine") &&
+                        item.transaction.expediteur
+                      ) {
+                        return item.transaction.expediteur.nom;
+                      }
+                      if (
+                        keys.includes("agence_origine") &&
+                        !item.transaction.expediteur
+                      ) {
+                        return item.transaction.agence_origine.nom;
+                      }
+                    }
+                  )}
                 </div>
               </div>
               <div className="divider my-3" />
@@ -474,10 +730,48 @@ class TransactionsClient extends Component {
                   </span>
                 </div>
                 <div className="font-weight-bold text-black font-size-sm">
-                  {keys.includes("agence_origine")
-                    ? item.transaction.destinataire.nom
-                    : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
-                  {" - " + item.transaction.destinataire.tel}
+                  {customSwitch(
+                    [
+                      {
+                        cases: [CAGNOTE],
+                        fn: () => `${item.transaction.destinataire.nom}`,
+                      },
+
+                      {
+                        cases: [RECOLTE, CAGNOTE_ANNULE],
+                        fn: () =>
+                          `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`,
+                      },
+                    ],
+                    item.type_transaction,
+                    () => {
+                      if (
+                        item.type_transaction === PAIEMENT_MASSE &&
+                        this.props.user.id === item.transaction?.expediteur.id
+                      ) {
+                        return (
+                          <FontAwesomeIcon
+                            onClick={(e) => {
+                              this.togglePayementMasse(item);
+                            }}
+                            icon={["fas", "users"]}
+                            className="font-size-md p-0 m-0 text-primary"
+                          />
+                        );
+                      }
+
+                      if (
+                        //item.type_transaction !== PAIEMENT_MASSE &&
+                        !keys.includes("agence_origine")
+                      ) {
+                        return `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`;
+                      }
+
+                      if (keys.includes("agence_origine")) {
+                        return item.transaction.destinataire.nom;
+                      }
+                    }
+                  )}
                 </div>
               </div>
               <div className="divider my-3" />
@@ -488,7 +782,16 @@ class TransactionsClient extends Component {
                   </span>
                 </div>
                 <div className="font-weight-bold text-black font-size-sm">
-                  {item.transaction.montant}
+                  {customSwitch([], item.type_transaction, () => {
+                    if (
+                      item.type_transaction === PAIEMENT_MASSE &&
+                      this.props.user.id === item.transaction?.expediteur.id
+                    ) {
+                      return item.transaction.total;
+                    } else {
+                      return item.transaction.montant;
+                    }
+                  })}
                   <small className="px-2 font-weight-normal">MRU</small>
                 </div>
               </div>

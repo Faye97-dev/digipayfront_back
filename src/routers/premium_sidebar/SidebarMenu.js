@@ -70,6 +70,7 @@ const SidebarMenu = (props) => {
         "AGENT_COMPENSATION",
         "CLIENT",
         "VENDOR",
+        "FACTURIER",
       ],
     },
 
@@ -129,6 +130,7 @@ const SidebarMenu = (props) => {
         "AGENT_COMPENSATION",
         "CLIENT",
         "VENDOR",
+        "FACTURIER",
       ],
     },
     {

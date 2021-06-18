@@ -5,6 +5,7 @@ export const AGENT_COMPENSATION = "AGENT_COMPENSATION";
 export const CLIENT = "CLIENT";
 export const VENDOR = "VENDOR";
 export const SYSADMIN = "SYSADMIN";
+export const FACTURIER = "FACTURIER";
 
 // notification status
 export const DEMANDE_PAIEMENT = "DEMANDE_PAIEMENT";
@@ -31,6 +32,9 @@ export const COMP_RETRAIT = "04";
 export const CAGNOTE = "09";
 export const RECOLTE = "10";
 export const PAIEMENT_MASSE = "11";
+export const CAGNOTE_ANNULE = "12";
+export const PAIEMENT_FACTURE = "13";
+export const PAIEMENT_CREDIT = "14";
 
 export const NONE = "NONE";
 export const INF_3000 = "INF_3000";
@@ -48,6 +52,9 @@ export const mapColorTypes = {
   "09": "warning",
   10: "success",
   11: "primary",
+  12: "info",
+  13: "warning",
+  14: "warning",
 };
 
 export const mapTypeNames = {
@@ -62,6 +69,9 @@ export const mapTypeNames = {
   "09": "CAGNOTTE",
   10: "RECOLTE",
   11: "PAIEMENT MASSE",
+  12: "CAGNOTTE ANNULÉ",
+  13: "PAIEMENT FACTURE",
+  14: "PAIEMENT CREDIT",
 };
 
 // transactions status
@@ -86,3 +96,15 @@ export const mapColorStatus = {
   TO_VALIDATE: "info",
   COMFIRMED: "success",
 };
+
+// Facturiers
+// list it when sysAdmin regiter a new facturier
+export const SOMELEC = "SOMELEC";
+export const SNDE = "SNDE";
+export const WIFI_MAURITEL = "WIFI_MAURITEL";
+
+// services
+export const Electricte = "Électricité";
+export const Eau = "Eau";
+export const Internet = "Internet";
+export const Chaines = "Chaines";

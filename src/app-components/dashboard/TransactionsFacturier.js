@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 
 import clsx from "clsx";
 
@@ -8,6 +8,7 @@ import {
   Table,
   Col,
   Card,
+  CustomInput,
   Input,
   Badge,
   Nav,
@@ -17,7 +18,6 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  Modal,
 } from "reactstrap";
 import { NavLink as NavLinkStrap } from "reactstrap";
 import Select from "react-select";
@@ -45,13 +45,13 @@ import {
   mapTypeNames,
   mapColorTypes,
   mapStatusNames,
-  VENDOR,
-  TO_VALIDATE,
+  PAIEMENT,
 } from "../../utils/choices";
 import FormFilter from "../transaction/FormFilter";
 import CollapseModel from "./CollapseModel";
 import { PaginateData } from "../../utils/dataTable";
-import FormSecretKeyLivraison from "./FormSecretKeyLivraison";
+//import ModalClientTransDetails from "../transaction/ModalClientTransDetails";
+//import ModalPayementMasseBeneficiaires from "../transaction/ModalPayementMasseBeneficiaires";
 
 const filtersOptions = {
   status: {
@@ -76,7 +76,31 @@ const filtersOptions = {
   },
 };
 
-class TransactionsVendor extends Component {
+const addCase = (callbacks, cases, fn) => {
+  for (let i = 0; i < cases.length; i++) {
+    callbacks[cases[i]] = callbacks[cases[i]] || [];
+    callbacks[cases[i]].push(fn);
+  }
+  return callbacks;
+};
+
+const multipleAddCase = (callbacks, data) => {
+  data.forEach((item) => {
+    callbacks = addCase(callbacks, item.cases, item.fn);
+  });
+  return callbacks;
+};
+
+export const customSwitch = (data, condition, defautCase) => {
+  const callbacks = multipleAddCase({}, data);
+  if (callbacks[condition]) {
+    return callbacks[condition][0]();
+  } else {
+    return defautCase();
+  }
+};
+
+class TransactionsFacturier extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -88,23 +112,20 @@ class TransactionsVendor extends Component {
       page: 1,
       current: [],
       searchOpen: false,
-      modalLivraison: false,
-      currentTransaction: null,
+      modalPayementMasse: false,
+      currentItem: null,
     };
 
     this.handleChangePage = this.handleChangePage.bind(this);
     this.Paginate = this.Paginate.bind(this);
-    this.handleModalLivraison = this.handleModalLivraison.bind(this);
   }
 
-  handleModalLivraison = (transaction = null) => {
+  togglePayementMasse = (item) =>
     this.setState({
       ...this.state,
-      modalLivraison: !this.state.modalLivraison,
-      currentTransaction: transaction,
+      modalPayementMasse: !this.state.modalPayementMasse,
+      currentItem: item,
     });
-  };
-
   openSearch = () => this.setState({ ...this.state, searchOpen: true });
   closeSearch = () => this.setState({ ...this.state, searchOpen: false });
 
@@ -131,6 +152,7 @@ class TransactionsVendor extends Component {
         init: true,
       });
     }
+
     /*if (
       nextState.search === "" &&
       this.state.search !== "" &&
@@ -202,25 +224,39 @@ class TransactionsVendor extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {!keys.includes("agence_origine") &&
-                        `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
-                      {keys.includes("agence_origine") &&
-                        item.transaction.expediteur &&
-                        item.transaction.expediteur.nom}
-                      {keys.includes("agence_origine") &&
-                        !item.transaction.expediteur &&
-                        item.transaction.agence_origine.nom}
+                      {customSwitch(
+                        [
+                          {
+                            cases: [PAIEMENT],
+                            fn: () =>
+                              `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`,
+                          },
+
+                          // payement agence ou versement
+                          /*{
+                            cases: [RECOLTE, CAGNOTE_ANNULE],
+                            fn: () => `${item.transaction.expediteur.nom}`,
+                          },*/
+                        ],
+                        item.type_transaction,
+                        () => {
+                          return "";
+                        }
+                      )}
                     </a>
                     <span className="text-black-50 d-block">
-                      {!keys.includes("agence_origine") &&
-                        item.transaction.expediteur &&
-                        item.transaction.expediteur.tel}
-                      {keys.includes("agence_origine") &&
-                        item.transaction.expediteur &&
-                        item.transaction.expediteur.tel}
-                      {keys.includes("agence_origine") &&
-                        !item.transaction.expediteur &&
-                        item.transaction.agence_origine.type_agence}
+                      {customSwitch(
+                        [
+                          {
+                            cases: [PAIEMENT],
+                            fn: () => item.transaction.expediteur.tel,
+                          },
+                        ],
+                        item.type_transaction,
+                        () => {
+                          return "";
+                        }
+                      )}
                     </span>
                   </div>
                 </td>
@@ -232,17 +268,41 @@ class TransactionsVendor extends Component {
                       className="font-weight-bold text-black-30"
                       title="..."
                     >
-                      {keys.includes("agence_origine")
-                        ? item.transaction.destinataire.nom
-                        : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
+                      {customSwitch(
+                        [
+                          {
+                            cases: [PAIEMENT],
+                            fn: () => `${item.transaction.destinataire.nom}`,
+                          },
+                        ],
+
+                        item.type_transaction,
+                        () => {
+                          return "";
+                        }
+                      )}
                     </a>
                     <span className="text-black-50 d-block">
-                      {item.transaction.destinataire.tel}
+                      {customSwitch(
+                        [
+                          {
+                            cases: [PAIEMENT],
+                            fn: () =>
+                              `${item.transaction.destinataire.responsable.first_name} ${item.transaction.destinataire.responsable.last_name}`,
+                          },
+                        ],
+                        item.type_transaction,
+                        () => {
+                          return "";
+                        }
+                      )}
                     </span>
                   </div>
                 </td>
                 <td className="font-size-lg font-weight-bold text-center">
-                  <span>{item.transaction.montant}</span>
+                  <span>
+                    {customSwitch([], item.type_transaction, () => "")}
+                  </span>
                   <small className="px-2">MRU</small>
                 </td>
                 <td className="font-size-lg font-weight-bold text-center">
@@ -304,31 +364,7 @@ class TransactionsVendor extends Component {
                             <span>Details</span>
                           </NavLinkStrap>
                         </NavItem>
-                        {this.props.role?.value === VENDOR &&
-                          item.transaction.status === TO_VALIDATE &&
-                          item.transaction.destinataire.id ===
-                            this.props.user.id && (
-                            <NavItem>
-                              <NavLinkStrap
-                                href="#/"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  this.handleModalLivraison({
-                                    transfertID: item.transaction.id,
-                                    transactionID: item.id,
-                                    expediteurRole:
-                                      item.transaction.expediteur.role,
-                                  });
-                                }}
-                              >
-                                <FontAwesomeIcon
-                                  icon={["fas", "truck"]}
-                                  className="font-size-md mr-3"
-                                />
-                                <span>Livraison</span>
-                              </NavLinkStrap>
-                            </NavItem>
-                          )}
+                        {/*<ModalClientTransDetails item={item} />*/}
                       </Nav>
                     </DropdownMenu>
                   </UncontrolledDropdown>
@@ -339,141 +375,10 @@ class TransactionsVendor extends Component {
         )}
       </>
     );
-    const transactions_mobile = this.props.transactions.loading ? (
-      <SkeletonLoader />
-    ) : this.state.current.length === 0 ? (
-      <>
-        <div className="d-flex align-items-center justify-content-center pt-3">
-          <img style={{ width: "17%" }} src={empty} />
-        </div>
-        <div className="d-flex align-items-center justify-content-center pt-1">
-          <span>Pas de données disponibles </span>
-        </div>
-      </>
-    ) : (
-      this.state.current.map((item) => {
-        const keys = Object.keys({ ...item.transaction });
-        return (
-          <div key={item.id}>
-            <CollapseModel
-              type_transaction={item.type_transaction}
-              montant={item.transaction.montant}
-              destinataire={
-                keys.includes("agence_origine")
-                  ? item.transaction.destinataire.nom
-                  : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`
-              }
-            >
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Numero
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {item.code_transaction}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Date
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {item.date}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Origine
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {!keys.includes("agence_origine") &&
-                    `${item.transaction.expediteur.first_name} ${item.transaction.expediteur.last_name}`}
-                  {keys.includes("agence_origine") &&
-                    item.transaction.expediteur &&
-                    item.transaction.expediteur.nom}
-                  {keys.includes("agence_origine") &&
-                    !item.transaction.expediteur &&
-                    item.transaction.agence_origine.nom}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Beneficiaire
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {keys.includes("agence_origine")
-                    ? item.transaction.destinataire.nom
-                    : `${item.transaction.destinataire.first_name} ${item.transaction.destinataire.last_name}`}
-                  {" - " + item.transaction.destinataire.tel}
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Montant
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  {item.transaction.montant}
-                  <small className="px-2 font-weight-normal">MRU</small>
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Frais
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  0<small className="px-2 font-weight-normal">MRU</small>
-                </div>
-              </div>
-              <div className="divider my-3" />
-              <div className="d-flex align-items-center justify-content-between flex-wrap">
-                <div>
-                  <span className="font-size-sm text-uppercase text-black-30">
-                    Status
-                  </span>
-                </div>
-                <div className="font-weight-bold text-black font-size-sm">
-                  <Badge
-                    className={
-                      "px-4 py-1 h-auto text-" +
-                      mapColorStatus[item.transaction.status] +
-                      " border-1 border-" +
-                      mapColorStatus[item.transaction.status]
-                    }
-                    color={"neutral-" + mapColorStatus[item.transaction.status]}
-                  >
-                    {mapStatusNames[item.transaction.status]}
-                  </Badge>
-                </div>
-              </div>
-              <div className="divider my-3" />
-            </CollapseModel>
-          </div>
-        );
-      })
-    );
+
+    // transactions mobile
     return (
       <>
-        <ModalLivraison
-          handleModalLivraison={this.handleModalLivraison}
-          modalLivraison={this.state.modalLivraison}
-          transaction={this.state.currentTransaction}
-        />
         <Card className="card-box shadow-none d-none d-md-block">
           <div className="px-4 pt-4 text-primary">
             <h5 className="font-weight-bold text-dark">
@@ -586,7 +491,6 @@ class TransactionsVendor extends Component {
               </div>
             </CardBody>
           </div>
-
           {!this.props.transactions.loading && this.state.current.length !== 0 && (
             <div className="d-flex align-items-center justify-content-center mt-4 mb-4">
               <RcPagination
@@ -600,28 +504,6 @@ class TransactionsVendor extends Component {
           )}
         </Card>
         {/*mobile version*/}
-        <Card className="card-box shadow-none d-block d-md-none">
-          <div className="px-4 pt-4 text-primary">
-            <h5 className="font-weight-bold text-dark">
-              Historiques de transactions
-            </h5>
-          </div>
-          <div className="divider" />
-          <div className="pb-1 pt-3 px-0">
-            <CardBody>{transactions_mobile}</CardBody>
-          </div>
-          {!this.props.transactions.loading && this.state.current.length !== 0 && (
-            <div className="d-flex align-items-center justify-content-center mt-2 mb-4">
-              <RcPagination
-                defaultPageSize={this.state.totalRowsPerPage}
-                onChange={this.handleChangePage}
-                current={this.state.page}
-                total={this.state.totalData}
-                locale={localeInfo}
-              />
-            </div>
-          )}
-        </Card>
       </>
     );
   }
@@ -629,30 +511,10 @@ class TransactionsVendor extends Component {
 
 const mapStateToProps = (state) => ({
   transactions: state.transaction.transactions,
-  role: state.auth.role,
   user: state.auth.user,
+  access: state.auth.access,
 });
 
 export default connect(mapStateToProps, {
   getTransactions,
-})(TransactionsVendor);
-
-function ModalLivraison(props) {
-  return (
-    <Modal
-      zIndex={2000}
-      centered
-      size="md"
-      isOpen={props.modalLivraison}
-      toggle={props.handleModalLivraison}
-      contentClassName="border-0"
-    >
-      <div className="my-4">
-        <FormSecretKeyLivraison
-          handleModalLivraison={props.handleModalLivraison}
-          transaction={props.transaction}
-        />
-      </div>
-    </Modal>
-  );
-}
+})(TransactionsFacturier);

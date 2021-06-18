@@ -48,6 +48,10 @@ const importDashboardByRole = (role) => {
     component = lazy(() =>
       import("../app-components/dashboard/DashboardCompensation")
     );
+  } else if (role === "FACTURIER") {
+    component = lazy(() =>
+      import("../app-components/dashboard/DashboardFacturier")
+    );
   }
 
   return component;
@@ -172,6 +176,7 @@ const Routes = (props) => {
         "AGENT_COMPENSATION",
         "CLIENT",
         "VENDOR",
+        "FACTURIER",
       ],
     },
     {
@@ -232,6 +237,7 @@ const Routes = (props) => {
         "AGENT_COMPENSATION",
         "CLIENT",
         "VENDOR",
+        "FACTURIER",
       ],
     },
     {
@@ -291,12 +297,6 @@ const Routes = (props) => {
     {
       component: SysAdmin_Client,
       link: "/Utilisateur/Client",
-      roles: ["SYSADMIN"],
-    },
-
-    {
-      component: SysAdmin_Vendor,
-      link: "/Utilisateur/Commerçant",
       roles: ["SYSADMIN"],
     },
 

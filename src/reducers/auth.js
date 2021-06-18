@@ -18,34 +18,10 @@ import {
   UPDATE_EMPLOYE_SUCCESS,
   UPDATE_RESPONSABLE_SUCCESS,
   UPDATE_AGENT_SUCCESS,
+  UPDATE_FACTURIER_SUCCESS,
   TOKEN_EXPIRED,
 } from "../actions/types.js";
 
-// routes changement warning
-// datatable niveau 3 , connect filter data with db ,
-// diconnect agence when logout , mouse cursor on ordering datatable , logout message de confirmation
-// refont code client envoie  , agence retrait add confirmation code ....
-// FormClientsend and other Form : reset form
-// asyn file handle forbidden issue , agence transfert check destinataire !== expediteur , sync notifications with actions
-// atomic transaction backend , restric serializer models , hash code payement , remove duplicates fetch ...
-// move check_clientdigipay in service.py
-// statistiques actions  move it to redux ?? , check refresh token before logout , register username = tel and can't update ,
-// validate password format backend and frontend
-// clean models file , refactor pre-transction action in models , remove serializer , remove clotures
-// post request body sercure id of user and id in params
-// profile statistique move get a to post request
-// reset all form, handle item , show info value to null ,change submiting to the second step
-// check a account if is active before traitement for all actions
-// client form password secure form to number type front and back
-// identifiant random on register for all users
-// Backend : store all proprety attributes in db  : ( code de transaction ....)
-// remove refresh token
-// Sync premiumRoutes with Routes
-// some attribute in serializers to readonly or writeonly
-// delete user when token is alive
-// Custom django Admin , model __str__
-// code retrait timeout , livraison .... ,qrcode notification not showing on prod
-// delete notif after livraison vendor
 const initialState = {
   access: localStorage.getItem("access"),
   refresh: localStorage.getItem("refresh"),
@@ -179,8 +155,21 @@ export default function (state = initialState, action) {
         ...state,
         user: {
           ...state.user,
+          //first_name: action.payload.first_name,
+          //last_name: action.payload.last_name,
+          adresse: action.payload.adresse,
+          email: action.payload.email,
+        },
+      };
+    case UPDATE_FACTURIER_SUCCESS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          //username: action.payload.username,
+          //identifiant: action.payload.identifiant,
           first_name: action.payload.first_name,
-          last_name: action.payload.last_name,
+          //compte_banquaire: action.payload.compte_banquaire,
           adresse: action.payload.adresse,
           email: action.payload.email,
         },

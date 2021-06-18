@@ -17,7 +17,7 @@ import {
 import { NavLink as NavLinkStrap } from "reactstrap";
 
 import RcPagination from "rc-pagination";
-import localeInfo from "rc-pagination/lib/locale/en_US";
+import localeInfo from "rc-pagination/lib/locale/fr_FR";
 import { Filter } from "react-feather";
 
 import { CardBody } from "reactstrap";

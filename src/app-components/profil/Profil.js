@@ -39,6 +39,7 @@ import {
   AGENT_COMPENSATION,
   RESPONSABLE_AGENCE,
   EMPLOYE_AGENCE,
+  FACTURIER,
 } from "../../utils/choices";
 import FormProfilEmploye from "./FormProfilEmploye";
 import FormAgence from "./FormAgence";
@@ -46,6 +47,7 @@ import FormProfilResponsable from "./FormProfilResponsable";
 import FormProfilAgent from "./FormProfilAgent";
 import UpdatePassword from "./UpdatePassword";
 import ClientUpdatePassword from "./ClientUpdatePassword";
+import FormProfilFacturier from "./FormProfilFacturier";
 function Profil(props) {
   //const [inputBg, setInputBg] = useState(false);
   //const toggleInputBg = () => setInputBg(!inputBg);
@@ -298,6 +300,7 @@ function Profil(props) {
                 <Card className="bg-white ">
                   {props.role?.value === VENDOR && <FormProfilVendor />}
                   {props.role?.value === CLIENT && <FormProfilClient />}
+                  {props.role?.value === FACTURIER && <FormProfilFacturier />}
                   {props.role?.value === EMPLOYE_AGENCE && (
                     <FormProfilEmploye />
                   )}
